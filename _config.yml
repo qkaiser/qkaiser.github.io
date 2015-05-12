@@ -1,0 +1,11 @@
+# Site settings
+title: QTNKSR
+email: contact@quentinkaiser.be
+username: QKaiser
+description: "I build things ... and break others."
+baseurl: ""
+url: "https://qkaiser.github.io/"
+
+# Build settings
+markdown: kramdown
+permalink: pretty

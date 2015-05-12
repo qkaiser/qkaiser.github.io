@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE CodeBlocks_layout_file>
+<CodeBlocks_layout_file>
+	<File name="..\MAIN.C" open="0" top="0">
+		<Cursor position="1442" topLine="41"/>
+	</File>
+	<File name="..\MOD_CAND.C" open="0" top="0">
+		<Cursor position="32690" topLine="1076"/>
+	</File>
+	<File name="..\MOD_LIST.C" open="0" top="0">
+		<Cursor position="11235" topLine="397"/>
+	</File>
+	<File name="..\MOD_VOTE.C" open="0" top="0">
+		<Cursor position="5975" topLine="197"/>
+	</File>
+	<File name="..\mod_grap.c" open="0" top="0">
+		<Cursor position="2421" topLine="75"/>
+	</File>
+	<File name="..\mod_scru.c" open="0" top="0">
+		<Cursor position="3929" topLine="102"/>
+	</File>
+	<Expand folder="/Sources"/>
+</CodeBlocks_layout_file>
