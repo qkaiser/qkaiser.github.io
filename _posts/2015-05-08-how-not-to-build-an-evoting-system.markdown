@@ -161,12 +161,27 @@ l'inscrive dans un fichier. La carte est ensuite avalée dans une boite scellée
 
 ## Accès Autorisé
 
-Chaque président de bureau de vote reçoit un mot de passe dans une enveloppe
-scellée. Ce mot de passe permet au président d'initialiser toutes les machines
-Digivote ainsi que les programmes PGM. Ce mot de passe est composé de 10
-caractères numériques.
 
-Ce mot de passe n'est pas comparé à une valeur prédéfinie, mais le programme
+Tout d'abord, les disquettes et des mots de passe de président sont générées
+dans un lieu central et *sécurisé* (garde, caméra). Le président reçoit
+par courrier le mot de passe sous la forme d'un ticket à gratter et ce,
+quelques jours avant la date des élections. Les disquettes, elles, sont dans une
+enveloppe scellée qui l'attend à son bureau de vote. Le président doit
+normalement attendre que son bureau soit constitué (prestation de serment des
+assesseurs et témoins) avant d'ouvrir cette enveloppe.
+
+Là, il démarre et initialise la première machine *Urn*. Les disquettes
+(en double exemplaire) ne sont pas protégées en écriture et passe de machine en
+machine. Evidemment, impossible de savoir ce qu'il y avait dessus et les coups
+de sonde des experts sont inopérants. Surtout que la fonction de vérification
+d'intégrité de la disquette était [erroné](#bonus) de 1994 à 2012.
+
+Si le président oublie sa lettre avec le mot de passe, pas de problème, la commune
+possède tous les mots de passe. Et on peut toujours appeler le Ministère de l'Intérieur
+qui les fourni et a aussi tous les mots de passe.
+
+Ce mot de passe est composé de 10 caractères numériques.
+Il n'est pas comparé à une valeur prédéfinie, mais le programme
 vérifie la validité de celui-ci grâce au calcul d'une somme de contrôle.
 Ce système de validation de mot de passe n'est, a priori, pas problèmatique, car
 la valeur du mot de passe est ensuite utilisée pour dériver une clé secrète.
@@ -490,6 +505,15 @@ vote, le contenu de ce fichier temporaire est chiffré avec
 [AES](https://fr.wikipedia.org/wiki/Advanced_Encryption_Standard) et inscrit
 dans un nouveau fichier. Le fichier temporaire étant ensuite supprimé.
 
+Une fois le contenu chiffré sur les disquettes, le président emmène celles-ci
+vers le bureau de totalisation avec le secrétaire de son choix. Ce qui est
+l'équivalent de se déplacer avec une urne non scellée. Il a en fait tout le
+logiciel pour fabriquer le résultat qui lui plait. Normalement, les disquettes
+devraient être dans des enveloppes scellées, mais ce n'est pas la pratique.
+
+Le logiciel de totalisation demande au président d'encoder son mot de passe,
+lit le contenu des disquettes et produit un résultat qui est imprimé
+localement.
 
 ### Manipuler le contenu du fichier temporaire
 
@@ -640,6 +664,7 @@ clés et IV sont obtenues.
 
 ### Bonus
 
+<div id="bonus"></div>
 Le code de vérification d'intégrité a été corrigé en 2014 et jamais détecté
 auparavant.
 
