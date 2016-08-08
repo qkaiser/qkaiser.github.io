@@ -433,4 +433,4 @@ Part II will discuss other Trend Micro products where I managed to be greeted wi
 
 ## Exploits
 
-* Metasploit module - will send a PR to github soon :) 
+* Metasploit module - I sent a [PR](https://github.com/rapid7/metasploit-framework/pull/7191) to them. We'll see how it goes :)
