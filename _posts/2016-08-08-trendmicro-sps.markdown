@@ -43,7 +43,8 @@ Let's look at each vulnerable component:
 In the excerpt below, we can see that ```$host``` and ```$apikey``` are directly initialiazed from unsanitized POST parameters values and fed to
 to $LWCSCTRLEXEC command as -u and -a parameters.
 
-{% highlight php startinline=true %}
+{% highlight php %}
+<?php
 case 'register':
 $host = "";
 $apikey = "";
@@ -68,6 +69,7 @@ else
 $data = array();
 $ret = 0;
 exec("$LWCSCTRLEXEC -c CCCA_REGISTER -u $host -a $apikey", $data, $ret);
+?>
 {% endhighlight %}
 
 **/var/www/AdminUI/php/ccca_ajaxhandler.php [line 217-230]**
@@ -76,7 +78,8 @@ exec("$LWCSCTRLEXEC -c CCCA_REGISTER -u $host -a $apikey", $data, $ret);
 In the excerpt below, we can see that ```$cca_enable``` is directly initialiazed with an unsanitized POST parameter value and fed to
 to $LWCSCTRLEXEC command as -e parameter.
 
-{% highlight php startinline=true %}
+{% highlight php %}
+<?php
 case 'save_setting':
 $ccca_enable = 0;
 if( isset($_POST['enable']))
@@ -91,6 +94,7 @@ else
 $data = array();
 $ret = 0;
 exec("$LWCSCTRLEXEC -c CCCA_SAVESETTING -e $ccca_enable", $data, $ret);
+?>
 {% endhighlight %}
 
 **/var/www/AdminUI/php/ccca_ajaxhandler.php [lines 288-311]**
@@ -98,7 +102,8 @@ exec("$LWCSCTRLEXEC -c CCCA_SAVESETTING -e $ccca_enable", $data, $ret);
 In the excerpt below, we can see that ```$host``` and ```$apikey``` are directly initialized with unsanitized POST parameters values and fed to
 to $LWCSCTRLEXEC command as -u and -a parameters.
 
-{% highlight php startinline=true %} 
+{% highlight php %} 
+<?php
 case 'test_connection':
 $host = "";
 $apikey = "";
@@ -123,6 +128,7 @@ else
 $data = array();
 $ret = 0;
 exec("$LWCSCTRLEXEC -c CCCA_TESTCONNECTION -u $host -a $apikey", $data, $ret);
+?>
 {% endhighlight %}
 
 **/var/www/AdminUI/php/admin_notification.php [lines 85-114]**
@@ -130,7 +136,8 @@ exec("$LWCSCTRLEXEC -c CCCA_TESTCONNECTION -u $host -a $apikey", $data, $ret);
 In the excerpt below, we can see that ```$host``` and ```$arr1['SNMP']['Community’]```, ```$arr1['SNMP']['AllowGroupNetmask’]```, and ```$arr1['SNMP']['AllowGroupIP’]```
 are directly read from POST parameters and fed to SnmpUtils functions. SnmpUtils is detailed in in the excerpt afterwards.
 
-{% highlight php startinline=true %}
+{% highlight php %}
+<?php
 $arr1['SNMP']['EnableSNMP'] = is_null($_POST['spare_EnableSNMP']) ? "0":$_POST['spare_EnableSNMP'];	
 if ("1" == $arr1['SNMP']['EnableSNMP'])
 {
@@ -161,6 +168,7 @@ else
 		$ret = SnmpUtils::SetFirewall($arr1['SNMP']['AllowGroupIP'], $arr1['SNMP']['AllowGroupNetmask']);
 	}
 }
+?>
 {% endhighlight %}
 
 SnmpUtils defines two functions (SetCommunityName, SetFirewall) that calls directly ```/usr/tmcss/bin/ServWebExec``` with unsanitized inputs
@@ -168,22 +176,26 @@ as ```snmpsetcomm``` and ```snmpsetfw``` parameters, respectively.
 
 **/var/www/AdminUI/php/inc/SnmpUtils.php [line 38]**
 
-{% highlight php startinline=true %}
+{% highlight php %}
+<?php
 static function SetCommunityName($CommunityName) {
 	$command="/usr/tmcss/bin/ServWebExec --snmpsetcomm ".$CommunityName;
 	system($command, $retval);
 	return $retval;
 }
+?>
 {% endhighlight %}
 
 **/var/www/AdminUI/php/inc/SnmpUtils.php [line 44]**
 
-{% highlight php startinline=true %}
+{% highlight php %}
+<?php
 static function SetFirewall($IP, $Netmask) {
 	$command="/usr/tmcss/bin/ServWebExec --snmpsetfw ".$IP." ".$Netmask;
 	system($command, $retval);
 	return $retval;
 }
+?>
 {% endhighlight %}
 
 #### Building a PoC
@@ -293,7 +305,8 @@ We review each vulnerable component below:
 
 In the excerpt below, we can see that the GET parameter ```tmpfname``` is used directly in ```file_exists```, ```readfile```, and ```unlink```. This means that not only we can retrieve any file that webserv user has read access to, but that we can also delete any file that webserv has write access to. Note that arbitrary deletion of files can easily lead to denial of service.
 
-{% highlight php startinline=yes %}
+{% highlight php %}
+<?php
 if (isset($_GET['downloadCSV']) && isset($_GET['tmpfname']) && file_exists(TMP_PATH . "/" . $_GET['tmpfname']))
 {
 ini_set('zlib.output_compression', 'Off'); 
@@ -310,13 +323,15 @@ flush();
 @unlink(TMP_PATH . "/" . $_GET['tmpfname']);
 exit;
 }
+?>
 {% endhighlight %}
 
 **/var/www/AdminUI/php/log_mgt_ajaxhandler.php [lines 577-601]**
 
 In the excerpt below, we can see that the GET parameter ```tmpfname``` is used directly in ```file_exists```, ```readfile```, and ```unlink```. This means that not only we can retrieve any file that webserv user has read access to, but that we can also delete any file that webserv has write access to. Note that arbitrary deletion of files can easily lead to denial of service.
 
-{% highlight php startinline=yes %}
+{% highlight php %}
+<?php
 case 'downloadCSV':
 	if( isset($_REQUEST['tmpfname']) && file_exists(TMP_PATH . "/{$_REQUEST['tmpfname']}") )
 	{
@@ -342,13 +357,15 @@ case 'downloadCSV':
 		exit;
 	}
 	break;
+?>
 {% endhighlight %}
 
 **/var/www/AdminUI/php/log_mgt_ajaxhandler.php [lines 776-784]**
 
 The case below is particular as it "only" allows for arbitrary file deletion.
 	
-{% highlight php startinline=yes %}
+{% highlight php %}
+<?php
 else
 {
 	if( isset($_REQUEST['tmpfname']) && file_exists(TMP_PATH . "/{$_REQUEST['tmpfname']}") )
@@ -357,13 +374,15 @@ else
 	}
 	outputError(ERROR_CANNOT_PARSE_REQUEST);
 }
+?>
 {% endhighlight %}
 
 **/var/www/AdminUI/php/wcs_bwlists_handler.php [line lines 578-600]**
 
 In the excerpt below, we can see that the GET parameter ```tf``` is used directly in ```file_exists```, ```readfile```, and ```unlink```. This means that not only we can retrieve any file that webserv user has read access to, but that we can also delete any file that webserv has write access to. Note that arbitrary deletion of files can easily lead to denial of service.
 
-{% highlight php startinline=yes %}
+{% highlight php %}
+<?php
 case 'download_csv':
 	if( isset($_REQUEST['tf']) && file_exists(TMP_PATH . "/" . $_REQUEST['tf']))
 	{
@@ -387,6 +406,7 @@ case 'download_csv':
 		exit;
 	}
 	break;
+?>
 {% endhighlight %}
 
 
