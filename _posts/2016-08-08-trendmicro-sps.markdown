@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Trend Micro Bug Hunting - Part I"
-date:   2016-07-09 17:34:24
+date:   2016-08-08 07:00:00
 comments: true
 categories: pentesting trendmicro
 ---
