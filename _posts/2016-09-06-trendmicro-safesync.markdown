@@ -17,7 +17,7 @@ I recommend anyone running SafeSync for Enterprise to apply the critical patch r
 
 * Safesync Enhancement Pack 1 (SSFE 3.2) - [http://downloadcenter.trendmicro.com/index.php?regs=NABU&clk=latest&clkval=4887&lang_loc=1](http://downloadcenter.trendmicro.com/index.php?regs=NABU&clk=latest&clkval=4887&lang_loc=1)
 
-Trend Micro Advisory is available on their [business support website](https://success.trendmicro.com/solution/XXX)
+Trend Micro Advisory is available on their [business support website](https://success.trendmicro.com/)
 
 #### Affected Versions
 
