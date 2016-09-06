@@ -87,4 +87,4 @@ Part III will discuss yet another Trend Micro product where I managed to be gree
 ### Exploit
 
 * Metasploit module - I sent a [PR](https://github.com/rapid7/metasploit-framework/pull/XXX) to them. We'll see how it goes :)
-{% comment %}
+{% endcomment %}
