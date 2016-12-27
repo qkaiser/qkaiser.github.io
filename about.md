@@ -4,5 +4,15 @@ title: About
 permalink: /about/
 ---
 
-* Mail : [contact@quentinkaiser.be](mailto:contact@quentinkaiser.be) | [PGP](http://quentinkaiser.be/pgp)
-* IRC : qkaiser on *freenode.org* and *geeknode.org*
+**Mail**
+
+* [contact@quentinkaiser.be](mailto:contact@quentinkaiser.be)
+* [PGP key](http://quentinkaiser.be/pgp)
+
+**IRC**
+
+* qkaiser on *freenode.org* and *geeknode.org*
+
+**Twitter**
+
+* [@QKaiser](https://twitter.com/qkaiser)
