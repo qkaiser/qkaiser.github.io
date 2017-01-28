@@ -27,11 +27,11 @@ Terms of reference attached below.
 The price shall discuss, if you can make. Answer please.
 {% endhighlight %}
 
-The attachment is a file named "New.gz" allegedly containing the "Terms of reference" Mihail is talking about.
+The attachment is a file named *New.gz* allegedly containing the "Terms of reference" Mihail is talking about.
 
 #### Malicious attachment fingerprinting
 
-So let's dive in ! I launched a VM and ran some basic checks on the file. `binwalk` told us that the file is actually a RAR archive, even though the extension says `.gz`
+So let's dive in ! I launched a VM and ran some basic checks on the file. binwalk tells us that the file is actually a RAR archive, even though the extension says *.gz*
 
 {% highlight sh %}
 $ binwalk New.gz 
@@ -41,7 +41,7 @@ DECIMAL       HEXADECIMAL     DESCRIPTION
 0             0x0             RAR archive data, first volume type: MAIN_HEAD
 {% endhighlight %}
 
-The archive contains a document named `New.doc`, apparently a Microsoft Office document:
+The archive contains a document named *New.doc*, apparently a Microsoft Office document:
 
 {% highlight sh %}
 $ file New.doc 
