@@ -16,7 +16,6 @@ The mail looked like this:
 {% highlight text %}
 Date: Fri, 27 Jan 2017 12:26:06 +0100
 From: Mihail <hunter@puppetlabs.com>
-To: contact@quentinkaiser.be
 Subject: question
 Reply-To: Mihail <AdamBuchbinder@tutanota.com>
 X-Mailer: Microsoft Windows Live Mail 14.0.8117.416
