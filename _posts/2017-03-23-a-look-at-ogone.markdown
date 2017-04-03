@@ -326,4 +326,4 @@ I guess they didn't read it.
 * 14/03/2017 - Checked again on affected Android developers to make sure proper mitigations are in place
 * 15/03/2017 - Asked update from CERT.be: *"we called multiple times and the only answer we got was that they transferred the info to the tech guys."*
 * 23/03/2017 - 60 days have passed, no response, disclosing.
-
+* 03/04/2017 - Ogone got back to CERT.be, they fixed their latest version of the SDK and are contacting their customers to upgrade to the latest version. They are also hunting down the person who pushed the jar on Github. Sorry krishna1121 :)
