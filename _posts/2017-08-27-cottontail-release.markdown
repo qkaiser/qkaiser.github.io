@@ -23,7 +23,7 @@ I won't go into RabbitMQ details so I recommend you to read those excellent [tut
 
 ![rabbitmq_management_login]({{site.url}}assets/rabbitmq_management_login.png)
 
-rabbitmq_management is a RabbitMQ plugin that will spin up a web server with both a REST API and an administration GUI. You can use the GUI or interact directly with the API to manage pretty much everything. Due to its ease of use, a lot of developpers use it so they don't have to learn all the `rabbitmqctl` commands. For every RabbitMQ listener publicly exposed I encountered so far, rabbitmq_management plugin was also enabled.
+rabbitmq_management is a RabbitMQ plugin that will spin up a web server with both a REST API and an administration GUI. You can use the GUI or interact directly with the API to manage pretty much everything. Due to its ease of use, a lot of developers use it so they don't have to learn all the `rabbitmqctl` commands. For every RabbitMQ listener publicly exposed I encountered so far, rabbitmq_management plugin was also enabled.
 
 What we're interested in with rabbitmq_management is the REST API it exposes. We will use it to obtain a bunch of information about the server. Namely:
 
