@@ -6,9 +6,9 @@ comments: true
 categories: security tool
 ---
 
-I gained access to RabbitMQ brokers multiple times for the past year during pentesting engagments. It was always due to default credentials (the infamous `guest:guest`) or credentials being leaked in some way (e.g. in publicly accessible _.env_ file).
+I gained access to RabbitMQ brokers multiple times for the past year during pentesting engagements. It was always due to default credentials (the infamous `guest:guest`) or credentials being leaked in some way (e.g. in publicly accessible _.env_ file).
 
-The problem when you discover a RabbitMQ service is that you can't really dump content as you would with, let's say, a database backend. You need to know the exact names of virtual hosts, exchanges, and routing keys in order to be able to consume messages being sent through. Listing those values not being implemented by [AMQP](https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol), you're left completely blind.
+The problem when you discover a RabbitMQ service is that you can't really dump content as you would with, let's say, a database back-end. You need to know the exact names of virtual hosts, exchanges, and routing keys in order to be able to consume messages being sent through. Listing those values not being implemented by [AMQP](https://en.wikipedia.org/wiki/Advanced_Message_Queuing_Protocol), you're left completely blind.
 
 This leads to situations where it is quite difficult to prove the impact of a compromised RabbitMQ instance to a client:
 
@@ -17,7 +17,7 @@ This leads to situations where it is quite difficult to prove the impact of a co
 
 While accessing the source code of clients connecting to the broker is a way to gain enough knowledge to capture content, it is almost always impossible in black box scenarios. Another way - which is the one I explore in this post - is harnessing the API exposed by the rabbitmq_management plugin.
 
-I won't go into RabbitMQ details so I recommend you to read those excellent [tutorials](https://www.rabbitmq.com/getstarted.html) if you do not have prior knowledge.
+I won't go into RabbitMQ details so I suggest you to read those excellent [tutorials](https://www.rabbitmq.com/getstarted.html) if you do not have prior knowledge.
 
 ### rabbitmq_management
 
@@ -50,19 +50,19 @@ What do you mean by "capture model" ? Well, I'm glad you asked :)
 
 Our objective is to capture messages being sent through while limiting our impact on the target's availability. This means currently connected clients need to receive messages as if we were not capturing them.
 
-If we don't take care of that and clients were written without much thinking, you'll end up with a completely messed up target such as queues stacking up because clients stopped processing given item X was not received, hanged RPC clients because you captured the request without forwarding it to the RPC server, integrity violations triggered by clients pushing data not received in order. Sky is the limit when it comes to doom scenarios.
+If we don't take care of that and clients were written without much thinking, you will end up with a completely messed up target such as queues stacking up because clients stopped processing given item X was not received, hanged RPC clients because you captured the request without forwarding it to the RPC server, integrity violations triggered by clients pushing data not received in order. Sky is the limit when it comes to doom scenarios.
 
-Let's see how we can handle all of this by analysing each RabbitMQ's mode of operation !
+Let's see how we can handle all of this by analyzing each RabbitMQ's mode of operation!
 
 #### Producer Consumer Model / RPC Model
 
 ![producer_consumer]({{site.url}}assets/producer_consumer.gif)
 
-In the producer consumer mode, our connection will just move the model towards the **Work queues** model with legitimate consumer (C0) being one worker and ourselves (C1) being a second worker. The interesting thing here is that as soon as we receive our first message and requeue it (yellow mail), we will be able to capture all of them due to the round robin distribution implemented by RabbitMQ. Think about it: if we requeue fast enough we will always be the next client in the round-robin queue. In the end, it is as if we were diverting all messages through the red line (see my wonderful GIF above) to transparently log them without impacting the legitimate consumer.
+In the producer consumer mode, our connection will just move the model towards the **Work queues** model with legitimate consumer (C0) being one worker and ourselves (C1) being a second worker. The interesting thing here is that as soon as we receive our first message and re-queue it (yellow mail), we will be able to capture all of them due to the round robin distribution implemented by RabbitMQ. Think about it: if we re-queue fast enough we will always be the next client in the round-robin queue. In the end, it is as if we were diverting all messages through the red line (see my wonderful GIF above) to transparently log them without impacting the legitimate consumer.
 
-This capture model also applies to RPC calls. We just need to requeue messages with their complete metadata (properties suchh as `reply_to`, `correlation_id`, `timestamp`, or `expiration`) so that the RPC server ultimately receives the request as if it were coming from the RPC client. Consider it 'RPC call spoofing' if you will.
+This capture model also applies to RPC calls. We just need to re-queue messages with their complete meta-data (properties such as `reply_to`, `correlation_id`, `timestamp`, or `expiration`) so that the RPC server ultimately receives the request as if it were coming from the RPC client. Consider it 'RPC call spoofing' if you will.
 
-Note that with traffic intensive queues, it is entirely possible to miss a beat (a message being dispatched prior to our script requeuing the previous one). The legitimate client will never miss a message that was intended for him but we, as attacker, might miss some.
+Note that with traffic intensive queues, it is entirely possible to miss a beat (a message being dispatched prior to our script re-queueing the previous one). The legitimate client will never miss a message that was intended for him but we, as attacker, might miss some.
 
 
 #### Work queues
@@ -81,13 +81,13 @@ In this capture model, we simply bind a queue to the fanout exchange. All subscr
 
 ![topic_exchange]({{site.url}}assets/topic_exchange.png)
 
-In this capture model, we bind a queue to the topic exchange using a wildcard (`#`) routing key in order to receive all messages.
+In this capture model, we bind a queue to the topic exchange using a wild-card (`#`) routing key in order to receive all messages.
 
 #### Direct exchange
 
 ![direct_exchange]({{site.url}}assets/direct_exchange.png)
 
-Direct exchanges do not support wildcard (`#`) routing keys. Therefore, we list bindings between other consumers and this direct exchange to obtain a list of routing keys currently in use by consumers. Then we bind one queue per discovered routing key to the direct exchange. This way we are able to receive the same amount of messages as all consumers bound to this direct exchange combined.
+Direct exchanges do not support wild-card (`#`) routing keys. Therefore, we list bindings between other consumers and this direct exchange to obtain a list of routing keys currently in use by consumers. Then, we bind one queue per discovered routing key to the direct exchange. This way we are able to receive the same amount of messages as all consumers bound to this direct exchange combined.
 
 Note: some producers might send messages with a routing key unused by currently bound consumers. Still need to think about that scenario.
 
@@ -127,4 +127,25 @@ If you are really curious you can activate the verbose mode with `-v`, it will f
 
 ![cottonverbose]({{site.url}}assets/cottontail_verbose.png)
 
-So that's all for now ! Do not hesitate to file an [issue](https://github.com/QKaiser/cottontail/issues) or to submit a [pull request](https://github.com/QKaiser/cottontail/pulls) :)
+Of course, do not hesitate to file an [issue](https://github.com/QKaiser/cottontail/issues) or to submit a [pull request](https://github.com/QKaiser/cottontail/pulls) :)
+
+### Exploitation in the wild ?
+
+![rabbitmq_exposure]({{site.url}}assets/rabbitmq_exposure.png)
+
+I wanted to see how exposed are RabbitMQ brokers over the Internet. I started by downloading a list of hosts exposing an AMQP listener on port tcp/5672 from [Shodan](https://www.shodan.io/search?query=port%3A5672+product%3ARabbitMQ) and proceeded by scanning port tcp/15672 (rabbitmq_management_plugin/plain) and port tcp/15671 (rabbitmq_management_plugin/ssl) on those hosts.
+
+Out of 4813 hosts exposing port tcp/5672, 832 are exposing port tcp/15672 only and 50 are exposing both ports tcp/15672 and tcp/15671. Out of those 882 hosts exposing a rabbitmq_management_plugin, 518 are allowing connections from the Internet with default credentials (`guest:guest`). To sum it up, 18,32% of exposed RabbitMQ brokers have rabbitmq_management_plugin installed, 58,73% of which allows connections with default credentials over the Internet.
+
+### Conclusion
+
+I hope this post motivated you to learn more about RabbitMQ and message brokers in general as they are more and more a key component of modern web application stacks. I also hope that my tool will facilitate the work of pentesters and web application auditors alike when they are faced with a RabbitMQ instance.
+
+Some key recommendations for people administering RabbitMQ clusters:
+
+* do not expose your AMQP listeners to the Internet unless it is a hard requirement. If so, implement access control lists to limit exposure (iptables is your friend here).
+* do not expose rabbitmq_management to the Internet unless it is a hard requirement. If so, implement access control list to limit exposure.
+* delete the guest user or at least change its password to a unique, complex, and random value
+* implement and review your RabbitMQ access controls (see [https://www.rabbitmq.com/access-control.html](https://www.rabbitmq.com/access-control.html))
+
+That's all folks ! :)
