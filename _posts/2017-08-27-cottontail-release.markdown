@@ -129,7 +129,7 @@ If you are really curious you can activate the verbose mode with `-v`, it will f
 
 Of course, do not hesitate to file an [issue](https://github.com/QKaiser/cottontail/issues) or to submit a [pull request](https://github.com/QKaiser/cottontail/pulls) :)
 
-### Exploitation in the wild ?
+### Assessing exposure
 
 ![rabbitmq_exposure]({{site.url}}assets/rabbitmq_exposure.png)
 
