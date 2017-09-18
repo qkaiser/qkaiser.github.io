@@ -64,6 +64,8 @@ This capture model also applies to RPC calls. We just need to re-queue messages 
 
 Note that with traffic intensive queues, it is entirely possible to miss a beat (a message being dispatched prior to our script re-queueing the previous one). The legitimate client will never miss a message that was intended for him but we, as attacker, might miss some.
 
+**Edit (18/09/2017)**: I initially relied on rabbitmq_management API to check if other consumers were present to know if I should re-queue a message or not. This was generating an insane amount of HTTP requests towards the target so I searched for a more clever solution. The solution I came up with is this: always re-queue received messages, but insert a random and unique header in the message prior to re-queuing it. Upon message reception, if our unique header is present this means we are the only consumer so we don't re-queue again. No more HTTP requests and only 1 unnecessary publish action if we are the only consumer (which is an obvious edge case).
+
 
 #### Work queues
 
