@@ -323,6 +323,10 @@ Nmap done: 1 IP address (1 host up) scanned in 0.58 seconds
 
 Yay ! I'm keeping an eye on pull requests [#1123](https://github.com/nmap/nmap/pull/1123) and [#1124](https://github.com/nmap/nmap/pull/1124), hopefully my code will be included in Nmap at some point :)
 
+### Metasploit module
+
+I'm tidying up my Metasploit [module](https://github.com/rapid7/metasploit-framework/pull/9554) for this service at the moment. Once it lands on master I'll edit this post with more details.
+
 ### Mandatory Shodan Search
 
 If you search for the terms "osgi" and "eclipse" on shodan, you get [23 results](https://www.shodan.io/search?query=osgi+eclipse). Please make sure you're not in charge of one of them.
@@ -344,6 +348,6 @@ As for the OSGi service in itself, it is difficult to say if pentesters will fin
 * ...
 
 
-I'm tidying up my Metasploit module for this service at the moment. Once it lands on master I'll edit this post with more details. If you have questions, do not hesitate to contact me via Twitter/Email/Comments. I'll do my best to answer them.
+If you have questions, do not hesitate to contact me via Twitter/Email/Comments. I'll do my best to answer them.
 
 
