@@ -4,8 +4,8 @@ email: contact@quentinkaiser.be
 username: QKaiser
 description: "I build things ... and break others."
 baseurl: ""
-url: "https://qkaiser.github.io/"
-
+#url: "https://qkaiser.github.io/"
+url: "http://localhost:4000"
 # Build settings
 markdown: kramdown
 permalink: pretty
