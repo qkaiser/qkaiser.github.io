@@ -1,0 +1,113 @@
+---
+layout: post
+title:  "Shedding some light on the new Belgian eVoting system"
+date:   2018-06-18 08:30:00
+comments: true
+categories: evoting
+---
+
+
+With the next rounds of elections approaching in Belgium (municipal elections in October 2018, federal elections in June 2019), I decided to take a look at the new system currently under development.
+
+Everything started from a discussion with a close friend: knowing that the source code of election software won't be availble until *after* the elections, what could an adversary get from open source intelligence gathering and a little bit of investigation ? How could that information be leveraged to disrupt the election process ?
+
+**PSA:** none of what I'll describe below involve hacking or unauthorized access.
+
+
+#### Public Competitive Tendering
+
+My first stop was looking at draft laws and executive documents on the new electronic voting system. Since the decision to drop [the old system](/) was taken, a public competitive tendering was set up. We can see in the screenshot below (source: [http://www.dekamer.be/FLWB/PDF/54/1353/54K1353008.pdf](http://www.dekamer.be/FLWB/PDF/54/1353/54K1353008.pdf)) that the budget for this new system nicknamed "MARTINE (**Ma**nagement, **R**egistration and **T**ransmission of **In**formation and results about **E**lection)" is 420.000€.
+
+![law_screen]({{site.url}}assets/54K1353008_screen1.png)
+
+
+Looking for who won this competitive tendering, I stumbled upon this [document](http://www.ibz.rrn.fgov.be/fileadmin/user_upload/fr/rn/rapports/comite/2017/AG-20171206/AG-20171206-01-Legislation-2017-et-projets-DGIP-FR.pdf) which is a belgian Federal Service of Internal Affairs general assembly presentation from 2017. We can find the following slides in this document:
+
+![AG-20171206_screen1]({{site.url}}assets/AG-20171206_screen1.png)
+
+![AG-20171206_screen2]({{site.url}}assets/AG-20171206_screen2.png)
+
+
+So, the company who won this public competitive tendering is **CIVADIS**. CIVADIS [acquired](https://www.civadis.be/index.php/g%C3%A9n%C3%A9ral/297-officialisation-de-la-fusion-entre-stesud-et-civadis) the [company](http://www.stesud.be/index2.php) who developped the bug-ridden system that I [analyzed back in 2014](http://quentinkaiser.be/analysis/2015/05/12/how-not-to-build-an-evoting-system/). CIVADIS itself is part of a bigger belgian ICT consultancy group named [NRB](http://www.nrb.be/).
+
+The diagram below should help you understand components of their structure involved in this evoting project:
+
+
+![civadis_galaxy]({{site.url}}assets/civadis_galaxy.png)
+
+Note that CIVADIS takes care of vote tallying, transmission, and publication systems which will be in use for each voting method (paper and electronic). For cities in Belgium that chose to stick to electronic voting booths, the booths will be provided by [Smartmatic](http://www.smartmatic.com/).
+
+As for auditing of this system, a city of Brussels employee told me in an email that *"To this day, both contractors chose PWC for certification and audit"*.
+
+So pretty much keep the 2014 team and start again.
+
+
+#### Finding Martine
+
+From there I just had to do some Googling with the right set of keywords to find information about MARTINE. One of the first hit was a personal website with a [page](http://www.arnaudp.be/martine) containing the complete list of hosts and websites that are part of the MARTINE infrastructure.
+
+**Edit:** The page is no longer accessible but can be seen via [Google webcache](http://webcache.googleusercontent.com/search?q=cache:TNmNtr2HsqkJ:  www.arnaudp.be/martine+&cd=4&hl=fr&ct=clnk&gl=be).
+
+**Edit 2:** The webcache is dead now, so here is a screenshot I took:
+
+![arnaudp_be_martine.png]({{site.url}}assets/arnaudp_be_martine.png)
+
+
+#### Mapping Martine 
+
+I extracted everything I could from that discovered web page (URLs, hostnames, naming conventions, ...). Everything is hosted on subdomains of [martineproject.be](www.martineproject.be), in a subnet managed by CIGER (a sub-branch of NRB). A look at Certificate Transparency logs returns interesting [results](https://crt.sh/?q=%25.martineproject.be) too. I started taking automated screenshots of them with cutycapt to see what was running there to confirm it really is election software.
+
+![martine_ma1x_screenshot]({{site.url}}assets/martine_ma1x_screenshot.png)
+
+After a while, and based on my initial knowledge acquired during the 2014 elections, I started mapping everything out on paper. My current understanding of the whole solution is summarized in the diagram below (you can click on it for a version with larger resolution).
+
+[![martine_functional_diagram]({{site.url}}assets/martine_functional_diagram_small.png)]({{site.url}}assets/martine_functional_diagram.png)
+
+
+#### Understanding Martine
+
+The following components are part of the architecture:
+
+* **MA1B** - Introduce results, generate PDF report and sign it with polling station president eID ?
+* **MA2X** - Introduce results and generate "Format F" (CSV) file ?
+* **MA1L** - Encoding of political parties, candidates, polling stations details.
+* **MA1V** - Visualisation app ? No idea what this is.
+* **MA5** - Introduction of results by embassies ?
+* **MA5V** - Visualisation app to monitor reception of embassies results ?
+* **Collect** - Reception of results and signed PDF from MA2X/MA1L/MA5.
+* **Calculate** - Reception of collected results from Collect and vote tallying.
+* **Cockpits** - Monitoring and overview of the whole operation.
+* **Diffuse** - Publication platform, available to press organizations on the night of the election.
+
+Those who read my research from 2014 will see some similarities here. If I use the 2014 nomenclature: MA1L is Web1, MA1B is Pgm2, MA2X is Pgm3, Collect is Loc1, and Calculate is Loc2. The big difference is that instead of having thick clients running on laptop in polling stations, they chose to have polling stations presidents connect to websites to transmit results.
+
+As for the software stack, each application seems to have been developed in Java and runs on WildFly behind Nginx acting as a reverse proxy, hosted on Linux servers. Let's just say it's a good thing they're moving away from their previous software stack which was mostly PHP web apps running on Windows with Flash applications for Cockpits.
+
+#### Auditing Martine
+
+If we take a look at the latest revision of the [ordonnance](https://elections2018.brussels/sites/default/files/2018-02/Ord%20vote%20%C3%A9lectronique.pdf) for electronic voting in Brussels, electronic voting software will be published once they have been audited. A more or less litteral translation of what they consider to fall into that "electronic voting software" definition is *"software provided by the government that polling stations and central polling stations need to use"*. That's ... rather vague.
+
+![ordonnance_vote_screen1]({{site.url}}assets/ordonnance_vote_screen1.png)
+
+[IANAL](https://www.urbandictionary.com/define.php?term=IANAL), but I think we can consider that orange components in the diagram below falls under that definition. Keep in mind that I'm not 100% sure that MA5/MA5V is software used by embassies to transmit results so its status may change in the future.
+
+[![evoting_software_overview_small]({{site.url}}assets/evoting_software_overview_small.png)]({{site.url}}assets/evoting_software_overview.png)
+
+(Idea for that diagram comes from Rob van der Veer's OWASP AppSec 2015 [presentation](https://2015.appsec.eu/wp-content/uploads/2015/09/owasp-appseceu2015-vanderveer.pdf))
+
+Based on my analysis, I think we should expect the belgian government to publish the source code of 3 web applications (MA1B, MA2X, MA5), an OCR-based paper vote counting solution (DEPASS), and 3 Linux virtual machines from Smartmatic (ECM, PM, VM).
+
+Given the large code base it represents, it would be nice that the belgian infosec community set up events similar to [DEFCON Voting Machine Hacking Vilage](https://www.wired.com/story/voting-machine-hacks-defcon/) so that people can look at it together.
+
+#### Conclusion
+
+This is a work in progress and I'll do my best to update this post and document the new system as I gather new information but so far I can already assert that:
+
+* there is a lot of components involved in the election process and it can be really difficult to find them all. Hopefully having a comprehensive list of them will help us when we request access to the source code.
+* the law on electronic voting is too vague. It does not define precisely what is or isn't considered to be "electronic voting software".
+* the fact they use Jenkins is a good indicator they might be using a source code control system. So hopefully we won't need to dig into fucked up archives packaged in a hurry.
+* the fact that this whole infrastructure is exposed to the public Internet is troubling. They even managed to get themselves [indexed](https://www.google.com/search?q=site%3Amartineproject.be) by Google.
+
+If you made it this far, thanks for reading :) If you have questions, do not hesitate to contact me via Twitter/Email/Comments. I'll do my best to answer them.
+
+
