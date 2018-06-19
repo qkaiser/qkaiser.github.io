@@ -105,7 +105,7 @@ This is a work in progress and I'll do my best to update this post and document 
 
 * there is a lot of components involved in the election process and it can be really difficult to find them all. Hopefully having a comprehensive list of them will help us when we request access to the source code.
 * the law on electronic voting is too vague. It does not define precisely what is or isn't considered to be "electronic voting software".
-* the fact they use Jenkins is a good indicator they might be using a source code control system. So hopefully we won't need to dig into fucked up archives packaged in a hurry.
+* the fact they use Jenkins is a good indicator they might be using a source code control system. So hopefully we won't need to dig into messy archives packaged in a hurry.
 * the fact that this whole infrastructure is exposed to the public Internet is troubling. They even managed to get themselves [indexed](https://www.google.com/search?q=site%3Amartineproject.be) by Google.
 
 If you made it this far, thanks for reading :) If you have questions, do not hesitate to contact me via Twitter/Email/Comments. I'll do my best to answer them.
