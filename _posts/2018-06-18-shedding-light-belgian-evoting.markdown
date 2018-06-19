@@ -95,7 +95,9 @@ If we take a look at the latest revision of the [ordonnance](https://elections20
 
 (Idea for that diagram comes from Rob van der Veer's OWASP AppSec 2015 [presentation](https://2015.appsec.eu/wp-content/uploads/2015/09/owasp-appseceu2015-vanderveer.pdf))
 
-Based on my analysis, I think we should expect the belgian government to publish the source code of 3 web applications (MA1B, MA2X, MA5), an OCR-based paper vote counting solution (DEPASS), and 3 Linux virtual machines from Smartmatic (ECM, PM, VM).
+Based on my analysis, I think we should expect the belgian government to publish the source code of 3 web applications (MA1B, MA2X, MA5), ~~an OCR-based paper vote counting solution (DEPASS)~~, and 3 Linux virtual machines from Smartmatic (ECM, PM, VM).
+
+**Edit (19/06/2018):** as indicated by [@DavidGlaude](https://twitter.com/DavidGlaude), DEPASS is not deployed in Brussels and the ordonnance therefore does not apply to it. I edited the diagram and my text to reflect that.
 
 Given the large code base it represents, it would be nice that the belgian infosec community set up events similar to [DEFCON Voting Machine Hacking Vilage](https://www.wired.com/story/voting-machine-hacks-defcon/) so that people can look at it together.
 
