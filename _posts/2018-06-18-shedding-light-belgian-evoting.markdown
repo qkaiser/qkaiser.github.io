@@ -13,6 +13,7 @@ Everything started from a discussion with a close friend: knowing that the sourc
 
 **PSA:** none of what I'll describe below involve hacking or unauthorized access.
 
+**PSA2:** someone (you know who you are) forced me to translate this in French, you can find the translation [here](#FR).
 
 #### Public Competitive Tendering
 
@@ -112,4 +113,115 @@ This is a work in progress and I'll do my best to update this post and document 
 
 If you made it this far, thanks for reading :) If you have questions, do not hesitate to contact me via Twitter/Email/Comments. I'll do my best to answer them.
 
+<p id="FR" ></p>
+
+## FR
+
+
+
+Avec les élections approchant en Belgique (élections communales en octobre 2018, puis les élections fédérales en 2019), j'ai décidé de jeter un coup d'oeil au nouveau système en cours de développement..
+
+Tout est parti d'une discussion avec un ami: sachant que le code source des logiciels électoraux ne seront publiés qu'*après* les élections, qu'est-ce qu'un adversaire pourrait obtenir grâce à un peu d'OSINT et d'investigation en ligne ? Comment ces informations pourraient-elles être utilisées pour mettre à mal le processus électoral ?
+
+**PSA:** rien de ce que je décris ci-dessous n'a été obtenu via un accès non autorisé ou hacking de quelque sorte que ce soit.
+
+
+#### Offre de Marché Public
+
+Mon enquête commence par de la lecture. J'ai commencé par des projets de lois et des documents de l'exécutif abordant les nouvelles mesures en matière de vote électronique. Depuis que la décision d'abandonner [l'ancien système](/) a été prise, une offre de marché public a été mise en place. On peut le voir dans la capture d'écran ci-dessous (source: [http://www.dekamer.be/FLWB/PDF/54/1353/54K1353008.pdf](http://www.dekamer.be/FLWB/PDF/54/1353/54K1353008.pdf))  que le budget pour ce nouveau système baptisé "MARTINE (**Ma**nagement, **R**egistration and **T**ransmission of **In**formation and results about **E**lection)" est de 420.000€.
+
+![law_screen]({{site.url}}assets/54K1353008_screen1.png)
+
+
+En cherchant qui obtenu ce marché public, je suis tombé sur ce [document](http://www.ibz.rrn.fgov.be/fileadmin/user_upload/fr/rn/rapports/comite/2017/AG-20171206/AG-20171206-01-Legislation-2017-et-projets-DGIP-FR.pdf) provenant d'une assemblée générale du service fédéral des affaires intérieures daté de 2017. On retrouve les deux slides ci-dessous dans le document:
+
+![AG-20171206_screen1]({{site.url}}assets/AG-20171206_screen1.png)
+
+![AG-20171206_screen2]({{site.url}}assets/AG-20171206_screen2.png)
+
+
+On y apprends que la société retenue pour l'offre de marché public est **CIVADIS**. CIVADIS a [acquis](https://www.civadis.be/index.php/g%C3%A9n%C3%A9ral/297-officialisation-de-la-fusion-entre-stesud-et-civadis) la [société](http://www.stesud.be/index2.php) qui avait developpé le système que j'avais précédemment [analysé en 2014](http://quentinkaiser.be/analysis/2015/05/12/how-not-to-build-an-evoting-system/). CIVADIS fait partie d'un groupe plus large, [NRB](http://www.nrb.be/), qui est spécialisé dans la consultance en informatique.
+
+Le diagramme ci-dessous devrait vous aider à comprendre les différents composants de sa structure qui sont impliqués dans ce projet de vote électronique:
+
+![civadis_galaxy]({{site.url}}assets/civadis_galaxy.png)
+
+Retenez que CIVADIS prends en charge le décompte, la totalisation, la transmission, ainsi que la publication des votes autant pour le vote papier que le vote électronique. Pour les villes belges qui ont décidé de continuer à utiliser des machines de vote électronique, celles-ci seront fournies par la société [Smartmatic](http://www.smartmatic.com/).
+
+Quand à l'audit du système, un employé de la ville de Bruxelles m'a indiqué par mail qu' *"à ce jour, les deux sociétés on choisi PWC pour la certification et l'audit."*.
+
+On conserve donc la même équipe de 2014 et on recommence à nouveau.
+
+
+#### Finding Martine
+
+A partir de ces informations, il me restait à faire quelques recherches Google avec les bons mots-clés pour trouver un lot d'information sur MARTINE. L'une des première page référencée viens d'un [site perso](http://www.arnaudp.be/martine) contenant la liste complète des serveurs et sites web composants l'infrastructure de MARTINE.
+
+**Edit:** La page n'est plus accessible mais peut encore être observée via [Google webcache](http://webcache.googleusercontent.com/search?q=cache:TNmNtr2HsqkJ:  www.arnaudp.be/martine+&cd=4&hl=fr&ct=clnk&gl=be).
+
+**Edit 2:** Le web cache viens d'expirer, donc voici une capture d'écran:
+
+![arnaudp_be_martine.png]({{site.url}}assets/arnaudp_be_martine.png)
+
+
+#### Mapping Martine
+
+Ayant extrait tout ce que je pouvais de cette page (URLs, noms de domaines, conventions de nommage, ...), je peux affirmer que tout est hébergé sur des sous-domaines de [martineproject.be](www.martineproject.be), dans un subnet géré par CIGER (une succursale de NRB). Un rapide coup d'oeil aux Certificate Transparency logs retourne quelques [résultats](https://crt.sh/?q=%25.martineproject.be) intéressants également. J'ai commencé à prendre des captures d'écrans de manière automatisée avec cutycapt pour voir si ce qui tournait sur ces sites étaient bien des logiciels électoraux.
+
+![martine_ma1x_screenshot]({{site.url}}assets/martine_ma1x_screenshot.png)
+
+Après quelques temps - et en me basant sur ce que j'ai appris lors des élections de 2014 - j'ai commencé par dessiner la structure telle que je la comprenais sur papier. Ma compréhension actuelle de la solution est décrite dans le diagramme ci-dessous (une version avec une meilleur résolution est disponible si vous cliquez sur l'image).
+
+[![martine_functional_diagram]({{site.url}}assets/martine_functional_diagram_small.png)]({{site.url}}assets/martine_functional_diagram.png)
+
+
+#### Understanding Martine
+
+Les composants ci-dessous font partie de l'infrastructure:
+
+* **MA1B** - Introduction des résultats, génération d'un PV en PDF qui est signé par le président du bureau de vote avec son eID ?
+* **MA2X** - Introduction des résulats et génération du "Format F" (CSV) ?
+* **MA1L** - Encodage par les partis des listes électorales, des candidats. Encodage des bureaux de votes par le ministère.
+* **MA1V** - Application de visualisation ?
+* **MA5** - Introduction des résultats par les ambassades ?
+* **MA5V** - Application de visualisations pour monitorer la réception des résultats provenant des amabassades ?
+* **Collect** - Reception des résultats et des PDF signés depuis MA2X/MA1L/MA5.
+* **Calculate** - Reception des résultats récoltés par Collect et décomptage des votes.
+* **Cockpits** - Monitoring and supervision de toutes les opérations.
+* **Diffuse** - Plateforme de publication, disponible aux groupes de presse lors de la nuit des élections.
+
+Ceux qui ont lu mes recherches de 2014 observeront certainement quelques similarités. Si l'on utilise la nomenclature de 2014: MA1L est Web1, MA1B est Pgm2, MA2X est Pgm3, Collect est Loc1, et Calculate est Loc2. La différence majeure ici, c'est qu'au lieu d'avoir un client lourd s'exécutant sur le laptop du président du bureau de vote, c'est le navigateur de ce laptop qui sera utilisé pour se connecter aux différents sites web afin d'encoder les résultats.
+
+Quand à la couche logicielle, chaque application semble avoir été développée en Java et est exécutée par WildFly derrière un serveur Nginx agissant comme un *reverse proxy*, le tout hébergé sur des serveurs Linux. Loin sont les jours où toutes leurs applications web étaient développées en PHP/Flash et tournait sur des serveurs Windows.
+
+#### Auditing Martine
+
+Si l'on jette un coup d'oeil à la dernière révision de l'[ordonnance](https://elections2018.brussels/sites/default/files/2018-02/Ord%20vote%20%C3%A9lectronique.pdf) régissant le vote électronique à Bruxelles, on apprends que le code source des différent logiciels sera publié une fois qu'ils ont été agréés.
+
+La définition de ces logiciels provient de l'alinéa §1: *"les logiciels informatiques que ceux-ci [les bureaux de votes] doivent utiliser"*. Une définition plutôt vague. En se faisant l'avocat du diable, on peut considérer que Microsoft Windows, ou encore Acrobat Reader sont des logiciels que les bureaux de vote doivent utiliser. Le code source de ces logiciels sera-t-il publié par l'Etat ?
+
+![ordonnance_vote_screen1]({{site.url}}assets/ordonnance_vote_screen1.png)
+[
+IANAL](https://www.urbandictionary.com/define.php?term=IANAL), mais je pense que l'on peut considérer les composants orange dans le diagramme ci-dessous comme tombant sous cette définition. Notez que je ne suis pas encore sûr à 100% que MA5/MA5V soient les interfaces utilisées par les ambassades pour la transmission des votes.
+
+[![evoting_software_overview_small]({{site.url}}assets/evoting_software_overview_small.png)]({{site.url}}assets/evoting_software_overview.png)
+
+(L'idée originale du diagramme provient de Rob van der Veer's OWASP AppSec 2015 [presentation](https://2015.appsec.eu/wp-content/uploads/2015/09/owasp-appseceu2015-vanderveer.pdf))
+
+En se basant sur mon analyse, je pense que l'on peut attendre du gouvernement la publication du code source de 3 applications web (MA1B, MA2X, MA5), ~~d'une application OCR de dépouillement (DEPASS)~~, ainsi que 3 machines virtuelles Linux de Smartmatic (ECM, PM, VM).
+
+**Edit (19/06/2018):** comme indiqué par [@DavidGlaude](https://twitter.com/DavidGlaude), DEPASS n'est pas déployé à Bruxelles et l'ordonnance ne s'applique donc pas à ce système. J'ai édité le diagramme pour refléter cet état de fait.
+
+Etant donné l'ampleur du code, il serait intéressant que la communauté infosec belge mette en place un évènement similaire au [DEFCON Voting Machine Hacking Vilage](https://www.wired.com/story/voting-machine-hacks-defcon/) afin que différentes personnes puisse l'analyser ensemble.
+
+#### Conclusion
+
+C'est un *work in progress* et je vais faire de mon mieux pour mettre à jour ce billet et documenter ce nouveau système dès que de nouvelles informations apparaissent. L'on peut déja affirmer que:
+
+* il y a énormément de composants impliqués dans le processus de vote électronique et il est difficile de tous les trouver. J'espère que cette analyse aidera les personnes intéressées lorsqu'elles réclameront accès aux codes sources des logiciels électoraux.
+* la loi sur le vote électronique est trop vague à mon avis. Elle ne définit pas assez précisément ce qui est considéré comme "logiciel de vote électronique".
+* le fait qu'ils utilisent Jenkins est un bon indicateur qu'ils utilisent un système de gestion de version. Avec un peu de chance cela permettra d'avoir des archives claires des différents logiciels.
+* le fait qu'une majeure partie de l'infrastructure soit exposées sur l'Internet est troublant. Ils ont même réussi à se faire [indexer](https://www.google.com/search?q=site%3Amartineproject.be) par Google.
+
+Si vous êtes arrivé jusqu'ici, merci de m'avoir lu :) Si vous avez des questions n'hésitez pas à me contacter via Twitter/Email/Commentaires. Je ferai de mon mieux pour répondre dans les temps.
 
