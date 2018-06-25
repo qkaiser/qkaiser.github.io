@@ -119,7 +119,7 @@ If you made it this far, thanks for reading :) If you have questions, do not hes
 
 
 
-Avec les élections approchant en Belgique (élections communales en octobre 2018, puis les élections fédérales en 2019), j'ai décidé de jeter un coup d'oeil au nouveau système en cours de développement..
+Avec les élections approchant en Belgique (élections communales en octobre 2018, puis les élections fédérales en 2019), j'ai décidé de jeter un coup d'oeil au nouveau système en cours de développement...
 
 Tout est parti d'une discussion avec un ami: sachant que le code source des logiciels électoraux ne seront publiés qu'*après* les élections, qu'est-ce qu'un adversaire pourrait obtenir grâce à un peu d'OSINT et d'investigation en ligne ? Comment ces informations pourraient-elles être utilisées pour mettre à mal le processus électoral ?
 
@@ -140,26 +140,26 @@ En cherchant qui obtenu ce marché public, je suis tombé sur ce [document](http
 ![AG-20171206_screen2]({{site.url}}assets/AG-20171206_screen2.png)
 
 
-On y apprends que la société retenue pour l'offre de marché public est **CIVADIS**. CIVADIS a [acquis](https://www.civadis.be/index.php/g%C3%A9n%C3%A9ral/297-officialisation-de-la-fusion-entre-stesud-et-civadis) la [société](http://www.stesud.be/index2.php) qui avait developpé le système que j'avais précédemment [analysé en 2014](http://quentinkaiser.be/analysis/2015/05/12/how-not-to-build-an-evoting-system/). CIVADIS fait partie d'un groupe plus large, [NRB](http://www.nrb.be/), qui est spécialisé dans la consultance en informatique.
+On y apprend que la société retenue pour l'offre de marché public est **CIVADIS**. CIVADIS a [acquis](https://www.civadis.be/index.php/g%C3%A9n%C3%A9ral/297-officialisation-de-la-fusion-entre-stesud-et-civadis) la [société](http://www.stesud.be/index2.php) qui a developpé le système que j'avais précédemment [analysé en 2014](http://quentinkaiser.be/analysis/2015/05/12/how-not-to-build-an-evoting-system/). CIVADIS fait partie d'un groupe plus large, [NRB](http://www.nrb.be/), qui est spécialisé dans la consultance en informatique.
 
 Le diagramme ci-dessous devrait vous aider à comprendre les différents composants de sa structure qui sont impliqués dans ce projet de vote électronique:
 
 ![civadis_galaxy]({{site.url}}assets/civadis_galaxy.png)
 
-Retenez que CIVADIS prends en charge le décompte, la totalisation, la transmission, ainsi que la publication des votes autant pour le vote papier que le vote électronique. Pour les villes belges qui ont décidé de continuer à utiliser des machines de vote électronique, celles-ci seront fournies par la société [Smartmatic](http://www.smartmatic.com/).
+Retenez que CIVADIS prend en charge le décompte, la totalisation, la transmission, ainsi que la publication des votes autant pour le vote papier que le vote électronique. Pour les villes belges qui ont décidé de continuer à utiliser des machines de vote électronique, celles-ci seront fournies par la société [Smartmatic](http://www.smartmatic.com/).
 
-Quand à l'audit du système, un employé de la ville de Bruxelles m'a indiqué par mail qu' *"à ce jour, les deux sociétés on choisi PWC pour la certification et l'audit."*.
+Quand à l'audit du système, un employé de la ville de Bruxelles m'a indiqué par mail qu' *"à ce jour, les deux sociétés ont choisi PWC pour la certification et l'audit."*.
 
-On conserve donc la même équipe de 2014 et on recommence à nouveau.
+On conserve donc la même équipe de 2014 et on recommence.
 
 
 #### Finding Martine
 
-A partir de ces informations, il me restait à faire quelques recherches Google avec les bons mots-clés pour trouver un lot d'information sur MARTINE. L'une des première page référencée viens d'un [site perso](http://www.arnaudp.be/martine) contenant la liste complète des serveurs et sites web composants l'infrastructure de MARTINE.
+A partir de ces informations, il me restait à faire quelques recherches Google avec les bons mots-clés pour trouver un lot d'informations sur MARTINE. L'une des premières pages référencées vient d'un [site perso](http://www.arnaudp.be/martine) contenant la liste complète des serveurs et sites web composant l'infrastructure de MARTINE.
 
 **Edit:** La page n'est plus accessible mais peut encore être observée via [Google webcache](http://webcache.googleusercontent.com/search?q=cache:TNmNtr2HsqkJ:  www.arnaudp.be/martine+&cd=4&hl=fr&ct=clnk&gl=be).
 
-**Edit 2:** Le web cache viens d'expirer, donc voici une capture d'écran:
+**Edit 2:** Le web cache vient d'expirer, donc voici une capture d'écran:
 
 ![arnaudp_be_martine.png]({{site.url}}assets/arnaudp_be_martine.png)
 
@@ -185,9 +185,9 @@ Les composants ci-dessous font partie de l'infrastructure:
 * **MA1V** - Application de visualisation ?
 * **MA5** - Introduction des résultats par les ambassades ?
 * **MA5V** - Application de visualisations pour monitorer la réception des résultats provenant des amabassades ?
-* **Collect** - Reception des résultats et des PDF signés depuis MA2X/MA1L/MA5.
-* **Calculate** - Reception des résultats récoltés par Collect et décomptage des votes.
-* **Cockpits** - Monitoring and supervision de toutes les opérations.
+* **Collect** - Réception des résultats et des PDF signés depuis MA2X/MA1L/MA5.
+* **Calculate** - Réception des résultats récoltés par Collect et décomptage des votes.
+* **Cockpits** - Monitoring et supervision de toutes les opérations.
 * **Diffuse** - Plateforme de publication, disponible aux groupes de presse lors de la nuit des élections.
 
 Ceux qui ont lu mes recherches de 2014 observeront certainement quelques similarités. Si l'on utilise la nomenclature de 2014: MA1L est Web1, MA1B est Pgm2, MA2X est Pgm3, Collect est Loc1, et Calculate est Loc2. La différence majeure ici, c'est qu'au lieu d'avoir un client lourd s'exécutant sur le laptop du président du bureau de vote, c'est le navigateur de ce laptop qui sera utilisé pour se connecter aux différents sites web afin d'encoder les résultats.
@@ -196,7 +196,7 @@ Quand à la couche logicielle, chaque application semble avoir été développé
 
 #### Auditing Martine
 
-Si l'on jette un coup d'oeil à la dernière révision de l'[ordonnance](https://elections2018.brussels/sites/default/files/2018-02/Ord%20vote%20%C3%A9lectronique.pdf) régissant le vote électronique à Bruxelles, on apprends que le code source des différent logiciels sera publié une fois qu'ils ont été agréés.
+Si l'on jette un coup d'oeil à la dernière révision de l'[ordonnance](https://elections2018.brussels/sites/default/files/2018-02/Ord%20vote%20%C3%A9lectronique.pdf) régissant le vote électronique à Bruxelles, on apprend que le code source des différents logiciels sera publié une fois qu'ils ont été agréés.
 
 La définition de ces logiciels provient de l'alinéa §1: *"les logiciels informatiques que ceux-ci [les bureaux de votes] doivent utiliser"*. Une définition plutôt vague. En se faisant l'avocat du diable, on peut considérer que Microsoft Windows, ou encore Acrobat Reader sont des logiciels que les bureaux de vote doivent utiliser. Le code source de ces logiciels sera-t-il publié par l'Etat ?
 
@@ -212,16 +212,16 @@ En se basant sur mon analyse, je pense que l'on peut attendre du gouvernement la
 
 **Edit (19/06/2018):** comme indiqué par [@DavidGlaude](https://twitter.com/DavidGlaude), DEPASS n'est pas déployé à Bruxelles et l'ordonnance ne s'applique donc pas à ce système. J'ai édité le diagramme pour refléter cet état de fait.
 
-Etant donné l'ampleur du code, il serait intéressant que la communauté infosec belge mette en place un évènement similaire au [DEFCON Voting Machine Hacking Vilage](https://www.wired.com/story/voting-machine-hacks-defcon/) afin que différentes personnes puisse l'analyser ensemble.
+Etant donné l'ampleur du code, il serait intéressant que la communauté infosec belge mette en place un événement similaire au [DEFCON Voting Machine Hacking Vilage](https://www.wired.com/story/voting-machine-hacks-defcon/) afin que différentes personnes puissent l'analyser ensemble.
 
 #### Conclusion
 
-C'est un *work in progress* et je vais faire de mon mieux pour mettre à jour ce billet et documenter ce nouveau système dès que de nouvelles informations apparaissent. L'on peut déja affirmer que:
+C'est un *work in progress* et je vais faire de mon mieux pour mettre à jour ce billet et documenter ce nouveau système dès que de nouvelles informations apparaissent. L'on peut déjà affirmer que:
 
 * il y a énormément de composants impliqués dans le processus de vote électronique et il est difficile de tous les trouver. J'espère que cette analyse aidera les personnes intéressées lorsqu'elles réclameront accès aux codes sources des logiciels électoraux.
 * la loi sur le vote électronique est trop vague à mon avis. Elle ne définit pas assez précisément ce qui est considéré comme "logiciel de vote électronique".
 * le fait qu'ils utilisent Jenkins est un bon indicateur qu'ils utilisent un système de gestion de version. Avec un peu de chance cela permettra d'avoir des archives claires des différents logiciels.
-* le fait qu'une majeure partie de l'infrastructure soit exposées sur l'Internet est troublant. Ils ont même réussi à se faire [indexer](https://www.google.com/search?q=site%3Amartineproject.be) par Google.
+* le fait qu'une majeure partie de l'infrastructure soit exposée sur l'Internet est troublant. Ils ont même réussi à se faire [indexer](https://www.google.com/search?q=site%3Amartineproject.be) par Google.
 
 Si vous êtes arrivé jusqu'ici, merci de m'avoir lu :) Si vous avez des questions n'hésitez pas à me contacter via Twitter/Email/Commentaires. Je ferai de mon mieux pour répondre dans les temps.
 
