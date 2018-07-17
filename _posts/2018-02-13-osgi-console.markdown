@@ -325,7 +325,12 @@ Yay ! I'm keeping an eye on pull requests [#1123](https://github.com/nmap/nmap/p
 
 ### Metasploit module
 
-I'm tidying up my Metasploit [module](https://github.com/rapid7/metasploit-framework/pull/9554) for this service at the moment. Once it lands on master I'll edit this post with more details.
+~~~I'm tidying up my Metasploit [module](https://github.com/rapid7/metasploit-framework/pull/9554) for this service at the moment. Once it lands on master I'll edit this post with more details.~~~
+
+Thanks to the wonderful people maintaining Metasploit, my module [landed](https://github.com/rapid7/metasploit-framework/pull/9554) some time ago. Usage is straightforward:
+
+<script src="https://asciinema.org/a/KyEbwcPNVLh7heErUpZiHEj9z.js" id="asciicast-KyEbwcPNVLh7heErUpZiHEj9z" async></script>
+
 
 ### Mandatory Shodan Search
 
