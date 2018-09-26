@@ -69,16 +69,19 @@ After a while, and based on my initial knowledge acquired during the 2014 electi
 
 The following components are part of the architecture:
 
-* **MA1B** - Introduce results, generate PDF report and sign it with polling station president eID ?
-* **MA2X** - Introduce results and generate "Format F" (CSV) file ?
+* **MA1B** - Introduce results, generate PDF report and sign it with polling station president eID.
+* **MA2X** - Introduce results and generate "Format F" (CSV) file.
 * **MA1L** - Encoding of political parties, candidates, polling stations details.
-* **MA1V** - Visualisation app ? No idea what this is.
+* **MA1V** - Supervision of MA1L.
+* **MA3X** - Information about polling stations.
 * **MA5** - Introduction of results by embassies ?
 * **MA5V** - Visualisation app to monitor reception of embassies results ?
 * **Collect** - Reception of results and signed PDF from MA2X/MA1L/MA5.
 * **Calculate** - Reception of collected results from Collect and vote tallying.
 * **Cockpits** - Monitoring and overview of the whole operation.
 * **Diffuse** - Publication platform, available to press organizations on the night of the election.
+
+**Update 26/09/2018**: my understanding of those components seems to be right based on a recently published [document](http://electionslocales.wallonie.be/sites/default/files/documents_telechargeables/Formation_MARTINE_CIVADIS.pdf).
 
 Those who read my research from 2014 will see some similarities here. If I use the 2014 nomenclature: MA1L is Web1, MA1B is Pgm2, MA2X is Pgm3, Collect is Loc1, and Calculate is Loc2. The big difference is that instead of having thick clients running on laptop in polling stations, they chose to have polling stations presidents connect to websites to transmit results.
 
@@ -182,13 +185,15 @@ Les composants ci-dessous font partie de l'infrastructure:
 * **MA1B** - Introduction des résultats, génération d'un PV en PDF qui est signé par le président du bureau de vote avec son eID ?
 * **MA2X** - Introduction des résulats et génération du "Format F" (CSV) ?
 * **MA1L** - Encodage par les partis des listes électorales, des candidats. Encodage des bureaux de votes par le ministère.
-* **MA1V** - Application de visualisation ?
+* **MA1V** - Application de supervision de MA1L.
 * **MA5** - Introduction des résultats par les ambassades ?
 * **MA5V** - Application de visualisations pour monitorer la réception des résultats provenant des amabassades ?
 * **Collect** - Réception des résultats et des PDF signés depuis MA2X/MA1L/MA5.
 * **Calculate** - Réception des résultats récoltés par Collect et décomptage des votes.
 * **Cockpits** - Monitoring et supervision de toutes les opérations.
 * **Diffuse** - Plateforme de publication, disponible aux groupes de presse lors de la nuit des élections.
+
+**Update 26/09/2018**: ma compréhension des différents composants semble être juste étant donné ce [document](http://electionslocales.wallonie.be/sites/default/files/documents_telechargeables/Formation_MARTINE_CIVADIS.pdf) de formation récement publié.
 
 Ceux qui ont lu mes recherches de 2014 observeront certainement quelques similarités. Si l'on utilise la nomenclature de 2014: MA1L est Web1, MA1B est Pgm2, MA2X est Pgm3, Collect est Loc1, et Calculate est Loc2. La différence majeure ici, c'est qu'au lieu d'avoir un client lourd s'exécutant sur le laptop du président du bureau de vote, c'est le navigateur de ce laptop qui sera utilisé pour se connecter aux différents sites web afin d'encoder les résultats.
 
