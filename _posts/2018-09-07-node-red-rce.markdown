@@ -65,7 +65,7 @@ I downloaded the results from Shodan and executed an innocuous scan on all those
 
 A Node-RED instance that is not protected will return version information:
 
-<pre style="background-color:black;color:white;font-family:'monospace';white-space: pre-wrap;">
+<pre>
 $ <b>curl -s http://127.0.0.1:1880/settings | json_pp</b>
 {
     "version" : "0.19.2",
@@ -88,7 +88,7 @@ $ <b>curl -s http://127.0.0.1:1880/settings | json_pp</b>
 
 A Node-RED instance that is protected will return a 401 Unauthorized:
 
-<pre style="background-color:black;color:white;font-family:'monospace';white-space: pre-wrap;">
+<pre>
 $ <b>curl -i http://127.0.0.1:1880/settings</b>
 HTTP/1.1 401 Unauthorized
 X-Powered-By: Express
