@@ -13,7 +13,7 @@ I recently came upon a Telnet-based service that was previously unidentified by 
 
 My first encounter with this service was from a Nessus scan reporting a Telnet service on some remote host. I simply connected to it:
 
-<pre style="background-color:black;color:white;font-family:'inconsolata';">
+<pre>
 <b>telnet somehost.lan</b>
 Trying somehost.lan...
 Connected to somehost.lan.
@@ -37,7 +37,7 @@ Interesting. A few minutes of google-fu later, I found some page describing that
 
 So far so good. I tinkered with the console and found two interesting calls:
 
-<pre style="background-color:black;color:white;font-family:'inconsolata';">
+<pre>
 osgi> <b>help exec</b>
 exec - execute a command in a separate process and wait
    scope: equinox
@@ -59,7 +59,7 @@ My first step was to create a test environment on my own machine so I don't end 
 
 Unzip everything and create the following directory structure by copying the right jar files from the unzipped directory:
 
-<pre style="background-color:black;color:white;font-family:'inconsolata';">
+<pre>
 .
 ├── configuration
 │   └── config.ini
@@ -80,7 +80,7 @@ osgi.noShutdown=true
 {% endhighlight %}
 
 Once everything was in place, I checked that it actually worked by launching it:
-<pre style="background-color:black;color:white;font-family:'inconsolata';">
+<pre>
 <b>java -jar org.eclipse.osgi_3.12.50.v20170928-1321.jar -console 5555</b>
 </pre>
 
@@ -117,7 +117,7 @@ match telnet m|^\xff\xfb\x01\xff\xfb\x03\xff\xfd\x1f\xff\xfd\x18$| p/Eclipse Equ
 
 Next attempt: it works \o/
 
-<pre style="background-color:black;color:white;font-family:'inconsolata';">
+<pre>
 <b>$ nmap -sV -p5555 -Pn 127.0.0.1</b>
 
 Starting Nmap 7.00 ( https://nmap.org ) at 2018-01-29 18:30 CET
@@ -131,7 +131,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.53 seconds
 
 I later discovered that OSGi console can run in what they call "_telnetd mode_". This can be done by issuing the following command:
 
-<pre style="background-color:black;color:white;font-family:'inconsolata';">
+<pre>
 osgi> <b>telnetd start</b>
 telnetd is running on 127.0.0.1:2019
 </pre>
@@ -145,7 +145,7 @@ match telnet m|^(\r\n)*osgi>\x20$| p/Eclipse Equinoxe OSGi Shell (telnetd mode)/
 
 Again, a quick check with Nmap to demonstrate that it actually works:
 
-<pre style="background-color:black;color:white;font-family:'inconsolata';">
+<pre>
 <b>$ nmap -sV -p2019,5555 -Pn 127.0.0.1</b>
 
 Starting Nmap 7.00 ( https://nmap.org ) at 2018-01-29 18:36 CET
@@ -305,7 +305,7 @@ end
 
 That's it. Let's try it:
 
-<pre style="background-color:black;color:white;font-family:'inconsolata';">
+<pre>
 <b>$ nmap -sV -p 5555 --script osgi-info -Pn -n 127.0.0.1</b>
 Starting Nmap 7.00 ( https://nmap.org ) at 2018-01-30 21:37 CET
 Nmap scan report for 127.0.0.1
