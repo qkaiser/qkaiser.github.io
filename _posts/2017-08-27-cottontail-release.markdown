@@ -108,7 +108,7 @@ I wrote a tool that implements everything I just described, called Cottontail. I
 
 It is pretty straightforward. You launch it by providing a URL to a rabbitmq_management server and it will try to connect using default credentials (you can change that behavior using `--username` and `--password`):
 
-<pre style="background-color:black;color:white;font-family:'monospace';">
+<pre>
 $ <b>python main.py</b>
 
         /\ /|
