@@ -44,4 +44,4 @@ The device is plug and play. You connect it to a screen over HDMI or VGA and hoo
 
 I tried streaming a presentation from Windows and using their [Android app](https://play.google.com/store/apps/details?id=com.crestron.airmedia). You simply need to provide the device's IP and the four digits code displayed on screen to associate with the device. Everything worked as expected, but we still don't know what makes it tick.
 
-To uncover how the device works we will start with hardware hacking, which is the subject of my next blog post. You can find it [right here](#).
+To uncover how the device works we will start with hardware hacking, which is the subject of my next blog post. You can find it [right here]({{site.url}}/pentesting/2019/03/25/awind-device-hardware/).
