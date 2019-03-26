@@ -1137,6 +1137,4 @@ We gathered information about applications, OS, and underlying CPU architecture 
 
 We gained more insight about storage layout and boot process by analyzing the image dump. On top of that, we now have access to the root filesystem holding all the files and binaries. This means it's time to move onto the next step: **network assessment**.
 
-This will be covered in the third part of this blog series :)
-
-<!-- [Man-in-the-Conference Room - Part III (Network Assessment)]({{site.url}}/pentesting/2019/03/26/awind-device-network/). -->
+This will be covered in the third part of this blog series, you can find it at [Man-in-the-Conference Room - Part III (Network Assessment)]({{site.url}}/pentesting/2019/03/26/awind-device-network/).
