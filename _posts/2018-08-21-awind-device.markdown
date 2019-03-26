@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Man-in-the-Conference Room - Part I (Intro)"
+title:  "Man-in-the-Conference-Room - Part I (Intro)"
 date:   2019-03-25 03:00:00
 comments: true
 categories: pentesting

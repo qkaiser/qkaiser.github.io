@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Man-in-the-Conference Room - Part III (Network Assessment)"
+title:  "Man-in-the-Conference-Room - Part III (Network Assessment)"
 date:   2019-03-26 03:00:00
 comments: true
 categories: pentesting

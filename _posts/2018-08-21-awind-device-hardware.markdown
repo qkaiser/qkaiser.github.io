@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Man-in-the-Conference Room - Part II (Hardware Hacking)"
+title:  "Man-in-the-Conference-Room - Part II (Hardware Hacking)"
 date:   2019-03-25 04:00:00
 comments: true
 categories: pentesting
