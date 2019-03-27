@@ -16,7 +16,7 @@ The device in question was an **Airmedia AM-101** and in this blog series I'll d
 Here's the agenda for this blog series:
 
 1. [**Intro**](#) - You're reading that post right now.
-2. [**Hardware Hacking**]({{site.url}}/pentesting/2019/03/25/awind-device-hardware/) - Where we discover debug ports, connect to it and ultimately dump the firmware. (release: 25/03/2019)
+2. [**Hardware Hacking**]({{site.url}}pentesting/2019/03/25/awind-device-hardware/) - Where we discover debug ports, connect to it and ultimately dump the firmware. (release: 25/03/2019)
 3. [**Network Assessment**]({{site.url}}pentesting/2019/03/26/awind-device-network/) - Scanning the device for exposed ports and network protocols reverse engineering. (release: 26/03/2019)
 4. [**Vulnerability Research & Development**]({{site.url}}pentesting/2019/03/27/awind-device-vrd/) - Armed with a firmware dump and known exposed services, we find multiple RCEs and bypasses. (release: 27/03/2019)
 5. **Hunting OEMs** - A methodology to find devices from other manufacturers that are affected by the exact same issues. (release: 28/03/2019)
