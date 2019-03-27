@@ -771,4 +771,4 @@ Hope you learned something along the way :) Nmap service probe rules, Nmap scrip
 The next step will be even more fun as we'll dig into **vulnerability research and development**! Keep an eye on this blog, I'll release it on March 27th.
 
 
-<!-- You can find it at [Man-in-the-conference room - Part IV (Vulnerability Research & Development)]({{site.url}}/pentesting/2018/08/21/awind-device-vrd/). -->
+You can find it at [Man-in-the-conference-room - Part IV (Vulnerability Research & Development)]({{site.url}}/pentesting/2019/03/27/awind-device-vrd/).
