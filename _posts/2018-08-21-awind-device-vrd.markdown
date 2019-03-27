@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Man-in-the-Conference Room - Part IV (Vulnerability Research & Development)"
+title:  "Man-in-the-Conference-Room - Part IV (Vulnerability Research & Development)"
 date:   2019-03-27 10:00:00
 comments: true
 categories: pentesting
