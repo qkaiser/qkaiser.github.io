@@ -20,7 +20,7 @@ Here's the agenda for this blog series:
 3. [**Network Assessment**]({{site.url}}pentesting/2019/03/26/awind-device-network/) - Scanning the device for exposed ports and network protocols reverse engineering.
 4. [**Vulnerability Research & Development**]({{site.url}}pentesting/2019/03/27/awind-device-vrd/) - Armed with a firmware dump and known exposed services, we find multiple RCEs and bypasses.
 5. [**Hunting OEMs**]({{site.url}}pentesting/2019/03/28/awind-device-oemhunt/) - A methodology to find devices from other manufacturers that are affected by the exact same issues.
-6. **Conclusion & Recommendations** - General conclusion and recommendations to secure those devices, coordinated disclosure timeline and release of tooling for all pentesting teams out there. (release: 29/03/2019)
+6. [**Conclusion & Recommendations**]({{site.url}}pentesting/2019/04/23/awind-device-conclusion/) - General conclusion and recommendations to secure those devices, coordinated disclosure timeline and release of tooling for all pentesting teams out there.
 
 ---
 

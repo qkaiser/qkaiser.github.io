@@ -261,4 +261,4 @@ Or this one presenting the model distribution from Crestron manufacturer, with a
 Thanks to my reverse engineering effort and Shodan, I understood that a lot more devices were affected.
 This led me to notify the right company and to provide them a detailed list of devices known to be affected by discovered vulnerabilities.
 
-The next article will be a general conclusion with clear advisories and coordinated disclosure timeline.
+The next article will be a general conclusion with clear advisories and coordinated disclosure timeline. You can find it [here]({{site.url}}pentesting/2019/04/23/awind-device-conclusion/)
