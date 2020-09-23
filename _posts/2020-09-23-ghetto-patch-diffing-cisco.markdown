@@ -6,7 +6,7 @@ comments: true
 categories: exploitdev
 ---
 
-![test]({{site.url}}/assets/ville100couleur_frite100sauce.jpg)
+![headerpicture]({{site.url}}assets/ville100couleur_frite100sauce.jpg)
 
 I received an email last week from someone looking into vulnerabilities affecting Cisco RV110W. They were wondering if I had any information about [CVE-2020-3323](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-3323), [CVE-2020-3330](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-3330), or [CVE-2020-3331](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-3331) that were released at the same time than [the ones I had found](/exploitdev/2020/07/14/breaking-cisco-rv-again/). 
 
@@ -164,7 +164,6 @@ $1$aUzX1IiE$x2rSbqyggRaYAJgSRJ9uC.:Admin123
 ```
 
 There you go. The static credentials found in RV110W firmware before 1.2.2.8 are **admin:Admin123**.
-
 
 Note that I never found a way to enable Telnet from the device web interface and that none of the RV110W [exposed on the Internet](https://www.shodan.io/search?query=ssl%3ARV110W+port%3A23) have Telnet port open.
 
