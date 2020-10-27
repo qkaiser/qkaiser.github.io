@@ -145,7 +145,8 @@ foreach($ive in $ives) {
 
 I also developed a post-exploitation module for Metasploit so if pentesters land on a laptop with an outdated version of Pulse Secure they can get plaintext domain credentials. No need to pass the hash anymore :)
 
-<!-- TODO: metasploit sample output with asciinema -->
+The module is currently [being reviewed](https://github.com/rapid7/metasploit-framework/pull/14314).
+
 ### How do we even fix this ?
 
 I'm totally aware that any credentials saving feature will need access to plaintext *at some point*. The data protection API is not bulletproof once you execute code with your victim's privileges. This is known and accepted, even by [browsers](https://www.rapid7.com/db/modules/post/windows/gather/enum_chrome).
