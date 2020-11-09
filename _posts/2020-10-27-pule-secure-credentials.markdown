@@ -1,6 +1,8 @@
 ---
 layout: post
 title:  "Reversing Pulse Secure Client Credentials Store"
+image: /assets/pulse_secure_logo.jpg
+author: qkaiser
 date:   2020-10-27 10:00:00
 comments: true
 categories: reversing

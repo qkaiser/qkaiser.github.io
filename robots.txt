@@ -1,0 +1,6 @@
+---
+layout: none
+exclude: true
+---
+User-agent: *
+Sitemap: {{ site.url }}/sitemap.xml
