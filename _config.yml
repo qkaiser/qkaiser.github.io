@@ -8,3 +8,14 @@ url: "https://quentinkaiser.be/"
 # Build settings
 markdown: kramdown
 permalink: pretty
+plugins:
+    - jekyll-seo-tag
+    - jekyll-sitemap
+twitter:
+  username: qkaiser
+  card: summary
+social:
+  name: Quentin Kaiser
+  links:
+    - https://twitter.com/qkaiser
+    - https://github.com/qkaiser
