@@ -9,7 +9,7 @@ categories: pentesting
 In this third installation of my blog series about wireless presentation devices, I’ll focus on how to discover exposed network services and how to reverse engineer proprietary network protocols. We'll rely on information gained during the two previous posts to do so. You can find those posts there:
 
 * [Man-in-the-conference room - Part I (Introduction)]({{site.url}}pentesting/2019/03/25/awind-device/)
-* [Man-in-the-conference room - Part II (Hardware Hacking)]({{asset.url}}pentesting/2019/03/25/awind-device-hardware/)
+* [Man-in-the-conference room - Part II (Hardware Hacking)]({{site.url}}pentesting/2019/03/25/awind-device-hardware/)
 
 ## 1. Network Scan
 
