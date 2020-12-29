@@ -1,11 +1,11 @@
 ---
 layout: post
-title:  "Huawei Weird Attempt at Astroturfing Belgium"
+title:  "Huawei Weird Attempt at Astroturfing Brussels"
 image: /assets/morty_is_everything_a_camera.jpeg
 author: qkaiser
 date:   2020-12-29 10:00:00
 comments: true
-categories: reversing
+categories: osint
 ---
 
 Starting around mid-december 2020, I started receiving **a lot** of sponsored content from Huawei about the decision that Belgium authorities took to block Huawei 5G gear from being deployed. The campaign was quite aggressive, so I took screenshots with the idea of coming back to it in the future.
