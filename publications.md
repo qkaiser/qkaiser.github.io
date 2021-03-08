@@ -10,7 +10,7 @@ A few things I worked on in the past few years.
 
 *This report outlines the VOOdoo vulnerabilities found in NETGEAR CG3700B cable modems provided by VOO to its subscribers. These modems use a weak algorithm to generate WPA2 pre-shared keys, allowing an attacker in reception range of a vulnerable modem to derive the WPA2 pre-shared key from the access point MAC address. The modems are also vulnerable to remote code execution through the web administration panel. The exploit is possible due to usage of default credentials and programming errors in multiple form handlers. By chaining these vulnerabilities an attacker can gain unauthorized access to VOO customers LAN (over the Internet or by being in reception range of the access point), fully compromise the router, and leave a persistent backdoor allowing direct remote access to the network.*
 
-* [paper]({{site.url}}/assets/qkaiser_voodoo_2020.pdf)
+* [paper]({{site.url}}/assets/qkaiser_voodoo_2021.pdf)
 
 #### Unfriend your boss. Mapping organizations social networks for red team engagements.
 
