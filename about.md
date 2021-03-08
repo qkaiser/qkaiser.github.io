@@ -10,4 +10,4 @@ I'm currently focusing on binary exploitation of embedded devices, hunting zero 
 
 You can get in touch by email ([contact@quentinkaiser.be](mailto:contact@quentinkaiser.be)) or Twitter ([@QKaiser](https://twitter.com/qkaiser)).
 
-If you'd like to hire me, all the information you need is at [https://konkretesec.com](https://konkretesec.com).
+If you'd like to hire me, I provide security consulting services in the area of penetration testing, ethical hacking, vulnerability assessments and security code and configuration reviews with [Konkrete Security](https://konkretesec.com), a company I launched in 2021.
