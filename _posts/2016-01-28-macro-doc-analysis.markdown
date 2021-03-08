@@ -2,10 +2,12 @@
 layout: post
 title:  "Analyzing maldocs with oledump"
 date:   2017-01-29 07:00:00
+author: qkaiser
+excerpt: |
+    I always worked for the red team but as I was going through my spam folder this morning I decided I’d give a try at analyzing malicious attachments. I also secretly always wanted to check out Didier Stevens’ oledump tool so this was a good excuse :)
 comments: true
 categories: reversing security malware macros
 ---
-
 
 I always worked for the red team but as I was going through my spam folder this morning I decided I'd give a try at analyzing malicious attachments. I also secretly always wanted to check out Didier Stevens' [oledump](https://blog.didierstevens.com/programs/oledump-py/) tool so this was a good excuse :)
 

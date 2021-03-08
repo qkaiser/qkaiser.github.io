@@ -2,6 +2,10 @@
 layout: post
 title:  "My views on hacking and electronic voting"
 date:   2017-02-05 07:00:00
+author: qkaiser
+image: 
+excerpt: |
+     I've been invited to take part to a radio talk show this morning as a "Security Expert". Imposter syndrome apart, it is really hard to convey key talking points to a non-technical crowd within a few minutes. The aim of this article is to share my views on the subject in a more detailed and documented way.
 comments: true
 categories: evoting
 ---
@@ -39,7 +43,7 @@ So I'm more worried of something going wrong because computers are dumb than som
 
 ### What about electronic voting booth ?
 
-[They suck](https://qkaiser.github.io/analysis/2015/05/12/how-not-to-build-an-evoting-system/). Stop trying to make it happen.
+[They suck](https://quentinkaiser.be/analysis/2015/05/12/how-not-to-build-an-evoting-system/). Stop trying to make it happen.
 
 ### Where do we go from here ?
 
@@ -52,4 +56,3 @@ I would recommend two things:
 That's all for me. Thanks for reading.
 
 *_Please, pretty please, don't let the skids from "Anonymous Belgium" downing your infra by wiring 0.01BC to some booter on election day._
-

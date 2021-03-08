@@ -2,6 +2,9 @@
 layout: post
 title:  "Man-in-the-Conference-Room - Part III (Network Assessment)"
 date:   2019-03-26 03:00:00
+author: qkaiser
+image: /assets/awind_webgui.png
+excerpt: In this third installation of my blog series about wireless presentation devices, I’ll focus on how to discover exposed network services and how to reverse engineer proprietary network protocols.
 comments: true
 categories: pentesting
 ---
@@ -97,15 +100,15 @@ One point that is often overlooked is whether the device supports IPv6 or not. T
 
 Link-local addresses in IPv6 are derived from the device's MAC address, so let's find it using **arp**:
 
-<pre>
+{% highlight bash %}
 $ arp
 Address                  HWtype  HWaddress           Flags Mask            Iface
 192.168.100.2            ether   00:12:5f:16:30:9f   C                     eth0
-</pre>
+{% endhighlight %}
 
 Once you have it you can easily derive the link-local address using a bash script like this one:
 
-```bash
+{% highlight bash %}
 #!/bin/bash
 
 mac_to_ipv6 () {
@@ -114,16 +117,16 @@ mac_to_ipv6 () {
     echo $ipv6_address
 }
 mac_to_ipv6 $1
-```
+{% endhighlight %}
 
-<pre>
+```
 $ mac_to_ipv6.sh 00:12:5f:16:30:9f
 fe80::0212:5fff:fe16:309f
-</pre>
+```
 
 Now that we have the address, we can try to ping it with **ping6**. Note that you need to mention the interface to which the device is connected at the end of the address if you didn't set explicit routing with '**ip -6 route**'.
 
-<pre>
+```
 $ ping6 -c 5 fe80::0212:5fff:fe16:309f%eth0
 PING fe80::0212:5fff:fe16:309f%eth0(fe80::212:5fff:fe16:309f) 56 data bytes
 From fe80::36e6:d7ff:fe01:3471 icmp_seq=1 Destination unreachable: Address unreachable
@@ -134,7 +137,7 @@ From fe80::36e6:d7ff:fe01:3471 icmp_seq=5 Destination unreachable: Address unrea
 
 --- fe80::0212:5fff:fe16:309f%eth0 ping statistics ---
 5 packets transmitted, 0 received, +5 errors, 100% packet loss, time 3999ms
-</pre>
+```
 
 We see the address is unreachable, which likely means the device does not support IPv6. Note: this hypothesis was later confirmed in my tests.
 
@@ -172,6 +175,7 @@ The device is exposing three main kind services:
 
 The web GUI is not unusual. A lighttpd server with CGI scripts behind. This is what the interface looks like:
 
+{:.foo}
 ![awind_webgui]({{site.url}}/assets/awind_webgui.png)
 
 Note that two users with default credentials are set: admin/admin and moderator/moderator.
@@ -182,11 +186,11 @@ The exposure of this service breaks the Airmedia protocol purpose. The whole ide
 
 This can be demonstrated using any open implementation of Airplay such as [open-airplay](https://github.com/jamesdlow/open-airplay):
 
-<pre>
+```
 $ git clone https://github.com/jamesdlow/open-airplay.git
 $ cd open-airplay/Java && ant
 $ java -jar build/airplay.jar -h 192.168.100.2 -p /tmp/this_is_fine.jpg
-</pre>
+```
 
 
 #### Awind Protocol (scdecapp)
@@ -198,7 +202,7 @@ This is a proprietary protocol developped by Awind (OEM provider of Crestron). I
 
 Now that we've covered TCP, let's move to UDP ! As we can see in the excerpt below, the device exposes three services: [NetBIOS](https://en.wikipedia.org/wiki/NetBIOS_over_TCP/IP), [SNMP](https://en.wikipedia.org/wiki/Simple_Network_Management_Protocol), and [mDNS](https://en.wikipedia.org/wiki/Multicast_DNS):
 
-<pre>
+```
 $ nmap -sUV -p- -T4 -Pn -n 192.168.100.2
 Nmap scan report for 192.168.100.2
 Host is up, received arp-response (0.00054s latency).
@@ -207,49 +211,49 @@ PORT      STATE         SERVICE         REASON               VERSION
 137/udp   open          netbios-ns      udp-response ttl 64  Microsoft Windows XP netbios-ssn
 161/udp   open          snmp            udp-response ttl 64  SNMPv1 server; Crestron Electronics, Inc. SNMPv3 server (public)
 5353/udp  open          mdns            udp-response ttl 255 DNS-based service discovery
-</pre>
+```
 
 #### NetBIOS
 
 You can confirm NetBIOS exposure using *nbtscan*. I still can't wrap my head around why they would need to expose such service, but yet it is there.
 
-<pre>
+```
 $ nbtscan 192.168.100.2
 Doing NBT name scan for addresses from 192.168.100.2
 IP address       NetBIOS Name     Server    User             MAC address
 ------------------------------------------------------------------------------
 192.168.100.2    AIRMEDIA-16309F  server  AIRMEDIA-16309F  00:00:00:00:00:00
-</pre>
+```
 
 #### SNMP
 
 Out of the box, the device exposes SNMP version 1 and version 2c using default read and write communities (public, private). The best way to interact with it is to use *snmpget*, *snmpset*, and *snmpwalk* utilities:
 
-<pre>
+```
 $ snmpwalk -c public -v1 192.168.100.2
 SNMPv2-MIB::sysDescr.0 = STRING: Crestron Electronics AM-100 (Version 2.4.1.19)
 --snip--
-</pre>
+```
 
 #### mDNS
 
 To check services advertised over multicast DNS, nothing better than Metasploit `auxiliary/scanner/mdns/query` module:
 
-<pre>
+```
 msf5 > use auxiliary/scanner/mdns/query
 msf5 auxiliary(<span style="color:#F44336">scanner/mdns/query</span>) > run
 
-<span style="color:#2196F3">[*]</span> Sending mDNS PTR IN queries for _services._dns-sd._udp.local to 192.168.100.2->192.168.100.2 port 5353 (1 hosts)
-<span style="color:#4CAF50">[+]</span> 192.168.100.2 responded with _services._dns-sd._udp.local: (PTR _raop._tcp.local, PTR _airplay._tcp.local)
-<span style="color:#2196F3">[*]</span> Scanned 1 of 1 hosts (100% complete)
-<span style="color:#2196F3">[*]</span> Auxiliary module execution completed
-</pre>
+[*] Sending mDNS PTR IN queries for _services._dns-sd._udp.local to 192.168.100.2->192.168.100.2 port 5353 (1 hosts)
+[+] 192.168.100.2 responded with _services._dns-sd._udp.local: (PTR _raop._tcp.local, PTR _airplay._tcp.local)
+[*] Scanned 1 of 1 hosts (100% complete)
+[*] Auxiliary module execution completed
+```
 
 Looking on the wire we can see the device advertising as an "Apple TV version 3.2":
 
-<pre>
+```
 11:22:19.640419 IP 192.168.100.2.mdns > 224.0.0.251.mdns: 0*- [0q] 7/0/0 PTR 00125F1799DF@AirMedia-16309f._raop._tcp.local., (Cache flush) TXT "txtvers=1" "cn=0,1,2,3" "da=true" "et=0,3,5" "ft=0x5A7FFFF7,0xE" "md=0,1,2" "sv=false" "sr=44100" "ss=16" "pw=1" "vn=65537" "tp=UDP" "vs=220.68" <span style="background-color:#FFEB3B;color:black">"am=AppleTV3,2"</span> "pk=7af87b1bda1782678d48ca3494defe037a7da5a2e358c74dda9f04706694e88d" "sf=0x44" "vv=2", (Cache flush) SRV Crestron.local.:49153 0 0, (Cache flush) A 192.168.100.2, PTR AirMedia-16309f._airplay._tcp.local., (Cache flush) TXT "deviceid=00:12:5f:16:30:9f" "srcvers=220.68" "features=0x5A7FFFF7,0xE" "pw=1" "flags=0x44" "model=AppleTV3,2" "pk=7af87b1bda1782678d48ca3494defe037a7da5a2e358c74dda9f04706694e88d" "vv=2", (Cache flush) SRV Crestron.local.:7000 0 0 (586)
-</pre>
+```
 
 Now that we have a pretty good understanding of what's running on the device network-wise, it's time to reverse engineer this unknown protocol we've come accross during our TCP scan. Time to perform some traffic analysis !
 
@@ -261,7 +265,7 @@ There are many ways to capture traffic for analysis while testing embedded devic
 
 We'll use a more straightforward method that does not involve buying a switch or getting a shell: transparent bridges with [*brctl*](https://linux.die.net/man/8/brctl). The bash script below should help you get started with transparent bridges on Linux:
 
-```bash
+{% highlight bash %}
 #!/bin/bash
 IF_IN="eth0"
 IF_OUT="eth1"
@@ -272,7 +276,7 @@ brctl addbr $BR  # create bridge interface
 brctl addif $BR $IF_IN # join first leg to bridge
 brctl addif $BR $IF_OUT # join second leg to bridge
 ip link set dev $BR up # bring bridge interface up
-```
+{% endhighlight %}
 
 Connect the tested device on one interface and the second interface to your switch/router. Once your bridge interface is up you can start capturing traffic flowing through it with [*Wireshark*](https://www.wireshark.org/).
 
@@ -472,7 +476,8 @@ end
 </details>
 
 Running the script will give you this:
-<pre>
+
+```
 # nmap --script broadcast-awind-discover -e eth0
 Starting Nmap 7.70SVN ( https://nmap.org ) at 2018-09-29 21:49 CEST
 Pre-scan script results:
@@ -484,7 +489,7 @@ Pre-scan script results:
 |_    Version: 2.6.0.6
 WARNING: No targets were specified, so 0 hosts scanned.
 Nmap done: 0 IP addresses (0 hosts up) scanned in 1.63 seconds
-</pre>
+```
 
 
 Of course, we can also simulate an Airmedia device by replying to discovery requests sent by legitimate clients:
@@ -519,19 +524,19 @@ The association between a client application and the Airmedia device is performe
 
 The first step is a "ping pong" request to verify availability of the remote device. Client sends `wppaliveROCK` to which the server replies `wppaliveROLL`. It's super easy to check with netcat:
 
-<pre>
+```
 $ echo "wppaliveROCK" | nc 192.168.100.2 389
 wppaliveROLL
-</pre>
+```
 
 This behavior can be exploited with Nmap to reliably fingerprint that service. The rule below can be appended to **nmap-service-probes** file. It defines a TCP probe that will send `wppaliveROCK` to the target port. If Nmap receives a response from the service that match `wppaliveROLL`, this means we successfully identified an Awind association port.
 
-<pre>
+```
 Probe TCP awindAssociat q|wppaliveROCK\n|
 # rarity 8
 ports 389,3268
 match awind-associate m|^wppaliveROLL$|s p/Awind scdecapp association/ d/specialized/ cpe:/h:awind/
-</pre>
+```
 
 #### Association (0x90)
 
@@ -664,41 +669,41 @@ This is what the script running looks like. It's a little bit slow, but it's a s
 Streaming is performed over TCP port 31865 by default, but it seems that it can also be performed over other ports such as TCP/515 and TCP/8080.
 All those ports reply to NULL probes with `wppib`, this can be observed with netcat:
 
-<pre>
+```
 $ echo "" | nc 192.168.100.2 31865 | hexdump -C
 00000000  77 70 70 69 62 00 00 10  00 00 00 00              |wppib.......|
 0000000c
-</pre>
+```
 
 This means that the service can be reliably fingerprinted with Nmap in the same way that we did for the association protocol. This time we edit **nmap-service-probes**
 in the section following the NULL probe definition. A NULL probe is simply Nmap connecting to the service and sending an empty payload.
 
 If the response returned by the server matches "wppib", we know it's an Awind streaming receiver:
 
-<pre>
+```
 match awind-wppib m|^wppib\0\0\x10\0\0\0\0$| p/Awind scdecapp stream/ d/specialized/ cpe:/h:awind/
-</pre>
+```
 
 To see how streaming is performed, I captured multiple streams performed from an Android phone. This is what the exchange looks like:
 
 First, the server answers the client with this wppib:
 
-<pre>
+```
 77 70 70 69 62 00 00 10 00 00 00 00        wppib.......
-</pre>
+```
 
 Then the client sends this packet:
 
-<pre>
+```
 53 65 6e 64 65 72 49 64 02 00 00 00 00 00  SenderId......
 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ..............
 00 00 00 00                                ....
-</pre>
+```
 
 
 Immediately followed by this:
 
-<pre>
+```
 41 57 49 4e 44 49 42 20 04 00 00 00 00 00 00 00  AWINDIB ........
 00 00 04 ff 02 cf 00 38 40 00 00 38 47 ce 00 38  .......8@..8G..8
 40 00 00 01 55 de 56 53 4d 4b 01 32 41 9a ff d8  @...U.VSMK.2A...
@@ -707,32 +712,32 @@ ff e0 00 10 4a 46 49 46 00 01 01 00 00 01 00 01  ....JFIF........
 00 01 80 00 01 00 01 00 00 00 00 00 00 00 00 00  ................
 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
 00 00 49 42 54 41 49 4c                          ..IBTAIL
-</pre>
+```
 
 As I didn't want to stare for hours at hexadecimal, I simply dumped all TCP payload from an identified TCP stream with *tshark*:
 
-<pre>
+```
 $ for l in `tshark -r "traffic_capture_201706161332.pcapng" -Y usb -z follow,tcp,raw,9`; do echo $l | xxd -r -p >> /tmp/android.bin; done
-</pre>
+```
 
 I ran binwalk on the extracted binary payloads to identify the kind of data being transmitted:
 
-<pre>
+```
 $ binwalk android.bin
 
 DECIMAL       HEXADECIMAL     DESCRIPTION
 --------------------------------------------------------------------------------
 104           0x68            JPEG image data, JFIF standard 1.01
-</pre>
+```
 
 Easy win, it seems they simply sends JPEG files in cleartext. Let's use *dd* to carve out the JPEG file:
 
-<pre>
+```
 $ dd if=android.bin of=9.jpg skip=104 bs=1
 87560+0 records in
 87560+0 records out
 87560 bytes (88 kB, 86 KiB) copied, 0,0983665 s, 890 kB/s
-</pre>
+```
 
 Opening the file confirmed my assumption as I was looking at my Android device screen.
 

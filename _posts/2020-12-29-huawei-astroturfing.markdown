@@ -10,6 +10,7 @@ categories: osint
 
 Starting around mid-december 2020, I started receiving **a lot** of sponsored content from Huawei about the decision that Belgium authorities took to block Huawei 5G gear from being deployed. The campaign was quite aggressive, so I took screenshots with the idea of coming back to it in the future.
 
+{:.foo}
 ![Huawei promoted tweet]({{site.url}}/assets/huawei_promoted.png)
 
 In the meantime, excellent investigative work have been produced by people on the subject, one [Twitter thread](https://twitter.com/mvanhulten/status/1341376781039915008) by [Michiel van Hulten](https://twitter.com/mvanhulten), and a [journalistic piece](https://www.knack.be/nieuws/belgie/fake-influencers-en-fake-news-moddercampagne-van-huawei-tegen-de-belgische-regering/article-longread-1680851.html) by Rien Emmery. I'm really glad belgian journalists caught onto this and released a
@@ -36,6 +37,7 @@ The dwire website starts appearing aroung November 2020, most content is about H
 
 The site is a simple Wordpress install and the system's administrators were so kind to leave directory indexing enabled, so we can look at uploaded files.
 
+{:.foo}
 ![is everything a Huawei front ?]({{site.url}}/assets/dwire_directory_listing.png)
 
 We have an [import logs file](https://web.archive.org/web/20201229104152/https://dwire.eu/wp-content/uploads/2020/09/log_file_2020-09-10__02-53-07.txt) and corresponding [import file](https://web.archive.org/web/20201229104319/https://dwire.eu/wp-content/uploads/2020/09/huaweiadvisor.WordPress.2020-09-10-2.xml_.txt) that shows content has initially been imported from another website: **huaweiadvisor.com**.
@@ -100,13 +102,14 @@ Certificate chain
 
 The diagram below should help you understand what happens:
 
+{:.foo}
 ![cloudflare bypass]({{site.url}}/assets/cloudflare_bypass.png)
 
 dwire.eu and huaweiadvisor.com are hosted on the same server but dwire.eu domain resolves to Cloudflare IP space so that its true origin can be hidden. However, given that we know the origin IP and that the server does not protect itself against Cloudflare bypass (e.g. by only trusting traffic coming from Cloudflare network), we can request the site by going over the dotted line to confirm our assumption that both sites resides on the same server.
 
 Given that official Huawei accounts on Twitter are sharing content from huaweiadvisor.com, that content from dwire.eu was directly imported from huaweiadvisor.com, and that both sites are hosted on the same server,  we can say with high confidence that this site is under the control of Huawei PR department and keep it for further investigation.
 
-
+{:.foo}
 ![Huawei Europe shares huaweiadvisor.com content]({{site.url}}/assets/huaweiadvisor_twitter.png)
 
 Continuing on pulling the thread, I obtained the list of acounts that tweeted links to dwire.eu:
@@ -178,14 +181,17 @@ All these sites are running Wordpress with some kind of "news site" template. Be
 
 New-York Globe
 
+{:.foo}
 ![is everything a Huawei front ?]({{site.url}}/assets/nyglobe.co.png)
 
 London Globe
 
+{:.foo}
 ![is everything a Huawei front ?]({{site.url}}/assets/londonglobe.co.png)
 
 BMGlobalNew
 
+{:.foo}
 ![is everything a Huawei front ?]({{site.url}}/assets/bmbglobalnews.com.png)
 
 
@@ -211,7 +217,7 @@ These sites are linked with quotes taken out of context:
 - https://www.tijd.be/politiek-economie/belgie/federaal/belgie-sluit-deur-niet-voor-huawei/10239037.html
 - https://www.lavenir.net/cnt/dmf20200703_01488447/orange-pas-favorable-a-une-restriction-sur-les-equipementiers-pour-la-5g
 
-
+{:.foo}
 ![is everything a Huawei front ?]({{site.url}}/assets/morty_is_everything_a_camera.jpeg)
 
 *Is everything a Huawei front ?*
@@ -220,6 +226,7 @@ These sites are linked with quotes taken out of context:
 
 When your Python script fails and you end up tweeting 5G misinformation for a client from a fake camgirl account, without the link:
 
+{:.foo}
 ![Huawei amateur hour]({{site.url}}/assets/huawei_amateur_hour.png)
 
 ### Conclusion

@@ -2,6 +2,10 @@
 layout: post
 title:  "Gaining RCE by abusing Node-RED"
 date:   2018-09-07 10:00:00
+author: qkaiser
+image: /assets/node_red_flows.png 
+excerpt: |
+    During a recent security audit I discovered a Node-RED instance running on the target server. I initially discarded it as being an offline editor to draw diagrams but then came back to it and figured out some of its features could be abused to gain remote command execution on the hosting server.
 comments: true
 categories: pentesting
 ---
@@ -17,8 +21,8 @@ Node-RED is "*a programming tool for wiring together hardware devices, APIs and 
 
 Users can wire source events (*e.g.* temperature change, location update) to filters and sinks (*e.g.* HTTP requests, MQTT messaging). You can think of it as [Scratch IDE](https://scratch.mit.edu/) but for the Internet of Things.
 
+{:.foo}
 ![node_red_flows]({{site.url}}/assets/node_red_flows.png)
-*A Node-RED flow being edited by its unsuspecting user.*
 
 By default, the application does not enforce any kind of authentication and is therefore publicly accessible.
 
@@ -26,11 +30,12 @@ By default, the application does not enforce any kind of authentication and is t
 
 Looking through the different block that can be included in a diagram, I came upon these:
 
+{:.foo}
 ![node_red_flows]({{site.url}}/assets/node_red_exec.png)
-*uh oh*
 
 After a few minutes of tinkering, I finally managed to setup the proper wiring to trigger the execution of an arbitrary command and get the output in Node-RED debug console:
 
+{:.foo}
 ![node_red_exec_flow]({{site.url}}/assets/node_red_exec_flow.png)
 
 Clicking on the `trigger` block (here a timestamp value) will send a signal to the `exec` block that will execute the assigned command on the server and the output of that command will be received by the `debug` block.
@@ -65,8 +70,8 @@ I downloaded the results from Shodan and executed an innocuous scan on all those
 
 A Node-RED instance that is not protected will return version information:
 
-<pre>
-$ <b>curl -s http://127.0.0.1:1880/settings | json_pp</b>
+```
+$ curl -s http://127.0.0.1:1880/settings | json_pp
 {
     "version" : "0.19.2",
     "tlsConfigDisableLocalFiles" : false,
@@ -84,12 +89,12 @@ $ <b>curl -s http://127.0.0.1:1880/settings | json_pp</b>
     },
     "httpNodeRoot" : "/"
 }
-</pre>
+```
 
 A Node-RED instance that is protected will return a 401 Unauthorized:
 
-<pre>
-$ <b>curl -i http://127.0.0.1:1880/settings</b>
+```
+$ curl -i http://127.0.0.1:1880/settings
 HTTP/1.1 401 Unauthorized
 X-Powered-By: Express
 WWW-Authenticate: Bearer realm="Users"
@@ -98,7 +103,7 @@ Connection: keep-alive
 Content-Length: 12
 
 Unauthorized
-</pre>
+```
 
 Regarding default credentials, Node-RED provides default values (admin:password) in [settings.js](https://github.com/node-red/node-red/blob/master/settings.js#L118):
 
@@ -121,6 +126,7 @@ I therefore checked for it by sending default credentials to the `/auth/token` e
 
 The results are presented in the graph below, with 245 vulnerable Node-RED instances out of 777 exposed instances:
 
+{:.foo}
 ![node_red_exposure_stats]({{site.url}}/assets/node_red_exposure_stats.png)
 
 ### Final recommendations
@@ -130,6 +136,7 @@ The results are presented in the graph below, with 245 vulnerable Node-RED insta
 Node-RED developers and maintainers: please find a way to include security *by default* in your product.
 
 -----
-If you have questions, do not hesitate to contact me via Twitter/Email/Comments. I'll do my best to answer them.
+
+If you have questions, do not hesitate to contact me via [Twitter](https://twitter.com/qkaiser) or [email](mailto:contact@quentinkaiser.be). I'll do my best to answer them.
 
 

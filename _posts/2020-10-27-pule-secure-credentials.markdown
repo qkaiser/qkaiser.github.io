@@ -6,11 +6,14 @@ author: qkaiser
 date:   2020-10-27 10:00:00
 comments: true
 categories: reversing
+excerpt: |
+    In early 2019, I had to assess the latest version (at the time) of Pulse Secure Connect Client, an IPSEC/SSL VPN client developed by Juniper.
+
+    Given that the client allow end users to save their credentials, one of my tests included verifying how an attacker could recover them. The attacker perspective was simple: access to an employee's laptop (either physical access or remote access with low privileges). Note that the ability to recover credentials can have serious effects given that they are *almost always* domain credentials.
 ---
 
-
+{:.foo}
 ![Reversing]({{site.url}}/assets/pulse_secure_logo.jpg){:width="100%"}
-
 
 In early 2019, I had to assess the latest version (at the time) of Pulse Secure Connect Client, an IPSEC/SSL VPN client developed by Juniper.
 
@@ -39,6 +42,7 @@ Windows Registry Editor Version 5.00
 
 The only reference to this format I could find is a request on 'John the Ripper' [mailing-list](https://www.openwall.com/lists/john-users/2014/06/27/1) asking if anyone looked into this before:
 
+{:.foo}
 ![pulse_secure_jtr_post]({{site.url}}/assets/pulse_secure_jtr_post.png)
 
 No one ever answered that email since 2014, so it's time to dig into the code !
@@ -49,6 +53,7 @@ I used [procmon](https://docs.microsoft.com/en-us/sysinternals/downloads/procmon
 
 I then disassembled the main binary (*./JamUI/Pulse.exe*) with [Radare2](https://rada.re/r/) and discovered that the client indeed rely on **Windows Data Protection API** (DPAPI) to encrypt credentials.
 
+{:.foo}
 ![Reversing]({{site.url}}/assets/pulse_secure_reversing.gif){:width="100%"}
 
 I checked [MSDN](https://docs.microsoft.com/en-us/windows/desktop/api/dpapi/nf-dpapi-cryptprotectdata) and noted that the first parameter to the function is a DATA_BLOB which holds the plaintext, the second is data description while the third is another DATA_BLOB holding an optional entropy parameter:
@@ -194,10 +199,12 @@ By looking around I found that they moved the DPAPI calls for user data to the P
 
 By tracing calls to CryptProtectData, I came upon the function below (variables renamed for readability). We can see that it receives the user's password to save and builds a DATA_BLOB structure for the entropy parameter.
 
+{:.foo}
 ![reversing91r4]({{site.url}}/assets/pulse_secure_91r4_reversing.png)
 
 Building pOptionalEntropy DATA_BLOB is performed in the function below. We can see that it sets the length (cbData) to 0x10 and makes pbData point to a hardcoded address in the binary:
 
+{:.foo}
 ![reversing91r4_2]({{site.url}}/assets/pulse_secure_91r4_reversing_2.png)
 
 Data representation sucks in Ghidra, so let's switch to Radare2:
@@ -211,6 +218,7 @@ Data representation sucks in Ghidra, so let's switch to Radare2:
 
 The entropy value is set to `7B4C6492B77164BF81AB80EF044F01CE`, we confirmed it by loading it with [DataProtectionDecryptor.exe](https://www.nirsoft.net/utils/dpapi_data_decryptor.html):
 
+{:.foo}
 ![dpapi_decryptor_results.png]({{site.url}}/assets/dpapi_decryptor_results.png)
 
 What's really interesting here is that the DPAPI key is stored in *C:\Windows\Sysnative\Microsoft\Protect\S-1-5-18\User\0AB0296F-01B7-4BC3-90A2-7CBB48201253*. Looking at the SID value (S-1-5-18), we know the key belong to Local System, which makes sense given that the Pulse Secure service runs as SYSTEM. This means we cannot recover the plaintext password unless we elevate our privileges first.

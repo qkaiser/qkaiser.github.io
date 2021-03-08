@@ -2,6 +2,9 @@
 layout: post
 title:  "Using the Android qemu console for dynamic analysis evasion"
 date:   2015-02-10 17:34:24
+author: qkaiser
+excerpt: |
+    I’ve been playing with the android emulator recently and I kept thinking about how malwares could be using that emulator console to - quite aggresively - evade dynamic analysis by just killing the emulator that is used to analyze them.
 comments: true
 categories: android security malware
 ---
@@ -20,7 +23,7 @@ keeping annoying a malware reverser by killink its sandbox :)
 
 ### Sample application
 
-{% highlight java linenos %}
+{% highlight java %}
 public class MainActivity extends Activity {
 
     @Override

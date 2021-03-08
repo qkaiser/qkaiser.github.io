@@ -2,6 +2,10 @@
 layout: post
 title:  "Man-in-the-Conference-Room - Part I (Intro)"
 date:   2019-03-25 03:00:00
+author: qkaiser
+image: /assets/airmedia_am_101_outside.jpg
+excerpt: |
+     Back in 2017 a small device appeared on my desk. A wireless presentation device that one of our customers wanted to deploy on its premises, but not before we had audited it first.
 comments: true
 categories: pentesting
 ---
@@ -36,10 +40,12 @@ First and foremost, security research on wireless presentation devices is not en
 
 Our test device is an Airmedia AM-101 running firmware version 2.4.1.19 on a WM8750A processor from [WonderMedia](https://en.wikipedia.org/wiki/WonderMedia). WonderMedia specializes in low-cost ARM processor with advanced graphics processing, which makes sense here given the device's purpose.
 
+{:.foo}
 ![am_101_outside]({{site.url}}/assets/airmedia_am_101_outside.jpg)
 
 The device is plug and play. You connect it to a screen over HDMI or VGA and hook it to the network over Ethernet, it will get a DHCP lease and display the following screen:
 
+{:.foo}
 ![am_101_screen]({{site.url}}/assets/airmedia_screen.jpg)
 
 I tried streaming a presentation from Windows and using their [Android app](https://play.google.com/store/apps/details?id=com.crestron.airmedia). You simply need to provide the device's IP and the four digits code displayed on screen to associate with the device. Everything worked as expected, but we still don't know what makes it tick.

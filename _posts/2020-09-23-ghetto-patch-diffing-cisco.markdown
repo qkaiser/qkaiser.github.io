@@ -2,11 +2,17 @@
 layout: post
 title:  "Ghetto Patch Diffing a Cisco RV110W Firmware Update"
 date:   2020-09-23 12:00:00
+author: qkaiser
+image: /assets/ville100couleur_frite100sauce.jpg
 comments: true
 categories: exploitdev
+excerpt: |
+    I received an email last week from someone looking into vulnerabilities affecting Cisco RV110W. They were wondering if I had any information about CVE-2020-3323, CVE-2020-3330, or CVE-2020-3331 that were released at the same time than the ones I had found. As I went through the advisories, I couldn't resist the urge to look into it, especially when these issues are similar to the ones I reported. I think it's a nice exercise in identifying my own blind spots :)
+
 ---
 
-![headerpicture]({{site.url}}assets/ville100couleur_frite100sauce.jpg)
+{:.foo}
+![headerpicture]({{site.url}}/assets/ville100couleur_frite100sauce.jpg)
 
 I received an email last week from someone looking into vulnerabilities affecting Cisco RV110W. They were wondering if I had any information about [CVE-2020-3323](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-3323), [CVE-2020-3330](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-3330), or [CVE-2020-3331](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-3331) that were released at the same time than [the ones I had found](/exploitdev/2020/07/14/breaking-cisco-rv-again/). 
 

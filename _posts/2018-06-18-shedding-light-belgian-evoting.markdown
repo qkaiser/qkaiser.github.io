@@ -2,6 +2,10 @@
 layout: post
 title:  "Shedding some light on the new Belgian eVoting system"
 date:   2018-06-18 08:30:00
+author: qkaiser
+excerpt: |
+    With the next rounds of elections approaching in Belgium (municipal elections in October 2018, federal elections in June 2019), I decided to take a look at the new system currently under development.
+image: /assets/martine_functional_diagram_small.png
 comments: true
 categories: evoting
 ---
@@ -19,22 +23,25 @@ Everything started from a discussion with a close friend: knowing that the sourc
 
 My first stop was looking at draft laws and executive documents on the new electronic voting system. Since the decision to drop [the old system](/) was taken, a public competitive tendering was set up. We can see in the screenshot below (source: [http://www.dekamer.be/FLWB/PDF/54/1353/54K1353008.pdf](http://www.dekamer.be/FLWB/PDF/54/1353/54K1353008.pdf)) that the budget for this new system nicknamed "MARTINE (**Ma**nagement, **R**egistration and **T**ransmission of **In**formation and results about **E**lection)" is 420.000€.
 
-![law_screen]({{site.url}}assets/54K1353008_screen1.png)
+{:.foo}
+![law_screen]({{site.url}}/assets/54K1353008_screen1.png)
 
 
 Looking for who won this competitive tendering, I stumbled upon this [document](http://www.ibz.rrn.fgov.be/fileadmin/user_upload/fr/rn/rapports/comite/2017/AG-20171206/AG-20171206-01-Legislation-2017-et-projets-DGIP-FR.pdf) which is a belgian Federal Service of Internal Affairs general assembly presentation from 2017. We can find the following slides in this document:
 
-![AG-20171206_screen1]({{site.url}}assets/AG-20171206_screen1.png)
+{:.foo}
+![AG-20171206_screen1]({{site.url}}/assets/AG-20171206_screen1.png)
 
-![AG-20171206_screen2]({{site.url}}assets/AG-20171206_screen2.png)
+{:.foo}
+![AG-20171206_screen2]({{site.url}}/assets/AG-20171206_screen2.png)
 
 
 So, the company who won this public competitive tendering is **CIVADIS**. CIVADIS [acquired](https://www.civadis.be/index.php/g%C3%A9n%C3%A9ral/297-officialisation-de-la-fusion-entre-stesud-et-civadis) the [company](http://www.stesud.be/index2.php) who developped the bug-ridden system that I [analyzed back in 2014](http://quentinkaiser.be/analysis/2015/05/12/how-not-to-build-an-evoting-system/). CIVADIS itself is part of a bigger belgian ICT consultancy group named [NRB](http://www.nrb.be/).
 
 The diagram below should help you understand components of their structure involved in this evoting project:
 
-
-![civadis_galaxy]({{site.url}}assets/civadis_galaxy.png)
+{:.foo}
+![civadis_galaxy]({{site.url}}/assets/civadis_galaxy.png)
 
 Note that CIVADIS takes care of vote tallying, transmission, and publication systems which will be in use for each voting method (paper and electronic). For cities in Belgium that chose to stick to electronic voting booths, the booths will be provided by [Smartmatic](http://www.smartmatic.com/).
 
@@ -51,18 +58,21 @@ From there I just had to do some Googling with the right set of keywords to find
 
 **Edit 2:** The webcache is dead now, so here is a screenshot I took:
 
-![arnaudp_be_martine.png]({{site.url}}assets/arnaudp_be_martine.png)
+{:.foo}
+![arnaudp_be_martine.png]({{site.url}}/assets/arnaudp_be_martine.png)
 
 
 #### Mapping Martine 
 
 I extracted everything I could from that discovered web page (URLs, hostnames, naming conventions, ...). Everything is hosted on subdomains of [martineproject.be](www.martineproject.be), in a subnet managed by CIGER (a sub-branch of NRB). A look at Certificate Transparency logs returns interesting [results](https://crt.sh/?q=%25.martineproject.be) too. I started taking automated screenshots of them with cutycapt to see what was running there to confirm it really is election software.
 
-![martine_ma1x_screenshot]({{site.url}}assets/martine_ma1x_screenshot.png)
+{:.foo}
+![martine_ma1x_screenshot]({{site.url}}/assets/martine_ma1x_screenshot.png)
 
 After a while, and based on my initial knowledge acquired during the 2014 elections, I started mapping everything out on paper. My current understanding of the whole solution is summarized in the diagram below (you can click on it for a version with larger resolution).
 
-[![martine_functional_diagram]({{site.url}}assets/martine_functional_diagram_small.png)]({{site.url}}assets/martine_functional_diagram.png)
+{:.foo}
+[![martine_functional_diagram]({{site.url}}/assets/martine_functional_diagram_small.png)]({{site.url}}/assets/martine_functional_diagram.png)
 
 
 #### Understanding Martine
@@ -91,11 +101,13 @@ As for the software stack, each application seems to have been developed in Java
 
 If we take a look at the latest revision of the [ordonnance](https://elections2018.brussels/sites/default/files/2018-02/Ord%20vote%20%C3%A9lectronique.pdf) for electronic voting in Brussels, electronic voting software will be published once they have been audited. A more or less litteral translation of what they consider to fall into that "electronic voting software" definition is *"software provided by the government that polling stations and central polling stations need to use"*. That's ... rather vague.
 
-![ordonnance_vote_screen1]({{site.url}}assets/ordonnance_vote_screen1.png)
+{:.foo}
+![ordonnance_vote_screen1]({{site.url}}/assets/ordonnance_vote_screen1.png)
 
 [IANAL](https://www.urbandictionary.com/define.php?term=IANAL), but I think we can consider that orange components in the diagram below falls under that definition. Keep in mind that I'm not 100% sure that MA5/MA5V is software used by embassies to transmit results so its status may change in the future.
 
-[![evoting_software_overview_small]({{site.url}}assets/evoting_software_overview_small.png)]({{site.url}}assets/evoting_software_overview.png)
+{:.foo}
+[![evoting_software_overview_small]({{site.url}}/assets/evoting_software_overview_small.png)]({{site.url}}/assets/evoting_software_overview.png)
 
 (Idea for that diagram comes from Rob van der Veer's OWASP AppSec 2015 [presentation](https://2015.appsec.eu/wp-content/uploads/2015/09/owasp-appseceu2015-vanderveer.pdf))
 
@@ -133,21 +145,25 @@ Tout est parti d'une discussion avec un ami: sachant que le code source des logi
 
 Mon enquête commence par de la lecture. J'ai commencé par des projets de lois et des documents de l'exécutif abordant les nouvelles mesures en matière de vote électronique. Depuis que la décision d'abandonner [l'ancien système](/) a été prise, une offre de marché public a été mise en place. On peut le voir dans la capture d'écran ci-dessous (source: [http://www.dekamer.be/FLWB/PDF/54/1353/54K1353008.pdf](http://www.dekamer.be/FLWB/PDF/54/1353/54K1353008.pdf))  que le budget pour ce nouveau système baptisé "MARTINE (**Ma**nagement, **R**egistration and **T**ransmission of **In**formation and results about **E**lection)" est de 420.000€.
 
-![law_screen]({{site.url}}assets/54K1353008_screen1.png)
+{:.foo}
+![law_screen]({{site.url}}/assets/54K1353008_screen1.png)
 
 
 En cherchant qui obtenu ce marché public, je suis tombé sur ce [document](http://www.ibz.rrn.fgov.be/fileadmin/user_upload/fr/rn/rapports/comite/2017/AG-20171206/AG-20171206-01-Legislation-2017-et-projets-DGIP-FR.pdf) provenant d'une assemblée générale du service fédéral des affaires intérieures daté de 2017. On retrouve les deux slides ci-dessous dans le document:
 
-![AG-20171206_screen1]({{site.url}}assets/AG-20171206_screen1.png)
+{:.foo}
+![AG-20171206_screen1]({{site.url}}/assets/AG-20171206_screen1.png)
 
-![AG-20171206_screen2]({{site.url}}assets/AG-20171206_screen2.png)
+{:.foo}
+![AG-20171206_screen2]({{site.url}}/assets/AG-20171206_screen2.png)
 
 
 On y apprend que la société retenue pour l'offre de marché public est **CIVADIS**. CIVADIS a [acquis](https://www.civadis.be/index.php/g%C3%A9n%C3%A9ral/297-officialisation-de-la-fusion-entre-stesud-et-civadis) la [société](http://www.stesud.be/index2.php) qui a developpé le système que j'avais précédemment [analysé en 2014](http://quentinkaiser.be/analysis/2015/05/12/how-not-to-build-an-evoting-system/). CIVADIS fait partie d'un groupe plus large, [NRB](http://www.nrb.be/), qui est spécialisé dans la consultance en informatique.
 
 Le diagramme ci-dessous devrait vous aider à comprendre les différents composants de sa structure qui sont impliqués dans ce projet de vote électronique:
 
-![civadis_galaxy]({{site.url}}assets/civadis_galaxy.png)
+{:.foo}
+![civadis_galaxy]({{site.url}}/assets/civadis_galaxy.png)
 
 Retenez que CIVADIS prend en charge le décompte, la totalisation, la transmission, ainsi que la publication des votes autant pour le vote papier que le vote électronique. Pour les villes belges qui ont décidé de continuer à utiliser des machines de vote électronique, celles-ci seront fournies par la société [Smartmatic](http://www.smartmatic.com/).
 
@@ -164,18 +180,21 @@ A partir de ces informations, il me restait à faire quelques recherches Google 
 
 **Edit 2:** Le web cache vient d'expirer, donc voici une capture d'écran:
 
-![arnaudp_be_martine.png]({{site.url}}assets/arnaudp_be_martine.png)
+{:.foo}
+![arnaudp_be_martine.png]({{site.url}}/assets/arnaudp_be_martine.png)
 
 
 #### Mapping Martine
 
 Ayant extrait tout ce que je pouvais de cette page (URLs, noms de domaines, conventions de nommage, ...), je peux affirmer que tout est hébergé sur des sous-domaines de [martineproject.be](www.martineproject.be), dans un subnet géré par CIGER (une succursale de NRB). Un rapide coup d'oeil aux Certificate Transparency logs retourne quelques [résultats](https://crt.sh/?q=%25.martineproject.be) intéressants également. J'ai commencé à prendre des captures d'écrans de manière automatisée avec cutycapt pour voir si ce qui tournait sur ces sites étaient bien des logiciels électoraux.
 
-![martine_ma1x_screenshot]({{site.url}}assets/martine_ma1x_screenshot.png)
+{:.foo}
+![martine_ma1x_screenshot]({{site.url}}/assets/martine_ma1x_screenshot.png)
 
 Après quelques temps - et en me basant sur ce que j'ai appris lors des élections de 2014 - j'ai commencé par dessiner la structure telle que je la comprenais sur papier. Ma compréhension actuelle de la solution est décrite dans le diagramme ci-dessous (une version avec une meilleur résolution est disponible si vous cliquez sur l'image).
 
-[![martine_functional_diagram]({{site.url}}assets/martine_functional_diagram_small.png)]({{site.url}}assets/martine_functional_diagram.png)
+{:.foo}
+[![martine_functional_diagram]({{site.url}}/assets/martine_functional_diagram_small.png)]({{site.url}}/assets/martine_functional_diagram.png)
 
 
 #### Understanding Martine
@@ -205,11 +224,13 @@ Si l'on jette un coup d'oeil à la dernière révision de l'[ordonnance](https:/
 
 La définition de ces logiciels provient de l'alinéa §1: *"les logiciels informatiques que ceux-ci [les bureaux de votes] doivent utiliser"*. Une définition plutôt vague. En se faisant l'avocat du diable, on peut considérer que Microsoft Windows, ou encore Acrobat Reader sont des logiciels que les bureaux de vote doivent utiliser. Le code source de ces logiciels sera-t-il publié par l'Etat ?
 
-![ordonnance_vote_screen1]({{site.url}}assets/ordonnance_vote_screen1.png)
+{:.foo}
+![ordonnance_vote_screen1]({{site.url}}/assets/ordonnance_vote_screen1.png)
 [
 IANAL](https://www.urbandictionary.com/define.php?term=IANAL), mais je pense que l'on peut considérer les composants orange dans le diagramme ci-dessous comme tombant sous cette définition. Notez que je ne suis pas encore sûr à 100% que MA5/MA5V soient les interfaces utilisées par les ambassades pour la transmission des votes.
 
-[![evoting_software_overview_small]({{site.url}}assets/evoting_software_overview_small.png)]({{site.url}}assets/evoting_software_overview.png)
+{:.foo}
+[![evoting_software_overview_small]({{site.url}}/assets/evoting_software_overview_small.png)]({{site.url}}/assets/evoting_software_overview.png)
 
 (L'idée originale du diagramme provient de Rob van der Veer's OWASP AppSec 2015 [presentation](https://2015.appsec.eu/wp-content/uploads/2015/09/owasp-appseceu2015-vanderveer.pdf))
 

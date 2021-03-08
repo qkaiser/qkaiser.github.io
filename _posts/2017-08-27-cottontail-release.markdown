@@ -2,6 +2,10 @@
 layout: post
 title:  "How to silently capture RabbitMQ messages"
 date:   2017-08-28 07:00:00
+image: /assets/rabbitmq_management_login.png
+author: qkaiser
+excerpt: |
+    The introduction of Cottontail, a tool to capture all RabbitMQ messages being sent through a broker. 
 comments: true
 categories: security tool
 ---
@@ -21,7 +25,8 @@ I won't go into RabbitMQ details so I suggest you to read those excellent [tutor
 
 ### rabbitmq_management
 
-![rabbitmq_management_login]({{site.url}}assets/rabbitmq_management_login.png)
+{:.foo}
+![rabbitmq_management_login]({{site.url}}/assets/rabbitmq_management_login.png)
 
 rabbitmq_management is a RabbitMQ plugin that will spin up a web server with both a REST API and an administration GUI. You can use the GUI or interact directly with the API to manage pretty much everything. Due to its ease of use, a lot of developers use it so they don't have to learn all the `rabbitmqctl` commands. For every RabbitMQ listener publicly exposed I encountered so far, rabbitmq_management plugin was also enabled.
 
@@ -56,7 +61,8 @@ Let's see how we can handle all of this by analyzing each RabbitMQ's mode of ope
 
 #### Producer Consumer Model / RPC Model
 
-![producer_consumer]({{site.url}}assets/producer_consumer.gif)
+{:.foo}
+![producer_consumer]({{site.url}}/assets/producer_consumer.gif)
 
 In the producer consumer mode, our connection will just move the model towards the **Work queues** model with legitimate consumer (C0) being one worker and ourselves (C1) being a second worker. The interesting thing here is that as soon as we receive our first message and re-queue it (yellow mail), we will be able to capture all of them due to the round robin distribution implemented by RabbitMQ. Think about it: if we re-queue fast enough we will always be the next client in the round-robin queue. In the end, it is as if we were diverting all messages through the red line (see my wonderful GIF above) to transparently log them without impacting the legitimate consumer.
 
@@ -75,19 +81,22 @@ Assuming we have administrative privileges, an aggressive way to ensure we get a
 
 #### Fanout exchange (a.k.a publish/subscribe)
 
-![fanout_exchange]({{site.url}}assets/fanout_exchange.png)
+{:.foo}
+![fanout_exchange]({{site.url}}/assets/fanout_exchange.png)
 
 In this capture model, we simply bind a queue to the fanout exchange. All subscribers bound to the exchange will receive all messages, including us.
 
 #### Topic exchange
 
-![topic_exchange]({{site.url}}assets/topic_exchange.png)
+{:.foo}
+![topic_exchange]({{site.url}}/assets/topic_exchange.png)
 
 In this capture model, we bind a queue to the topic exchange using a wild-card (`#`) routing key in order to receive all messages.
 
 #### Direct exchange
 
-![direct_exchange]({{site.url}}assets/direct_exchange.png)
+{:.foo}
+![direct_exchange]({{site.url}}/assets/direct_exchange.png)
 
 Direct exchanges do not support wild-card (`#`) routing keys. Therefore, we list bindings between other consumers and this direct exchange to obtain a list of routing keys currently in use by consumers. Then, we bind one queue per discovered routing key to the direct exchange. This way we are able to receive the same amount of messages as all consumers bound to this direct exchange combined.
 
@@ -108,8 +117,8 @@ I wrote a tool that implements everything I just described, called Cottontail. I
 
 It is pretty straightforward. You launch it by providing a URL to a rabbitmq_management server and it will try to connect using default credentials (you can change that behavior using `--username` and `--password`):
 
-<pre>
-$ <b>python main.py</b>
+```
+$ python main.py
 
         /\ /|
         \ V/
@@ -119,21 +128,24 @@ $ <b>python main.py</b>
     *(__\_\)
 
 usage: main.py [-h] [--username USERNAME] [--password PASSWORD] [-v] url
-</pre>
+```
 
 It will then proceed, following the methodology stated above, and log received messages along with their vhost, exchange, and routing key:
 
-![cottonheader]({{site.url}}assets/cottontail_header.png)
+{:.foo}
+![cottonheader]({{site.url}}/assets/cottontail_header.png)
 
 If you are really curious you can activate the verbose mode with `-v`, it will force cottontail to print out message properties and headers:
 
-![cottonverbose]({{site.url}}assets/cottontail_verbose.png)
+{:.foo}
+![cottonverbose]({{site.url}}/assets/cottontail_verbose.png)
 
 Of course, do not hesitate to file an [issue](https://github.com/QKaiser/cottontail/issues) or to submit a [pull request](https://github.com/QKaiser/cottontail/pulls) :)
 
 ### Assessing exposure
 
-![rabbitmq_exposure]({{site.url}}assets/rabbitmq_exposure.png)
+{:.foo}
+![rabbitmq_exposure]({{site.url}}/assets/rabbitmq_exposure.png)
 
 I wanted to see how exposed are RabbitMQ brokers over the Internet. I started by downloading a list of hosts exposing an AMQP listener on port tcp/5672 from [Shodan](https://www.shodan.io/search?query=port%3A5672+product%3ARabbitMQ) and proceeded by scanning port tcp/15672 (rabbitmq_management_plugin/plain) and port tcp/15671 (rabbitmq_management_plugin/ssl) on those hosts.
 

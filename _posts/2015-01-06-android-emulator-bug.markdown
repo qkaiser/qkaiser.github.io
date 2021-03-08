@@ -2,6 +2,9 @@
 layout: post
 title:  "Hunting for bugs in the Android emulator"
 date:   2015-01-06 17:34:24
+author: qkaiser
+excerpt: |
+    I’m currently writing a tool to automate Android applications penetration testing and I discovered a bug in the Android emulator during this process.
 comments: true
 categories: android security malware
 ---

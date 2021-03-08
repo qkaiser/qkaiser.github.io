@@ -2,11 +2,17 @@
 layout: post
 title:  "A look at Ogone mobile payment library"
 date:   2017-03-23 07:00:00
+author: qkaiser
+image: /assets/ogone_header.jpg
+excerpt: |
+    Ogone is an online payment service provider and payment risk management company that has been part of Ingenico since 2014. They started providing a mobile payment library for both iOS and Android to their clients back in 2012. One of the first organization publicly advertising its use of this mobile payment library is SNCB/NMBS, the belgian public transportation company.
+    I’ll describe here a few security vulnerabilities that are affecting this mobile library. Those vulnerabilities are now difficult to exploit due to security mechanisms that have been put in place in Android by Google since 2012, that’s why I’ll try to give an historical perspective to those vulnerabilities so everyone can fully understand impact.
 comments: true
 categories: security mobile
 ---
 
-![ogoneheader]({{site.url}}assets/ogone_header.jpg)
+{:.foo}
+![ogoneheader]({{site.url}}/assets/ogone_header.jpg)
 
 Ogone is an online payment service provider and payment risk management company that has been part of Ingenico since 2014. They started providing a mobile payment library for both iOS and Android to their clients back in 2012. One of the first organization [publicly advertising](https://www.digimedia.be/News/fr/14849/la-sncb-s-ouvre-au-paiement-mobile.html) its use of this mobile payment library is SNCB/NMBS, the belgian public transportation company.
 
@@ -278,7 +284,8 @@ Pretty good information if you want to launch a phishing campaigns to get those 
 
 Astute readers might have seen the custom user agent in that request, this is coming from an iOS application published by Ogone called [mTerminal](https://itunes.apple.com/be/app/ogone-m-terminal/id415651604?mt=8). I discovered those hidden API calls by using this exact application. This is what the interface looks like:
 
-![mterminal]({{site.url}}assets/mTerminal.jpg)
+{:.foo}
+![mterminal]({{site.url}}/assets/mTerminal.jpg)
 
 
 ### This can't be real
@@ -318,12 +325,12 @@ I guess they didn't read it.
 
 ### Disclosure Timeline
 
-* 02/01/2017 - First email sent to Ingenico
-* 05/01/2017 - Second email sent to Ingenico
-* 10/01/2017 - Contact initiated with CERT.be
-* 20/01/2017 - CERT.be managed to send all info to Ingenico
-* 01/02/2017 - Notified affected Android application developers
-* 14/03/2017 - Checked again on affected Android developers to make sure proper mitigations are in place
-* 15/03/2017 - Asked update from CERT.be: *"we called multiple times and the only answer we got was that they transferred the info to the tech guys."*
-* 23/03/2017 - 60 days have passed, no response, disclosing.
-* 03/04/2017 - Ogone got back to CERT.be, they fixed their latest version of the SDK and are contacting their customers to upgrade to the latest version. They are also hunting down the person who pushed the jar on Github. Sorry krishna1121 :)
+* **02/01/2017** - First email sent to Ingenico
+* **05/01/2017** - Second email sent to Ingenico
+* **10/01/2017** - Contact initiated with CERT.be
+* **20/01/2017** - CERT.be managed to send all info to Ingenico
+* **01/02/2017** - Notified affected Android application developers
+* **14/03/2017** - Checked again on affected Android developers to make sure proper mitigations are in place
+* **15/03/2017** - Asked update from CERT.be: *"we called multiple times and the only answer we got was that they transferred the info to the tech guys."*
+* **23/03/2017** - 60 days have passed, no response, disclosing.
+* **03/04/2017** - Ogone got back to CERT.be, they fixed their latest version of the SDK and are contacting their customers to upgrade to the latest version. They are also hunting down the person who pushed the jar on Github. Sorry krishna1121 :)

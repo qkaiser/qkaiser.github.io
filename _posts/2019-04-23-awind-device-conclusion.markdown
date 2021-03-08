@@ -2,6 +2,7 @@
 layout: post
 title:  "Man-in-the-Conference Room - Part VI (Conclusion)"
 date:   2019-04-23 10:00:00
+author: qkaiser
 comments: true
 categories: pentesting
 ---

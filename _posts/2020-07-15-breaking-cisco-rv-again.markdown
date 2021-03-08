@@ -3,7 +3,11 @@ layout: post
 title:  "Breaking Cisco RV110W, RV130, RV130W, and RV215W. Again."
 date:   2020-07-14 18:00:00
 comments: true
+author: qkaiser
 categories: exploitdev
+excerpt: |
+    Cisco RV110W, RV130(W), and RV215W VPN routers are affected by authentication bypass, authenticated remote        command execution, and information disclosure issues. By chaining them an unauthenticated remote attacker can fully compromise your device. Patch now.
+
 ---
 
 More than a year ago now, Pentest Partners published an [article](https://www.pentestpartners.com/security-blog/cisco-rv130-its-2019-but-yet-strcpy/) explaining CVE-2019-1663, a stack buffer overflow affecting multiple low end devices from Cisco (RV110, RV130, RV215). I then went on writing exploit modules for each affected device and version, as detailed in my "[Exploiting CVE-2019-1663](https://qkaiser.github.io/exploitdev/2019/08/30/exploit-CVE-2019-1663/)" post.
@@ -111,7 +115,7 @@ We identified multiple dangerous calls to strcpy in the function at 0x00071cac i
 
 The decompiled function looks like the pseudo-code below, comments are personal additions:
 
-```
+{% highlight c %}
 void apply_ipsec_policy(void)
 {
     char *ipsec_policy_name;
@@ -442,7 +446,7 @@ void apply_ipsec_policy(void)
     }
     return;
 }
-```
+{% endhighlight %}
 
 It is possible to trigger one of the stack buffer overflow above with an authenticated request such as the one
 below:
@@ -512,7 +516,7 @@ firmware rootfs).
 
 The decompiled function looks like the pseudo-code below, comments are personal additions:
 
-```
+{% highlight c %}
 void FUN_0006e994(void)
 {
     char *__s2;
@@ -602,7 +606,7 @@ void FUN_0006e994(void)
     }
     return;
 }
-```
+{% endhighlight %}
 
 It is possible to trigger one of the stack buffer overflow above with an authenticated request such as the one
 below:
@@ -680,7 +684,7 @@ The Python script below is a proof of concept demonstrating the issue. Run it in
 authenticate twice on the device's web administration interface to see how the session is successfully
 hijacked.
 
-```
+{% highlight python %}
 #!/usr/bin/env python
 import requests
 from time import sleep
@@ -706,4 +710,4 @@ while True:
             break
     except KeyboardInterrupt as e:
         break
-```
+{% endhighlight %}

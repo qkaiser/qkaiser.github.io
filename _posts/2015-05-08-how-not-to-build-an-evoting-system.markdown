@@ -191,9 +191,7 @@ Le calcul de la somme de contrôle est décrit ci-dessous et est quasi identique
 à celui utilisé pour votre numéro de registre national si vous êtes un citoyen
 belge.
 
-<p>
-{% include image.html url="/assets/password.png" description="Mot de passe de présidents de bureau de vote - Somme de controle." %}
-</p>
+![Mot de passe de présidents de bureau de vote - Somme de controle.]({{site.url}}/assets/password.png)
 
 {% highlight c %}
 

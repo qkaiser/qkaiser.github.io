@@ -2,6 +2,10 @@
 layout: post
 title:  "Man-in-the-Conference-Room - Part II (Hardware Hacking)"
 date:   2019-03-25 04:00:00
+author: qkaiser
+image: /assets/airmedia_am_101_inside.jpg
+excerpt: |
+    In this post I’ll describe how I used hardware hacking techniques to get more information about the device and dump its internal storage.
 comments: true
 categories: pentesting
 ---
@@ -25,16 +29,16 @@ I'll be using a [bus pirate](http://dangerousprototypes.com/docs/Bus_Pirate) in 
 
 Once our target is connected to the Bus Pirate, it's time to configure it to act as a UART transparent bridge. The first steps involve switching it to UART mode and setting serial parameters (baud rate, parity bits, stop bits, polarity):
 
-<pre>
-<b>$</b> screen /dev/ttyUSB0 115200
-<b>HiZ&gt;</b>m
+```
+$ screen /dev/ttyUSB0 115200
+HiZ>m
 1. HiZ
 2. UART
 3. I2C
 4. SPI
 x. exit(without change)
 
-<b>(1)&gt;</b>2
+(1)>2
 Set serial port speed: (bps)
  1. 300
  2. 1200
@@ -47,53 +51,53 @@ Set serial port speed: (bps)
  9. 115200
 10. BRG raw value
 
-<b>(1)&gt;</b>9
+(1)>9
 Data bits and parity:
  1. 8, NONE *default
  2. 8, EVEN
  3. 8, ODD
  4. 9, NONE
-<b>(1)&gt;</b>1
+(1)>1
 Stop bits:
  1. 1 *default
  2. 2
-<b>(1)&gt;</b>1
+(1)>1
 Receive polarity:
  1. Idle 1 *default
  2. Idle 0
-<b>(1)&gt;</b>1
+(1)>1
 Select output type:
  1. Open drain (H=Hi-Z, L=GND)
  2. Normal (H=3.3V, L=GND)
 
-<b>(1)&gt;</b>2
+(1)>2
 Clutch disengaged!!!
 To finish setup, start up the power supplies with command 'W'
 
 Ready
-<b>UART&gt;</b>W
+UART>W
 POWER SUPPLIES ON
 Clutch engaged!!!
-</pre>
+```
 
 Once in UART mode, we select the mode of operation:
 
-<pre>
-<b>UART&gt;</b>(0)
+```
+UART>(0)
  0.Macro menu
  1.Transparent bridge
  2.Live monitor
  3.Bridge with flow control
  4.Auto Baud Detection
-<b>UART&gt;</b>(1)
+UART>(1)
 UART bridge
 Reset to exit
 Are you sure? y
-</pre>
+```
 
 Everything is up and running, let's boot up the device and see what it has to say !
 
-<pre style="overflow-y:scroll;overflow-x:hidden;height:200px;">
+```
 WonderMedia Technologies, Inc.
 W-Load Version : 0.23.00.00
 uboot set plla cmd ..found
@@ -106,7 +110,7 @@ wloader finish
 U-Boot 1.1.4 (Sep 18 2013 - 17:32:14)
 WonderMedia Technologies, Inc.
 U-Boot Version : 0.28.00.04 AWIND_MOD
-U-Boot code: 03F80000 -&gt; 03FCEE98  BSS: -&gt; 03FF0A88
+U-Boot code: 03F80000 -> 03FCEE98  BSS: -> 03FF0A88
 boot from spi flash.
 SF0: ManufID = C2, DeviceID = 2017
 SF1: ManufID = FF, DeviceID = FFFF (Missing or Unknown FLASH)
@@ -197,7 +201,7 @@ CPU: Testing write buffer coherency: ok
 NET: Registered protocol family 16
 kmalloc buffer env_ptr = 0xce060000, env_ptr_nand = 0xce060000
 un-know id = 0xffffff
-1crc32 = 0x291be1e6 , env_ptr-&gt;crc = 0x291be1e6
+1crc32 = 0x291be1e6 , env_ptr->crc = 0x291be1e6
 L310 cache controller enabled
 l2x0: 8 ways, CACHE_ID 0x410000c8, AUX_CTRL 0x0e420000, Cache size: 131072 B
 ## Warning: "wmt.pmu.param" not defined
@@ -295,7 +299,7 @@ usbcore: registered new interface driver dm9620
 Linux video capture interface: v2.00
 WMT EVB SPI Controlor Driver OK!
 ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
-PCI: enabling device 0000:00:04.0 (0040 -&gt; 0042)
+PCI: enabling device 0000:00:04.0 (0040 -> 0042)
 ehci_hcd 0000:00:04.0: EHCI Host Controller
 ehci_hcd 0000:00:04.0: new USB bus registered, assigned bus number 1
 ## Warning: "wmt.usb.param" not defined
@@ -305,7 +309,7 @@ usb usb1: configuration #1 chosen from 1 choice
 hub 1-0:1.0: USB hub found
 hub 1-0:1.0: 4 ports detected
 uhci_hcd: USB Universal Host Controller Interface driver
-PCI: enabling device 0000:00:05.0 (0000 -&gt; 0001)
+PCI: enabling device 0000:00:05.0 (0000 -> 0001)
 uhci_hcd 0000:00:05.0: UHCI Host Controller
 uhci_hcd 0000:00:05.0: new USB bus registered, assigned bus number 2
 uhci_hcd 0000:00:05.0: irq 26, io base 0xfe007b00
@@ -313,7 +317,7 @@ uhci_hcd 0000:00:05.0: irq 26, io base 0xfe007b00
 usb usb2: configuration #1 chosen from 1 choice
 hub 2-0:1.0: USB hub found
 hub 2-0:1.0: 2 ports detected
-PCI: enabling device 0000:00:06.0 (0000 -&gt; 0001)
+PCI: enabling device 0000:00:06.0 (0000 -> 0001)
 uhci_hcd 0000:00:06.0: UHCI Host Controller
 uhci_hcd 0000:00:06.0: new USB bus registered, assigned bus number 3
 uhci_hcd 0000:00:06.0: irq 26, io base 0xfe008d00
@@ -408,7 +412,7 @@ dd: writing '/dev/fb/0': No space left on device
 384+0 records out
 25165824 bytes (24.0MB) copied, 0.139460 seconds, 172.1MB/s
 ## Warning: "wmt.pmu.param" not defined
-0xd8050948: 0x00000000 =&gt; 0x00000000
+0xd8050948: 0x00000000 => 0x00000000
 set vo 1280x720@60,option 0x0
 old: 1280 x 720
 vpp_config(1280x720@80)
@@ -428,7 +432,7 @@ dd: writing '/dev/fb/0': No space left on device
 385+0 records i## Warning: "wmt.pmu.param" not defined
 384+0 records out
 25165824 bytes (24.0MB) copied, 0.138796 seconds, 172.9MB/s
-0xd8050948: 0x00000000 =&gt; 0x00000004
+0xd8050948: 0x00000000 => 0x00000004
 dd: writing '/dev/fb/0': No space left on device
 385+0 records in
 384+0 records out
@@ -450,7 +454,7 @@ dd: writing '/dev/fb/0': No space left on device
 [wmt-vd] wmt-vc1 Request IRQ 70 Ok.
 [wmt-vd] wmt-vc1 registered major 236 minor 7
 ## Warning: "wmt.pmu.param" not defined
-0xd8050924: 0x00000003 =&gt; 0x00000003
+0xd8050924: 0x00000003 => 0x00000003
 net.core.rmem_max = 3145728
 net.core.rmem_default = 3145728
 net.core.netdev_max_backlog = 5000
@@ -462,15 +466,15 @@ VIA Networking Velocity Family Gigabit Ethernet Adapter Driver Ver. 1.14
 Copyright (c) 2002, 2003 VIA Networking Technologies, Inc.
 Copyright (c) 2004 Red Hat Inc.
 [David] set_phy_addr = 0x0
-[David 1] mac_regs-&gt;MIICFG= 0x1  mac_regs-&gt;MIIADR= 0x1
-[David 2] mac_regs-&gt;MIICFG= 0x0  mac_regs-&gt;MIIADR= 0x1
-mac_regs-&gt;PHYSR0=10,mac_regs-&gt;PHYSR1=0 mac_regs-&gt;MIIADR=1
-[David] vptr-&gt;phy_id = 0x1cc816
+[David 1] mac_regs->MIICFG= 0x1  mac_regs->MIIADR= 0x1
+[David 2] mac_regs->MIICFG= 0x0  mac_regs->MIIADR= 0x1
+mac_regs->PHYSR0=10,mac_regs->PHYSR1=0 mac_regs->MIIADR=1
+[David] vptr->phy_id = 0x1cc816
 eth0: VIA Networking Velocity Family Gigabit Ethernet Adapter
 eth0: Ethernet Address: 00:12:5F:16:30:9F
 usbcore: registered new interface driver usbhid
 usbhid: USB HID core driver
-mac_regs-&gt;PHYSR0=10,mac_regs-&gt;PHYSR1=0 mac_regs-&gt;MIIADR=2
+mac_regs->PHYSR0=10,mac_regs->PHYSR1=0 mac_regs->MIIADR=2
 [David] Enter loopback mode
 Velocity is AUTO mode
 [David] Exit loopback mode
@@ -515,7 +519,7 @@ ver.cpp:2035]
 18:36:10.447 INFO  | SetOverscanCompensation 0 0 65535 65535 [ScreenReceiver.cpp:2256]
 18:36:10.447 INFO  | SetRelOverscanCompensation 0 0 1279 719 [WpsDeviceBase.cpp:541]
 ## Warning: "wmt.pmu.param" not defined
-18:36:10.448 ERROR | ErrorCode=-6527004 -&gt; Failed to init object: m_pSockSvr [ScreenReceiver.cpp:2528]
+18:36:10.448 ERROR | ErrorCode=-6527004 -> Failed to init object: m_pSockSvr [ScreenReceiver.cpp:2528]
 Set AirplayIPCServer logger
 18:36:10.467 INFO  | SetCustomPort 1 [ScreenReceiver.cpp:2161]
 18:36:10.467 INFO  | GetNonLocalSenderList 0 [WpsDeviceBase.cpp:404]
@@ -523,7 +527,7 @@ Set AirplayIPCServer logger
 18:36:10.469 INFO  | SetCalibrationRange 0 0 65535 65535 [ScreenReceiver.cpp:2247]
 18:36:10.469 INFO  | SetOverscanCompensation 0 0 65535 65535 [ScreenReceiver.cpp:2256]
 18:36:10.469 INFO  | SetRelOverscanCompensation 0 0 1279 719 [WpsDeviceBase.cpp:541]
-18:36:10.470 ERROR | ErrorCode=-6527004 -&gt; Failed to init object: m_pSockSvr [ScreenReceiver.cpp:2528]
+18:36:10.470 ERROR | ErrorCode=-6527004 -> Failed to init object: m_pSockSvr [ScreenReceiver.cpp:2528]
 18:36:10.470 INFO  | GetNonLocalSenderList 0 [WpsDeviceBase.cpp:404]
 18:36:10.470 DEBUG | NotifyEvent key:0, event:2000, para:0 [WpsDeviceIpc.cpp:387]
 18:36:10.470 INFO  | GetNonLocalSenderList 0 [WpsDeviceBase.cpp:404]
@@ -578,49 +582,49 @@ Over
 18:36:11.421 INFO  | Is Enthernet link=0, disIp=1 [crestron.base.cpp:202]
 start wps is success
 ## Warning: "wmt.pmu.param" not defined
-0xd805099c: 0x00770003 =&gt; 0x00770003
+0xd805099c: 0x00770003 => 0x00770003
 ## Warning: "wmt.pmu.param" not defined
-0xd805099c: 0x00770003 =&gt; 0x00770001
+0xd805099c: 0x00770003 => 0x00770001
 Don't need set WEB_ONOFF
 Don't need set SNMP_ONOFF
 Don't need set CIP_ONOFF
-NOTICE[CIPBridge] 18:36:13.581 &gtPJDev.c,141&lt;Check power off timeout: 50seconds, current power status:0
-NOTICE[CIPBridge] 18:36:13.594 &gt;CIPDBus.c,354&lt;CIPDBus is connecting...
+NOTICE[CIPBridge] 18:36:13.581 &gtPJDev.c,141<Check power off timeout: 50seconds, current power status:0
+NOTICE[CIPBridge] 18:36:13.594 >CIPDBus.c,354<CIPDBus is connecting...
 18:36:13.596 INFO  | OnConnect sockfd=28, usPortNum=19996 [SocketServer.cpp:174]
 18:36:13.596 DEBUG | InitSocket sock:28 this:0x13b128 0 [ProtocolBase.cpp:230]
 18:36:13.596 DEBUG | CloseConnect 0 0 sock:-1 this:0x13b128 [ProtocolBase.cpp:338]
 18:36:13.600 DEBUG | DispatcherThread begin sock:28 this:0x13b128 [ProtocolBase.cpp:386]
 18:36:13.601 DEBUG | NetworkThread begin sock:28 this:0x13b128 [ProtocolBase.cpp:440]
-INFO[SNMP]&lt;get_sysname,206&gt;sysName: AM-100
-INFO[SNMP]&lt;vacm_create_simple,923&gt;new setting rocommunity: "public"
-NOTICE[CIPBridge] 18:36:13.631 &ltCIPDBus.c,57&gt;CIPDBus is ready.
+INFO[SNMP]<get_sysname,206>sysName: AM-100
+INFO[SNMP]<vacm_create_simple,923>new setting rocommunity: "public"
+NOTICE[CIPBridge] 18:36:13.631 &ltCIPDBus.c,57>CIPDBus is ready.
 18:36:13.632 INFO  | OnConnect sockfd=29, usPortNum=19996 [SocketServer.cpp:174]
 18:36:13.633 DEBUG | InitSocket sock:29 this:0x13c4e0 0 [ProtocolBase.cpp:230]
 18:36:13.633 DEBUG | CloseConnect 0 0 sock:-1 this:0x13c4e0 [ProtocolBase.cpp:338]
-INFO[SNMP]&lt;vacm_gen_com2sec,811&gt;community=public, secname=comm1(5), addressname=default
-INFO[SNMP]&lt;vacm_create_simple,917&gt;new setting rwcommunity: "private"
-INFO[SNMP]&lt;vacm_gen_com2sec,811&gt;community=private, secname=comm2(5), addressname=default
-INFO[SNMP]&lt;vacm_parse_rwuser,831&gt;new setting line: user priv
-INFO[SNMP]&lt;usm_parse_create_usmUser,4361&gt;usmUser new setting: user MD5 authpass DES privpass
-NOTICE[CIPBridge] 18:36:13.639 &lt;CIPDBus.c,267&gt;It's not a method call, CIPDBus will ignore it
-NOTICE[CIPBridge] 18:36:13.639 &lt;CIPDBus.c,267&gt;It's not a method call, CIPDBus will ignore it
+INFO[SNMP]<vacm_gen_com2sec,811>community=public, secname=comm1(5), addressname=default
+INFO[SNMP]<vacm_create_simple,917>new setting rwcommunity: "private"
+INFO[SNMP]<vacm_gen_com2sec,811>community=private, secname=comm2(5), addressname=default
+INFO[SNMP]<vacm_parse_rwuser,831>new setting line: user priv
+INFO[SNMP]<usm_parse_create_usmUser,4361>usmUser new setting: user MD5 authpass DES privpass
+NOTICE[CIPBridge] 18:36:13.639 <CIPDBus.c,267>It's not a method call, CIPDBus will ignore it
+NOTICE[CIPBridge] 18:36:13.639 <CIPDBus.c,267>It's not a method call, CIPDBus will ignore it
 18:36:13.640 DEBUG | DispatcherThread begin sock:29 this:0x13c4e0 [ProtocolBase.cpp:386]
 18:36:13.642 DEBUG | NetworkThread begin sock:29 this:0x13c4e0 [ProtocolBase.cpp:440]
-NOTICE[watchdog] 18:36:13.711 &lt;watchdog.c,673&gt;trigger Frequency=12
-NOTICE[watchdog] 18:36:13.716 &lt;watchdog.c,676&gt;trigger Freq*trigger time=trigger reset time=36 minute
-NOTICE[watchdog] 18:36:13.716 &lt;watchdog.c,677&gt;out of offce time=720 minute
-NOTICE[watchdog] 18:36:13.716 &lt;watchdog.c,678&gt;force reset time=14400 minute
-NOTICE[watchdog] 18:36:13.749 &lt;watchdog_dbus.c,250&gt;Create the process of connect dbus success!
-NOTICE[watchdog] 18:36:13.753 &lt;watchdog.c,877&gt;check for the TCP connection status every 1 min
-ERROR[watchdog] 18:36:13.866 &lt;watchdog.c,1022&gt;!!!cannot find /tmp/AirPlay.pid
+NOTICE[watchdog] 18:36:13.711 <watchdog.c,673>trigger Frequency=12
+NOTICE[watchdog] 18:36:13.716 <watchdog.c,676>trigger Freq*trigger time=trigger reset time=36 minute
+NOTICE[watchdog] 18:36:13.716 <watchdog.c,677>out of offce time=720 minute
+NOTICE[watchdog] 18:36:13.716 <watchdog.c,678>force reset time=14400 minute
+NOTICE[watchdog] 18:36:13.749 <watchdog_dbus.c,250>Create the process of connect dbus success!
+NOTICE[watchdog] 18:36:13.753 <watchdog.c,877>check for the TCP connection status every 1 min
+ERROR[watchdog] 18:36:13.866 <watchdog.c,1022>!!!cannot find /tmp/AirPlay.pid
           inet addr:192.168.100.10  Bcast:192.168.100.255  Mask:255.255.255.0
 wait until an ip addresS is assigned
-INFO[SNMP]&lt;snmpd_parse_config_informsink,1253&gt;sink port:(null)
-INFO[SNMP]&lt;get_sysdescr,166&gt;sysDescr:Crestron Electronics AM-100 (Version 1.3.0.11)
-INFO[SNMP]&lt;get_sysname,206&gt;sysName: AM-100
-INFO[SNMP]&lt;get_sysloc,178&gt;sysLocation:
-INFO[SNMP]&lt;get_syscon,188&gt;sysContact:
-INFO[SNMP]&lt;convert_v1pdu_to_v2,556&gt;System status: upgrade none
+INFO[SNMP]<snmpd_parse_config_informsink,1253>sink port:(null)
+INFO[SNMP]<get_sysdescr,166>sysDescr:Crestron Electronics AM-100 (Version 1.3.0.11)
+INFO[SNMP]<get_sysname,206>sysName: AM-100
+INFO[SNMP]<get_sysloc,178>sysLocation:
+INFO[SNMP]<get_syscon,188>sysContact:
+INFO[SNMP]<convert_v1pdu_to_v2,556>System status: upgrade none
 
 start Airplay 1
 mkdir: can't create directory '/tmp/pic': File exists
@@ -646,48 +650,48 @@ AirPlay Lib:c_get_ServerCtx()=0x1212f8
 avahi pk = e608c2f59103a15086821f51e4f4020ba8f80cf91aa26fe8f545de8ef81091e5
 AirPlay Lib:Check avahi service file...
 AirPlay Lib:write AirPlayService File Path: /etc/avahi/services/airplay.service
-AirPlay Lib:write AirPlayService Contect: &lt;?xml version="1.0" standalone='no'?&gt;&lt;!--*-nxml-*--&gt;&lt;!DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;
-&lt;service-group&gt;
-&lt;name replace-wildcards="yes"&gt;AirMedia-16309f&lt;/name&gt;
-  &lt;service&gt;
- &lt;type&gt;_airplay._tcp&lt;/type&gt;
-&lt;port&gt;7000&lt;/port&gt;
-&lt;txt-record&gt;deviceid=00:12:5f:16:30:9f&lt;/txt-record&gt;
-&lt;txt-record&gt;srcvers=220.68&lt;/txt-record&gt;
-&lt;txt-record&gt;features=0x5A7FFFF7,0xE&lt;/txt-record&gt;
-&lt;txt-record&gt;flags=0x44&lt;/txt-record&gt;
-&lt;txt-record&gt;model=AppleTV3,2&lt;/txt-record&gt;
-&lt;txt-record&gt;pk=e608c2f59103a15086821f51e4f4020ba8f80cf91aa26fe8f545de8ef81091e5&lt;/txt-record&gt;
-&lt;txt-record&gt;vv=2&lt;/txt-record&gt;
-&lt;/service&gt;
-&lt;/service-group&gt;
+AirPlay Lib:write AirPlayService Contect: <?xml version="1.0" standalone='no'?><!--*-nxml-*--><!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+<name replace-wildcards="yes">AirMedia-16309f</name>
+  <service>
+ <type>_airplay._tcp</type>
+<port>7000</port>
+<txt-record>deviceid=00:12:5f:16:30:9f</txt-record>
+<txt-record>srcvers=220.68</txt-record>
+<txt-record>features=0x5A7FFFF7,0xE</txt-record>
+<txt-record>flags=0x44</txt-record>
+<txt-record>model=AppleTV3,2</txt-record>
+<txt-record>pk=e608c2f59103a15086821f51e4f4020ba8f80cf91aa26fe8f545de8ef81091e5</txt-record>
+<txt-record>vv=2</txt-record>
+</service>
+</service-group>
 
 AirPlay Lib:write AirtunesService File Path: /etc/avahi/services/airtunes.service
-AirPlay Lib:write AirtunesService Contect: &lt;?xml version="1.0" standalone='no'?&gt;&lt;!--*-nxml-*--&gt;&lt;!DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;
-&lt;service-group&gt;
-  &lt;name replace-wildcards="yes"&gt;00125F16309F@AirMedia-16309f&lt;/name&gt;
-  &lt;service&gt;
-    &lt;type&gt;_raop._tcp&lt;/type&gt;
-&lt;domain-name&gt;local&lt;/domain-name&gt;
-    &lt;port&gt;49153&lt;/port&gt;
-&lt;txt-record&gt;txtvers=1&lt;/txt-record&gt;
-&lt;txt-record&gt;cn=0,1,2,3&lt;/txt-record&gt;
-&lt;txt-record&gt;da=true&lt;/txt-record&gt;
-&lt;txt-record&gt;et=0,3,5&lt;/txt-record&gt;
-&lt;txt-record&gt;ft=0x5A7FFFF7,0xE&lt;/txt-record&gt;
-&lt;txt-record&gt;md=0,1,2&lt;/txt-record&gt;
-&lt;txt-record&gt;sv=false&lt;/txt-record&gt;
-&lt;txt-record&gt;sr=44100&lt;/txt-record&gt;
-&lt;txt-record&gt;ss=16&lt;/txt-record&gt;
-&lt;txt-record&gt;vn=65537&lt;/txt-record&gt;
-&lt;txt-record&gt;tp=UDP&lt;/txt-record&gt;
-&lt;txt-record&gt;vs=220.68&lt;/txt-record&gt;
-&lt;txt-record&gt;am=AppleTV3,2&lt;/txt-record&gt;
-&lt;txt-record&gt;pk=e608c2f59103a15086821f51e4f4020ba8f80cf91aa26fe8f545de8ef81091e5&lt;/txt-record&gt;
-&lt;txt-record&gt;sf=0x44&lt;/txt-record&gt;
-&lt;txt-record&gt;vv=2&lt;/txt-record&gt;
-&lt;/service&gt;
-&lt;/service-group&gt;
+AirPlay Lib:write AirtunesService Contect: <?xml version="1.0" standalone='no'?><!--*-nxml-*--><!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+  <name replace-wildcards="yes">00125F16309F@AirMedia-16309f</name>
+  <service>
+    <type>_raop._tcp</type>
+<domain-name>local</domain-name>
+    <port>49153</port>
+<txt-record>txtvers=1</txt-record>
+<txt-record>cn=0,1,2,3</txt-record>
+<txt-record>da=true</txt-record>
+<txt-record>et=0,3,5</txt-record>
+<txt-record>ft=0x5A7FFFF7,0xE</txt-record>
+<txt-record>md=0,1,2</txt-record>
+<txt-record>sv=false</txt-record>
+<txt-record>sr=44100</txt-record>
+<txt-record>ss=16</txt-record>
+<txt-record>vn=65537</txt-record>
+<txt-record>tp=UDP</txt-record>
+<txt-record>vs=220.68</txt-record>
+<txt-record>am=AppleTV3,2</txt-record>
+<txt-record>pk=e608c2f59103a15086821f51e4f4020ba8f80cf91aa26fe8f545de8ef81091e5</txt-record>
+<txt-record>sf=0x44</txt-record>
+<txt-record>vv=2</txt-record>
+</service>
+</service-group>
 
 Found user 'root' (UID 0) and group 'root' (GID 0).
 Successfully dropped root privileges.
@@ -704,39 +708,39 @@ OnConnect socket: 30 Portnum: 5566
 Create MyScrReceiverCmdEx object
 Set MyScrReceiverCmdEx logger
 18:36:16.370 INFO  | Server::Recv1ByteData 0x80 sock:30 [AirplayCmdServer.cpp:130]
-18:36:16.370 INFO  | &lt;== NetworkThread got event 0xFD, len=1 sock:30 this:0x13db90 [ProtocolBase.cpp:507]
-18:36:16.370 INFO  | OnAirplay_GetLoginCode &lt;--- [AirplayIPCServer.cpp:161]
-18:36:16.371 INFO  | ==&gt; AckCommand Ack:0xFE OnAirplay_GetLoginCode size:1 sock:30 this:0x13db90 [ProtocolBase.cpp:311]
-18:36:16.371 INFO  | AckCommand AIRPLAY_GET_PASSCODE_ACK ---&gt; [AirplayIPCServer.cpp:163]
+18:36:16.370 INFO  | <== NetworkThread got event 0xFD, len=1 sock:30 this:0x13db90 [ProtocolBase.cpp:507]
+18:36:16.370 INFO  | OnAirplay_GetLoginCode <--- [AirplayIPCServer.cpp:161]
+18:36:16.371 INFO  | ==> AckCommand Ack:0xFE OnAirplay_GetLoginCode size:1 sock:30 this:0x13db90 [ProtocolBase.cpp:311]
+18:36:16.371 INFO  | AckCommand AIRPLAY_GET_PASSCODE_ACK ---> [AirplayIPCServer.cpp:163]
 UpdateLoginCode 1235
 NotifyChangePasscodeEx
 The socket connection is connected
-18:36:16.372 INFO  | NotifyPasscodeChange 1235 ---&gt; [AirplayCmdServer.cpp:81]
+18:36:16.372 INFO  | NotifyPasscodeChange 1235 ---> [AirplayCmdServer.cpp:81]
 18:36:16.372 INFO  | Output data: 1235 [AirplayCmdServer.cpp:95]
-18:36:16.372 INFO  | ==&gt; RequestCommand Req:0xFB Ans:0xFC NotifyPasscodeChange size:4 peek:1 timeout:5 pend:0 sock:30 this:0x13db90 [ProtocolBase.cpp:246]
-18:36:16.373 INFO  | &lt;== NetworkThread got response 0xFC sock:30 this:0x13db90 [ProtocolBase.cpp:497]
+18:36:16.372 INFO  | ==> RequestCommand Req:0xFB Ans:0xFC NotifyPasscodeChange size:4 peek:1 timeout:5 pend:0 sock:30 this:0x13db90 [ProtocolBase.cpp:246]
+18:36:16.373 INFO  | <== NetworkThread got response 0xFC sock:30 this:0x13db90 [ProtocolBase.cpp:497]
 18:36:16.373 INFO  | Server::Recv1ByteParam 0x30 [AirplayCmdServer.cpp:121]
 18:36:16.374 INFO  | RET 0x30 [AirplayCmdServer.cpp:98]
 Over
 Server startup complete. Host name is Crestron.local. Local service cookie is 2799382406.
 Service "00125F16309F@AirMedia-16309f" (/etc/avahi/services/airtunes.service) successfully established.
 Service "AirMedia-16309f" (/etc/avahi/services/airplay.service) successfully established.
-</pre>
+```
 
 Serial output gives us already a good amount of information. The WonderMedia board is an **ARMv7**, bootloader is **U-Boot** and it starts Linux with **kernel version 2.6.32.9**. We also get interesting information about the different services running on the device and even the PIN code used to associate with it (1235). At the end of the *init* process, we are not dropped into a shell or presented with a login prompt.
 
 At this point, I usually check if we can drop to a bootloader shell by sending characters over the serial line. This device being a good candidate given that it prints out this line:
 
-<pre>
+```
 Hit any key to stop autoboot:  0
-</pre>
+```
 
-I rebooted the device and pressed &lt;Enter&gt; multiple times during the bootloader stage. We get dropped to a U-Boot shell, wonderful. Let's check the environment variables to see how the bootloader boots the operating system:
+I rebooted the device and pressed <Enter> multiple times during the bootloader stage. We get dropped to a U-Boot shell, wonderful. Let's check the environment variables to see how the bootloader boots the operating system:
 
-<pre>
+```
 Abort WMT Display Logo Function
-<b>WMT #</b>
-<b>WMT #</b> printenv
+WMT #
+WMT # printenv
 ipaddr=192.168.0.2
 serverip=192.168.0.1
 gatewayip=192.168.0.1
@@ -783,14 +787,14 @@ stderr=serial
 ver=U-Boot 1.1.4 (Sep 18 2013 - 17:32:14)
 
 Environment size: 1493/65531 bytes
-</pre>
+```
 
 We learn from *spiboot*, *spiargs*, *emmcargs* and *mmcboot* variables that the device uses two kinds of storage medium: an **SPI flash** and an **MMC flash**.
 
 Let's check SPI flash banks first with *flinfo*:
 
-<pre>
-<b>WMT</b> # flinfo
+```
+WMT # flinfo
 
 Bank # 1: SST SPI Flash(25P64A-8MB)
   Sector Start Addresses:
@@ -811,23 +815,23 @@ Bank # 2: SST SPI Flash(25P64A-8MB)
    [ 12]FF0C0000     [ 13]FF0D0000     [ 14]FF0E0000
    [ 15]FF0F0000     [ 16]FF100000     [ 17]FF110000
 --snip--
-</pre>
+```
 
 So, we got two banks of 8MB each. Let's check MMC storage now. We initialize it first with *mmcinit*:
 
-<pre>
-<b>WMT #</b> mmcinit 1
+```
+WMT # mmcinit 1
 
 Initial SD/MMC Card OK!
 SD/MMC clock is 44Mhz
 register mmc device
 part_offset : 10, cur_part : 1
-</pre>
+```
 
 From the boot arguments it seems some partitions of MMC storage are FAT filesystems so let's double-check that with *fatinfo* and *fatls*:
 
-<pre>
-<b>WMT #</b> fatinfo mmc 1:1
+```
+WMT # fatinfo mmc 1:1
 part_offset : 10, cur_part : 1
 Interface:  MMC
   Device 1: Vendor:  Prod.:  Rev:
@@ -835,7 +839,7 @@ Interface:  MMC
             Capacity: 3776.0 MB = 3.6 GB (7733248 x 512)
 
 No valid FAT fs found
-<b>WMT #</b> fatinfo mmc 1:2
+WMT # fatinfo mmc 1:2
 part_offset : 7a4f0, cur_part : 2
 Interface:  MMC
   Device 1: Vendor:  Prod.:  Rev:
@@ -843,14 +847,14 @@ Interface:  MMC
             Capacity: 3776.0 MB = 3.6 GB (7733248 x 512)
 
 No valid FAT fs found
-<b>WMT #</b> fatinfo mmc 1:3
+WMT # fatinfo mmc 1:3
 part_offset : f49e0, cur_part : 3
 Interface:  MMC
   Device 1: Vendor:  Prod.:  Rev:
             Type: Hard Disk
             Capacity: 3776.0 MB = 3.6 GB (7733248 x 512)
 Partition 3: Filesystem: FAT32 "           "
-<b>WMT #</b> fatinfo mmc 1:4
+WMT # fatinfo mmc 1:4
 part_offset : 2dd1d0, cur_part : 4
 Interface:  MMC
   Device 1: Vendor:  Prod.:  Rev:
@@ -858,18 +862,18 @@ Interface:  MMC
             Capacity: 3776.0 MB = 3.6 GB (7733248 x 512)
 Partition 4: Filesystem: FAT32 "InternalMem"
 
-<b>WMT #</b> fatls mmc 1:4 /
+WMT # fatls mmc 1:4 /
 part_offset : 2dd1d0, cur_part : 4
 
 0 file(s), 0 dir(s)
 
-<b>WMT #</b> fatls mmc 1:3 /
+WMT # fatls mmc 1:3 /
 part_offset : f49e0, cur_part : 3
   8388608   spi.img
    921654   ulogo.bmp
 
 2 file(s), 0 dir(s)
-</pre>
+```
 
 Partitions 3 and 4 are FAT filesystems, partition 3 holds two files: **spi.img** (a copy of SPI content, holding kernel and CRAMFS), and **ulogo.bmp** (a bitmap file holding the logo displayed during the early boot stage).
 
@@ -887,10 +891,10 @@ After a few hours of research, I came up with the following strategy:
 
 A quick demonstration of that strategy: we load 512 (*0x400*) bytes from block number 20736 (*0x5100*) to address *0x1400000* and then print loaded memory content:
 
-<pre>
-<b>WMT #</b> mmcread 1 0x1400000 0x5100 0x400
+```
+WMT # mmcread 1 0x1400000 0x5100 0x400
 Read Data Success
-<b>WMT #</b> md.b 0x1400000 0x400
+WMT # md.b 0x1400000 0x400
 01400000: 00 00 00 07 73 73 68 2d 64 73 73 00 00 00 81 00    ....ssh-dss.....
 01400010: c0 ca 70 94 a9 c6 14 38 b6 61 ad be 43 b4 cb ff    ..p....8.a..C...
 01400020: b2 52 07 59 0f 01 3e e0 82 b0 d9 4c 8a f7 1d 1e    .R.Y..>....L....
@@ -903,7 +907,7 @@ Read Data Success
 01400090: 00 00 00 15 00 ba 2d 5d 7f 86 8c b3 00 49 13 a5    ......-].....I..
 014000a0: b6 00 8e d7 fd a4 28 72 cd 00 00 00 80 6b 4a 2f    ......(r.....kJ/
 --snip--
-</pre>
+```
 
 From the information provided by *fatinfo*, we know the MMC storage is composed of 7733248 blocks of 512 bytes. To dump the full MMC we can read each block sequentially. We can automate that process with a bit of Python by using *pexpect* over a serial line opened by picocom :)
 
@@ -913,23 +917,24 @@ The complete proof-of-concept for this firmware dump over serial is presented be
 
 The problem with this method is that it is **insanely slow**. Transfer rate is something around 2kB/sec so it takes approximately 20 days to dump the full MMC. Let's launch the script and grab a coffee or, you know, a thousand.
 
-<pre>
-<b>$</b> ./mmc_dump.py /dev/ttyUSB0 mmc_dump.bin
+```
+$ ./mmc_dump.py /dev/ttyUSB0 mmc_dump.bin
 [+] Setting up serial line.
 [+] Initializing MMC ...
 [+] Starting dumping process ...
 [o] 128/7733248 blocks read
-</pre>
+```
 
+{:.foo}
 ![lol]({{site.url}}/assets/3weekslater.jpg)
 
 Days have passed and we now have a complete dump of MMC storage. We can check that with the *file* command that indicates it is an MBR boot sector with 4 partitions. The *fdisk* command provides some more information, mainly about the filesystem type used by each partition.
 
-<pre>
-<b>$</b> file mmc_dump.bin
+```
+$ file mmc_dump.bin
 mmc_dump.bin: DOS/MBR boot sector; partition 1 : ID=0x83, start-CHS (0x0,1,1), end-CHS (0x1f0,62,16), startsector 16, 500960 sectors; partition 2 : ID=0x83, start-CHS (0x1f1,0,1), end-CHS (0x3e1,62,16), startsector 500976, 500976 sectors; partition 3 : ID=0xc, start-CHS (0x3e2,0,1), end-CHS (0x3ff,62,16), startsector 1001952, 2000880 sectors; partition 4 : ID=0xc, start-CHS (0x3ff,62,16), end-CHS (0x3ff,62,16), startsector 3002832, 3907008 sectors
 
-<b>$</b> fdisk -l mmc_dump.bin
+$ fdisk -l mmc_dump.bin
 Disk mmc_dump.bin: 3,7 GiB, 3959422976 bytes, 7733248 sectors
 Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
@@ -942,41 +947,42 @@ mmc_dump.bin1           16  500975  500960 244,6M 83 Linux
 mmc_dump.bin2       500976 1001951  500976 244,6M 83 Linux
 mmc_dump.bin3      1001952 3002831 2000880   977M  c W95 FAT32 (LBA)
 mmc_dump.bin4      3002832 6909839 3907008   1,9G  c W95 FAT32 (LBA)
-</pre>
+```
 
 <!-- TODO: flash storage explanation ? -->
 
 I read this [excellent resource](https://dustymabe.com/2012/12/15/mounting-a-partition-within-a-disk-image/) on how to mount the different partitions of a disk image and mounted the four of them as described below:
 
-<pre>
-<b>$</b> sudo losetup -v -f mmc_dump.bin
-<b>$</b> sudo losetup -a
+```
+$ sudo losetup -v -f mmc_dump.bin
+$ sudo losetup -a
 /dev/loop0: [0046]:9755872 (/home/quentin/research/airmedia/hardware/dumps/uboot/mmc_dump.bin)
-<b>$</b> sudo partx --show /dev/loop0
+$ sudo partx --show /dev/loop0
 NR   START     END SECTORS   SIZE NAME UUID
  1      16  500975  500960 244,6M
  2  500976 1001951  500976 244,6M
  3 1001952 3002831 2000880   977M
  4 3002832 6909839 3907008   1,9G
-<b>$</b> sudo partx -v --add /dev/loop0
+$ sudo partx -v --add /dev/loop0
 partition: none, disk: /dev/loop0, lower: 0, upper: 0
 /dev/loop0: partition table type 'dos' detected
 /dev/loop0: partition #1 added
 /dev/loop0: partition #2 added
 /dev/loop0: partition #3 added
 /dev/loop0: partition #4 added
-<b>$</b> sudo blkid /dev/loop0*
+$ sudo blkid /dev/loop0*
 /dev/loop0: PTTYPE="dos"
 /dev/loop0p1: UUID="6e4f610d-796f-4b15-8b21-f3da4538f09b" TYPE="ext2"
 /dev/loop0p2: UUID="1ce0eb6b-4733-44e8-9b4d-761597dd4a36" TYPE="ext2"
 /dev/loop0p3: UUID="7A5C-49D2" TYPE="vfat"
 /dev/loop0p4: LABEL="InternalMem" UUID="7A69-9C39" TYPE="vfat"
-<b>$</b> sudo mount -o ro /dev/loop0p1 /mnt/tmp
-</pre>
+$ sudo mount -o ro /dev/loop0p1 /mnt/tmp
+```
 
 
 We can get a better understanding of storage layout by looking into each partition to see what they hold. The diagram below provides a good overview of how the CPU interface with storage medium and what they contain.
 
+{:.foo}
 ![airmedia_storage_layout]({{site.url}}/assets/airmedia_storage_layout.png)
 
 
@@ -986,31 +992,31 @@ Ok, I might have skipped something on purpose just to show what can be done from
 
 This can be done using *setenv* to edit the **emmcargs** boot arguments, appending `init=/bin/sh` so that we get dropped to a shell. Once the environment variable is edited, we run **mmcboot** to boot the kernel.
 
-<pre>
-<b>WMT #</b> setenv emmcargs 'setenv bootargs mem=232M root=/dev/ram0 ro initrd=0x1400000,16M console=ttyS0,115200n8 mbtotal=64M <span style="background-color:white">init=/bin/sh</span>'
-<b>WMT #</b> run mmcboot
+```
+WMT # setenv emmcargs 'setenv bootargs mem=232M root=/dev/ram0 ro initrd=0x1400000,16M console=ttyS0,115200n8 mbtotal=64M <span style="background-color:white">init=/bin/sh</span>'
+WMT # run mmcboot
 --device boots--
-</pre>
+```
 
 We get dropped to a shell, prior to Linux running **init**. The next step is to mount required elements suchs as /proc, /sys, and /dev:
 
-<pre>
-<b>/ #</b> /bin/mount -t proc proc /proc
-<b>/ #</b> /bin/mount -t sysfs sysfs /sys
-<b>/ #</b> /bin/mount -t ramfs ramfs /tmp
-<b>/ #</b> /bin/mount -t usbfs usbfs /proc/bus/usb
-<b>/ #</b> mount -t tmpfs mdev /dev
-<b>/ #</b> mkdir /dev/pts
-<b>/ #</b> mount -t devpts devpts /dev/pts
-<b>/ #</b> /etc/dev/MKDEV
-<b>/ #</b> cp /etc/mdev.conf.base /tmp/mdev.conf
-<b>/ #</b> sync
-<b>/ #</b> mdev -s
-</pre>
+```
+/ # /bin/mount -t proc proc /proc
+/ # /bin/mount -t sysfs sysfs /sys
+/ # /bin/mount -t ramfs ramfs /tmp
+/ # /bin/mount -t usbfs usbfs /proc/bus/usb
+/ # mount -t tmpfs mdev /dev
+/ # mkdir /dev/pts
+/ # mount -t devpts devpts /dev/pts
+/ # /etc/dev/MKDEV
+/ # cp /etc/mdev.conf.base /tmp/mdev.conf
+/ # sync
+/ # mdev -s
+```
 
 Then we need to load kernel modules for USB storage devices so that we can dump the MMC to a USB key:
-<pre>
-<b>/ #</b> insmod /lib/modules/kernel/usb/usb-storage.ko
+```
+/ # insmod /lib/modules/kernel/usb/usb-storage.ko
 Initializing USB Mass Storage driver...
 scsi0 : SCSI emulation for USB Mass Storage devices
 usbcore: registered new interface driver usb-storage
@@ -1025,12 +1031,12 @@ sda: sda1
 sd 0:0:0:0: [sda] Assuming drive cache: write through
 sd 0:0:0:0: [sda] Attached SCSI removable disk
 FAT: utf8 is not a recommended IO charset for FAT filesystems, filesystem will be case sensitive!
-</pre>
+```
 
 We load the kernel module for MMC storage so that it detects the card:
 
-<pre>
-<b>/ #</b> insmod /lib/modules/kernel/usb/mmc_atsmb1.ko
+```
+/ # insmod /lib/modules/kernel/usb/mmc_atsmb1.ko
 wmt.sd1.param = 1:0
 WMT ATSMB1 (AHB To SD/MMC1 Bus) controller registered!
 mmc0: new high speed MMC card at address 0001
@@ -1044,22 +1050,22 @@ mmcblk1: mmc0:0001 004G90 3.68 GiB
  FAT: utf8 is not a recommended IO charset for FAT filesystems, filesystem will be case sensitive!
  FAT: utf8 is not a recommended IO charset for FAT filesystems, filesystem will be case sensitive!
  FAT: utf8 is not a recommended IO charset for FAT filesystems, filesystem will be case sensitive!
-</pre>
+```
 
 Our USB key gets auto-mounted in read-only so we remount it in read-write mode:
 
-<pre>
-<b>/ #</b> mount -o rw,remount /tmp/usb/sda1
-</pre>
+```
+/ # mount -o rw,remount /tmp/usb/sda1
+```
 
 After all these steps, we can simply use *dd* to copy the MMC to a file onto our USB key:
 
-<pre>
-<b>/ #</b> dd if=/dev/mmcblk1 of=/tmp/usb/sda1/mmcblk1.dd.img bs=1M
+```
+/ # dd if=/dev/mmcblk1 of=/tmp/usb/sda1/mmcblk1.dd.img bs=1M
 3776+0 records in
 3776+0 records out
 3959422976 bytes (3.7GB) copied, 457.659017 seconds, 8.3MB/s
-</pre>
+```
 
 7 minutes ! Way better than our serial dump, right ? Note that it's not always possible to do that so the U-Boot only method is still relevant for some devices :)
 
@@ -1072,15 +1078,17 @@ This time, on top of differentiating *GND* from *Vcc* ports, I used a logic anal
 
 In the screenshot below you see the Logic user interface with the signal received by each connector. Those who've already played with it will immediately identify the protocol it is speaking: **JTAG**.
 
+{:.foo}
 ![airmedia_jtag_logic_analyzer]({{site.url}}/assets/airmedia_jtag_logic_analyzer.png)
 
 After a few mistakes, I finally identified the correct connections for JTAG. Here I present the connections to make to a Bus Pirate that we will connect to with OpenOCD:
 
+{:.foo}
 ![airmedia_jtag_pinout]({{site.url}}/assets/airmedia_jtag_pinout.png)
 
 It's now time to launch OpenOCD. I created an *airmedia.cfg* file with the following content:
 
-<pre>
+```
 source [find interface/buspirate.cfg]
 
 buspirate_vreg 0          # turn off the voltage regulator
@@ -1088,13 +1096,13 @@ buspirate_mode normal
 buspirate_pullup 0        # turn pull up's down (no VTref)
 
 buspirate_port /dev/ttyUSB0
-</pre>
+```
 
 
 Sadly I wasn't able to properly interact with the JTAG port via OpenOCD and the bus pirate. It is definitely JTAG -that I'm sure- but it takes more skills or time to get it to work properly. Or maybe the port is just f*cked. I don't know. This is the kind of output I got when auto-probing the device, with IDCODE changing every time.
 
-<pre style="overflow-y:scroll;overflow-x:hidden;height:200px;">
-<b>$</b> sudo openocd -f openocd.cfg -c 'transport select jtag'
+```
+$ sudo openocd -f openocd.cfg -c 'transport select jtag'
 Open On-Chip Debugger 0.10.0+dev-00523-g2a3b709 (2018-08-30-21:05)
 Licensed under GNU GPL v2
 For bug reports, read
@@ -1118,11 +1126,11 @@ Info : JTAG tap: auto10.tap tap/device found: 0x00c24821 (mfg: 0x410 (Exelis), p
 Info : TAP auto11.tap does not have IDCODE
 Info : TAP auto12.tap does not have IDCODE
 Info : TAP auto13.tap does not have IDCODE
-Info : JTAG tap: auto14.tap tap/device found: 0x00c88801 (mfg: 0x400 (&lt;invalid&gt;), part: 0x0c88, ver: 0x0)
+Info : JTAG tap: auto14.tap tap/device found: 0x00c88801 (mfg: 0x400 (<invalid>), part: 0x0c88, ver: 0x0)
 Info : TAP auto15.tap does not have IDCODE
 Info : TAP auto16.tap does not have IDCODE
 Info : JTAG tap: auto17.tap tap/device found: 0x41262241 (mfg: 0x120 (ALPHA Technologies), part: 0x1262, ver: 0x4)
-</pre>
+```
 
 Given that I already got a memory dump and didn't want to perform debugging over JTAG I stopped my investigations there.
 

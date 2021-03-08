@@ -4,6 +4,10 @@ title: About
 permalink: /about/
 ---
 
-**Mail** [contact@quentinkaiser.be](mailto:contact@quentinkaiser.be)
+I'm Quentin Kaiser, a (now ex-)senior penetration tester turned independent security researcher.
 
-**Twitter** [@QKaiser](https://twitter.com/qkaiser)
+I'm currently focusing on binary exploitation of embedded devices, hunting zero days in security software, and traditional bug bounty hunting.
+
+You can get in touch by email ([contact@quentinkaiser.be](mailto:contact@quentinkaiser.be)) or Twitter ([@QKaiser](https://twitter.com/qkaiser)).
+
+If you'd like to hire me, all the information you need is at [https://konkretesec.com](https://konkretesec.com).
