@@ -3,7 +3,7 @@ layout: post
 title:  "VOOdoo - Remotely Compromising VOO Cable Modems"
 author: qkaiser
 date:   2021-03-09 06:00:00
-image: /assets/stack_trace_bcm.png
+image: assets/stack_trace_bcm.png
 comments: true
 categories: security
 excerpt: | 
