@@ -779,9 +779,6 @@ confidence whether it is affected by similar issues or not.
 
 ---
 
-If, in 2021, you're a large ISP shipping thousands of devices to your customers without getting them audited, you're borderline negligent.
-
-
 **Security Contact** During the disclosure process I advocated for VOO to get a security contact page on their website. This was a major pain point when I tried to report things in the first place. I could not find anything and had to bother CERT.be (sorry folks) for a contact there.
 
 They listened and even setup a [coordinated disclosure policy page](https://www.voo.be/fr/divulgation-responsable), that follows the Cybersecurity Centre Belgium recommendations. They chose the "reponsible disclosure" wording, which I don't appreciate, but well, at least they got a PGP key now.
