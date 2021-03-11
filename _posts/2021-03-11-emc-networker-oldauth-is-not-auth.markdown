@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Dell EMC Networker - oldauth is not auth !"
-image: assets/backup_stacks_by_jaymis_cc_by_20.jpg
+image: assets/backup_stacks_by_jaymis_cc_by_20_social.jpg
 author: qkaiser
 date:   2021-03-11 10:00:00
 description: In this article, we'll cover the different authentication mechanisms implemented by Networker (oldauth and nsrauth) and explain in details why relying on oldauth is the worst decision you can make when deploying Dell EMC Networker.
