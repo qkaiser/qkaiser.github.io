@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Huawei Weird Attempt at Astroturfing Brussels"
-image: /assets/morty_is_everything_a_camera.jpeg
+image: assets/morty_is_everything_a_camera.jpeg
 author: qkaiser
 date:   2020-12-29 10:00:00
 comments: true

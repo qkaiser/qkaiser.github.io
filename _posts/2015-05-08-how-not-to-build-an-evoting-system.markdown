@@ -16,7 +16,7 @@ Grâce à une requête en transparence administrative effectuée par poureva en
 met à disposition le code source de ses applications destinées au vote
 électronique.
 Or, depuis cette date, aucun organisme indépendant excepté
-[afront]({{site.url}}assets/afront.pdf) ne s'est lancé dans une analyse complète
+[afront]({{site.url}}/assets/afront.pdf) ne s'est lancé dans une analyse complète
 de ceux-ci. Plusieurs analyses "haut niveau" ont été effectuées par poureva,
 l'une abordant l'[adn du code](http://www.poureva.be/spip.php?article851),
 le [threat vector](http://www.poureva.be/spip.php?article384) et le
@@ -218,7 +218,7 @@ et les erreurs commises qui les rendent possibles.
 ### Carte Magnétique - Schéma
 
 
-![card layout]({{site.url}}assets/card_layout.png)
+![card layout]({{site.url}}/assets/card_layout.png)
 
 **Token [5 bytes]** Le token est une chaine de 5 caractères destinée à
 identifier de manière unique le bureau de vote où la carte à été initialisée.
@@ -305,7 +305,7 @@ afin d'obtenir le nombre total de bytes stockés.
 La valeur du token est inscrite sur la carte afin que l'urne puisse vérifier
 que la carte a effectivement été initialisée dans le même bureau de vote.
 
-![token generation]({{site.url}}assets/token_generation.png)
+![token generation]({{site.url}}/assets/token_generation.png)
 
 Le calcul du token inscrit sur la carte magnétique se fait en trois étapes :
 
@@ -454,7 +454,7 @@ La variable `fullPassword` contient le mot de passe de 10 caractères numérique
 encodé par le président de bureau. La fonction `extendPassword`, calcule la
 valeur de l'extension comme on l'a vu précédemment.
 
-![password key derivation]({{site.url}}assets/pkd.png)
+![password key derivation]({{site.url}}/assets/pkd.png)
 
 La clé est donc dérivée depuis un mot de passe de 10 caractères dont nous
 connaissons 6 caractères. En effet, la variable de `Minicodage` est connue et
@@ -658,7 +658,7 @@ mot de passe administrateur du président de bureau de vote.
 Le schéma ci-dessous décrit de manière très brouillonne comment les différentes
 clés et IV sont obtenues.
 
-![aes stupid]({{site.url}}assets/aes_attack.png)
+![aes stupid]({{site.url}}/assets/aes_attack.png)
 
 ### Bonus
 
@@ -780,8 +780,8 @@ On peut décemment se poser les questions suivantes vis-à-vis de cette cartogra
 * Quelles garanties vis-à-vis de la sécurité du réseau l'IBZ et Stésud peuvent
   fournir ? Le réseau a-t-il été audité ?
 
-![networking]({{site.url}}assets/codi3.png)
-![networking2]({{site.url}}assets/codi4.png)
+![networking]({{site.url}}/assets/codi3.png)
+![networking2]({{site.url}}/assets/codi4.png)
 
 ## Web Application (In)Security
 

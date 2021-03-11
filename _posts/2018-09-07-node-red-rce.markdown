@@ -3,7 +3,7 @@ layout: post
 title:  "Gaining RCE by abusing Node-RED"
 date:   2018-09-07 10:00:00
 author: qkaiser
-image: /assets/node_red_flows.png 
+image: assets/node_red_flows.png 
 excerpt: |
     During a recent security audit I discovered a Node-RED instance running on the target server. I initially discarded it as being an offline editor to draw diagrams but then came back to it and figured out some of its features could be abused to gain remote command execution on the hosting server.
 comments: true

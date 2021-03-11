@@ -5,7 +5,7 @@ date:   2018-06-18 08:30:00
 author: qkaiser
 excerpt: |
     With the next rounds of elections approaching in Belgium (municipal elections in October 2018, federal elections in June 2019), I decided to take a look at the new system currently under development.
-image: /assets/martine_functional_diagram_small.png
+image: assets/martine_functional_diagram_small.png
 comments: true
 categories: evoting
 ---

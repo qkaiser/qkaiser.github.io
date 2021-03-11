@@ -3,7 +3,7 @@ layout: post
 title:  "Man-in-the-Conference-Room - Part III (Network Assessment)"
 date:   2019-03-26 03:00:00
 author: qkaiser
-image: /assets/awind_webgui.png
+image: assets/awind_webgui.png
 excerpt: In this third installation of my blog series about wireless presentation devices, I’ll focus on how to discover exposed network services and how to reverse engineer proprietary network protocols.
 comments: true
 categories: pentesting
@@ -11,8 +11,8 @@ categories: pentesting
 
 In this third installation of my blog series about wireless presentation devices, I’ll focus on how to discover exposed network services and how to reverse engineer proprietary network protocols. We'll rely on information gained during the two previous posts to do so. You can find those posts there:
 
-* [Man-in-the-conference room - Part I (Introduction)]({{site.url}}pentesting/2019/03/25/awind-device/)
-* [Man-in-the-conference room - Part II (Hardware Hacking)]({{site.url}}pentesting/2019/03/25/awind-device-hardware/)
+* [Man-in-the-conference room - Part I (Introduction)]({{site.url}}/pentesting/2019/03/25/awind-device/)
+* [Man-in-the-conference room - Part II (Hardware Hacking)]({{site.url}}/pentesting/2019/03/25/awind-device-hardware/)
 
 ## 1. Network Scan
 
@@ -776,4 +776,4 @@ Hope you learned something along the way :) Nmap service probe rules, Nmap scrip
 The next step will be even more fun as we'll dig into **vulnerability research and development**! Keep an eye on this blog, I'll release it on March 27th.
 
 
-You can find it at [Man-in-the-conference-room - Part IV (Vulnerability Research & Development)]({{site.url}}pentesting/2019/03/27/awind-device-vrd/).
+You can find it at [Man-in-the-conference-room - Part IV (Vulnerability Research & Development)]({{site.url}}/pentesting/2019/03/27/awind-device-vrd/).

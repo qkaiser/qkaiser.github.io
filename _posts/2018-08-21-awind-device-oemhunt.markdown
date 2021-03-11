@@ -246,7 +246,7 @@ As always, I wanted to assess the overall exposure to vulnerabilities I discover
 * how many devices expose their web GUI ? how many of them uses default credentials ?
 * generic visualization of manufacturer distribution, model distribution per manufacturer, and version distribution per model
 
-I usually relied on matplotlib and a bit of Python to make such visualization (see the ones I made for [RabbitMQ]({{site.url}}security/tool/2017/08/28/cottontail-release/) and [Node-RED]({{site.url}}pentesting/2018/09/07/node-red-rce/) exposure) but this time was a bit more complex so I looked for easier ways to do it. I end up finding [Offensive ELK](https://github.com/marco-lancini/docker_offensive_elk) which is an ELK stack running on Docker container that can ingest Nmap results.
+I usually relied on matplotlib and a bit of Python to make such visualization (see the ones I made for [RabbitMQ]({{site.url}}/security/tool/2017/08/28/cottontail-release/) and [Node-RED]({{site.url}}/pentesting/2018/09/07/node-red-rce/) exposure) but this time was a bit more complex so I looked for easier ways to do it. I end up finding [Offensive ELK](https://github.com/marco-lancini/docker_offensive_elk) which is an ELK stack running on Docker container that can ingest Nmap results.
 
 A few script modification later I was able to ingest my script results and create wonderful dashboards such as the one below presenting vulnerable devices count and manufacturer distribution:
 
@@ -261,4 +261,4 @@ Or this one presenting the model distribution from Crestron manufacturer, with a
 Thanks to my reverse engineering effort and Shodan, I understood that a lot more devices were affected.
 This led me to notify the right company and to provide them a detailed list of devices known to be affected by discovered vulnerabilities.
 
-The next article will be a general conclusion with clear advisories and coordinated disclosure timeline. You can find it [here]({{site.url}}pentesting/2019/04/23/awind-device-conclusion/)
+The next article will be a general conclusion with clear advisories and coordinated disclosure timeline. You can find it [here]({{site.url}}/pentesting/2019/04/23/awind-device-conclusion/)

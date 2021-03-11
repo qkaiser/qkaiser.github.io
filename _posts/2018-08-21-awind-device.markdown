@@ -3,7 +3,7 @@ layout: post
 title:  "Man-in-the-Conference-Room - Part I (Intro)"
 date:   2019-03-25 03:00:00
 author: qkaiser
-image: /assets/airmedia_am_101_outside.jpg
+image: assets/airmedia_am_101_outside.jpg
 excerpt: |
      Back in 2017 a small device appeared on my desk. A wireless presentation device that one of our customers wanted to deploy on its premises, but not before we had audited it first.
 comments: true
@@ -20,11 +20,11 @@ The device in question was an **Airmedia AM-101** and in this blog series I'll d
 Here's the agenda for this blog series:
 
 1. [**Intro**](#) - You're reading that post right now.
-2. [**Hardware Hacking**]({{site.url}}pentesting/2019/03/25/awind-device-hardware/) - Where we discover debug ports, connect to it and ultimately dump the firmware.
-3. [**Network Assessment**]({{site.url}}pentesting/2019/03/26/awind-device-network/) - Scanning the device for exposed ports and network protocols reverse engineering.
-4. [**Vulnerability Research & Development**]({{site.url}}pentesting/2019/03/27/awind-device-vrd/) - Armed with a firmware dump and known exposed services, we find multiple RCEs and bypasses.
-5. [**Hunting OEMs**]({{site.url}}pentesting/2019/03/28/awind-device-oemhunt/) - A methodology to find devices from other manufacturers that are affected by the exact same issues.
-6. [**Conclusion & Recommendations**]({{site.url}}pentesting/2019/04/23/awind-device-conclusion/) - General conclusion and recommendations to secure those devices, coordinated disclosure timeline and release of tooling for all pentesting teams out there.
+2. [**Hardware Hacking**]({{site.url}}/pentesting/2019/03/25/awind-device-hardware/) - Where we discover debug ports, connect to it and ultimately dump the firmware.
+3. [**Network Assessment**]({{site.url}}/pentesting/2019/03/26/awind-device-network/) - Scanning the device for exposed ports and network protocols reverse engineering.
+4. [**Vulnerability Research & Development**]({{site.url}}/pentesting/2019/03/27/awind-device-vrd/) - Armed with a firmware dump and known exposed services, we find multiple RCEs and bypasses.
+5. [**Hunting OEMs**]({{site.url}}/pentesting/2019/03/28/awind-device-oemhunt/) - A methodology to find devices from other manufacturers that are affected by the exact same issues.
+6. [**Conclusion & Recommendations**]({{site.url}}/pentesting/2019/04/23/awind-device-conclusion/) - General conclusion and recommendations to secure those devices, coordinated disclosure timeline and release of tooling for all pentesting teams out there.
 
 ---
 
@@ -50,4 +50,4 @@ The device is plug and play. You connect it to a screen over HDMI or VGA and hoo
 
 I tried streaming a presentation from Windows and using their [Android app](https://play.google.com/store/apps/details?id=com.crestron.airmedia). You simply need to provide the device's IP and the four digits code displayed on screen to associate with the device. Everything worked as expected, but we still don't know what makes it tick.
 
-To uncover how the device works we will start with hardware hacking, which is the subject of my next blog post. You can find it [right here]({{site.url}}pentesting/2019/03/25/awind-device-hardware/).
+To uncover how the device works we will start with hardware hacking, which is the subject of my next blog post. You can find it [right here]({{site.url}}/pentesting/2019/03/25/awind-device-hardware/).

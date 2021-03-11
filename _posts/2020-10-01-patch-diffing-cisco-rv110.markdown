@@ -3,7 +3,7 @@ layout: post
 title:  "Patch Diffing a Cisco RV110W Firmware Update (Part II)"
 date:   2020-10-01 12:00:00
 author: qkaiser
-image: /assets/rv110_bindiff_matched_funcs.png
+image: assets/rv110_bindiff_matched_funcs.png
 comments: true
 categories: exploitdev
 excerpt: |

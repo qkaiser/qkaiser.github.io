@@ -2,7 +2,7 @@
 layout: post
 title:  "How to silently capture RabbitMQ messages"
 date:   2017-08-28 07:00:00
-image: /assets/rabbitmq_management_login.png
+image: assets/rabbitmq_management_login.png
 author: qkaiser
 excerpt: |
     The introduction of Cottontail, a tool to capture all RabbitMQ messages being sent through a broker. 

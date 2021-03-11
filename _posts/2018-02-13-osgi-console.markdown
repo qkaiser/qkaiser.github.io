@@ -3,7 +3,7 @@ layout: post
 title:  "OSGi Console - Gateway to (s)hell"
 date:   2018-02-13 10:00:00
 author: qkaiser
-image: /assets/shodan_osgi.png
+image: assets/shodan_osgi.png
 excerpt: |
     I recently came upon a Telnet-based service that was previously unidentified by network scanning tools. This blog post describes my encounter with this service and how I used Nmap fingerprinting and scripting capabilities to add detection, and Metasploit to gain command execution on it.
 comments: true
@@ -101,7 +101,7 @@ match telnet m|^(\r\n)*osgi>\x20$| p/Eclipse Equinoxe OSGi Shell (direct mode)/
 
 I initially thought that the rule above would trigger a match, but it didn't. Let's see why by launching Wireshark and looking at what happens when we connect to the service:
 
-![telnet_iac]({{site.url}}assets/osgi_console_telnet_iac.png)
+![telnet_iac]({{site.url}}/assets/osgi_console_telnet_iac.png)
 
 As we can see in the output above, the service expect us to negotiate the terminal type. Given that we use Nmap's `NULL` probe we will never reach the point where IAC negotiation finish and the service present us with the `osgi> `  prompt.
 
@@ -109,7 +109,7 @@ The trick here is to simply use a matching rule on that Telnet payload that alwa
 
 Let's get the data from Wireshark:
 
-![telnet_iac]({{site.url}}assets/osgi_console_telnet_iac2.png)
+![telnet_iac]({{site.url}}/assets/osgi_console_telnet_iac2.png)
 
 And put it into Nmap's fingerprint file:
 

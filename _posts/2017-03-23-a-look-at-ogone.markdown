@@ -3,7 +3,7 @@ layout: post
 title:  "A look at Ogone mobile payment library"
 date:   2017-03-23 07:00:00
 author: qkaiser
-image: /assets/ogone_header.jpg
+image: assets/ogone_header.jpg
 excerpt: |
     Ogone is an online payment service provider and payment risk management company that has been part of Ingenico since 2014. They started providing a mobile payment library for both iOS and Android to their clients back in 2012. One of the first organization publicly advertising its use of this mobile payment library is SNCB/NMBS, the belgian public transportation company.
     I’ll describe here a few security vulnerabilities that are affecting this mobile library. Those vulnerabilities are now difficult to exploit due to security mechanisms that have been put in place in Android by Google since 2012, that’s why I’ll try to give an historical perspective to those vulnerabilities so everyone can fully understand impact.

@@ -3,7 +3,7 @@ layout: post
 title:  "Ghetto Patch Diffing a Cisco RV110W Firmware Update"
 date:   2020-09-23 12:00:00
 author: qkaiser
-image: /assets/ville100couleur_frite100sauce.jpg
+image: assets/ville100couleur_frite100sauce.jpg
 comments: true
 categories: exploitdev
 excerpt: |
