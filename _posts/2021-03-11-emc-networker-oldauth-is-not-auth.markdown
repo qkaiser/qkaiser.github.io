@@ -19,11 +19,7 @@ In a previous life I came upon Dell EMC Networker in different environments and 
 
 In this article, we'll cover the different authentication mechanisms implemented by Networker (oldauth and nsrauth) and explain in details why relying on oldauth is the worst decision you can make when deploying Dell EMC Networker.
 
-Understanding the weaknesses of oldauth will help us in a second article where I'll discuss different ways to gain unauthenticated remote command execution on Dell EMC Networker Server. These techniques won't receive CVE assignments because Dell EMC Networker is *supposed* to allow command execution. It's just that an unprotected server configured with oldauth allows anyone to do so.
-
-Note: CVE-2017-8023 got a CVE because it affects the Networker **Client**, which is not supposed to let you execute arbitrary commands.
-
-
+Understanding the weaknesses of oldauth will help us in a second article where I'll discuss different ways to gain unauthenticated remote command execution on Dell EMC Networker Server.
 
 ### EMC Networker Authentication Primer
 
