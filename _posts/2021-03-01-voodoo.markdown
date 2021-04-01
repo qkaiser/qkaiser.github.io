@@ -7,7 +7,7 @@ image: assets/stack_trace_bcm.png
 comments: true
 categories: security
 excerpt: | 
-    This report outlines the VOOdoo vulnerabilities found in NETGEAR CG3700B cable modems provided by VOO to its subscribers. 
+    This report outlines the VOOdoo vulnerabilities found in NETGEAR CG3100 and CG3700B cable modems provided by VOO to its subscribers. 
     These modems use a weak algorithm to generate default WPA2 pre-shared keys, allowing an attacker in reception range of a vulnerable modem to derive the WPA2 pre-shared key from the access point MAC address. The modems are also vulnerable to remote code execution through the web administration panel.
 
     By chaining these vulnerabilities an attacker can gain unauthorized access to VOO customers LAN (over the Internet or by being in reception range of the access point), fully compromise the router, and leave a persistent backdoor allowing direct remote access to the network.
@@ -17,7 +17,7 @@ excerpt: |
 {:.foo}
 ![logo]({{site.url}}/assets/stack_trace_bcm.png)
 
-This report outlines the VOOdoo vulnerabilities found in NETGEAR CG3700B cable modems provided by VOO to its subscribers.
+This report outlines the VOOdoo vulnerabilities found in NETGEAR CG3100 and CG3700B cable modems provided by VOO to its subscribers.
 
 These modems use a weak algorithm to generate default WPA2 pre-shared keys, allowing an attacker in reception range of a vulnerable modem to derive the WPA2 pre-shared key from the access point MAC address. The modems are also vulnerable to remote code execution through the web administration panel. The exploit is possible due to usage of derivable credentials and programming errors in multiple form handlers.
 
@@ -36,9 +36,11 @@ A fix was also applied to the wireless stack so that the access point would use 
 
 However, it is still possible to bruteforce a list of valid pre-shared key candidates by using known Netgear Organizational Unit Identifiers and the access point SSID as an oracle. It takes less than a few minutes to run and gives you a small set (less than 30 candidates) to try.
 
-**I strongly recommend anyone with a Netgear CG3700B to update their wireless SSID and password if they're still using the factory defaults. If you don't steer away from factory defaults, you're still at risk of an attacker gaining unauthorized access to your network.**
+**I strongly recommend anyone with a Netgear CG3100 or CG3700B to update their wireless SSID and password if they're still using the factory defaults. If you don't steer away from factory defaults, you're still at risk of an attacker gaining unauthorized access to your network.**
 
 Now that this is out of the way, let's dig in !
+
+**Edit 12/03/2021:** just got a report from someone who's a previous VOO customer indicating that Netgear CG3100 are also affected. I updated this post to reflect that and contacted VOO so they check if they still have CG3100 on their network and if they were part of the patch roll out. 
 
 ---------------------------
 
@@ -776,6 +778,7 @@ confidence whether it is affected by similar issues or not.
 | 26/02/2021 | Emergency call, the last 6000 deployments to patch have set-top boxes connecting over WiFi. Set-top boxes starts bootlooping when the patch is applied to the modem. |
 | 04/03/2021 | Meeting with VOO, set top box issues have been fixed. More than 99% od modems are patched, coordinating press release. |
 | 09/03/2021  | Release of the full report. |
+| 12/03/2021  | Someone with a Netgear CG3100 from VOO adapted the proof-of-concept and confirmed to me that this model is also affected. I contact VOO so they check if they still have CG3100 on their network and if they were part of the patch roll out. |
 
 ---
 
