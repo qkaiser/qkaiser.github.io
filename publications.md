@@ -6,6 +6,12 @@ permalink: /publications/
 
 A few things I worked on in the past few years.
 
+#### A Clockwork Orange - Askey TCG300 Vulnerability Report
+
+*This report outlines vulnerabilities found in Askey TCG300 cable modems provided by Orange Belgium to its subscribers. The modems are vulnerable to authenticated and unauthenticated remote code execution through the web administration server. These vulnerabilities arise from memory corruptions due to insecure function calls when handling HTTP requests. These vulnerabilities can be exploited by attackers who already have access to the device’s local network, including from the guest network. Under certain specific conditions, the attack could also be launched remotely over the Internet. By exploiting these vulnerabilities, an attacker can gain unauthorized access to Orange Belgium customers LAN, fully compromise the router, and leave a persistent backdoor allowing direct remote access to the network.*
+
+* [paper]({{site.url}}/assets/qkaiser_orange_askey_tcg300_vuln_report.pdf)
+
 #### VOOdoo - Netgear CG3700B Vulnerability Report
 
 *This report outlines the VOOdoo vulnerabilities found in NETGEAR CG3700B cable modems provided by VOO to its subscribers. These modems use a weak algorithm to generate default WPA2 pre-shared keys, allowing an attacker in reception range of a vulnerable modem to derive the WPA2 pre-shared key from the access point MAC address. The modems are also vulnerable to remote code execution through the web administration panel. The exploit is possible due to usage of derivable credentials and programming errors in multiple form handlers. By chaining these vulnerabilities an attacker can gain unauthorized access to VOO customers LAN (over the Internet or by being in reception range of the access point), fully compromise the router, and leave a persistent backdoor allowing direct remote access to the network.*
