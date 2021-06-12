@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "So Many Ways to Own Misconfigured Dell EMC Networker"
+title:  "So Many Ways to Own Dell EMC Networker"
 image: assets/backup_stacks_by_jaymis_cc_by_20_social.jpg
 author: qkaiser
 date:   2021-06-12 06:00:00
