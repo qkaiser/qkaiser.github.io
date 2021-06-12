@@ -32,19 +32,23 @@ These issues were reported to Dell in March 2021:
 
 **Coordinated Disclosure Timeline**
 
-- March 12 2021 - Sent report to Dell
-- March 15 2021 - Dell acknowledge reception of the report
-- May 7 2021 - Update from Dell (working on a remediation plan)
-- May 28 2021 - Update from Dell (still working on a remediation plan, ask about my disclosure plans)
-- May 28 2021 - Answer Dell with the initialy provided 90 days disclosure policy description
-- June 4 2021 - Update from Dell (two issues might be CVE-2017-8023, says the fix will be ready by November, ask again what my disclosure plans are)
-- June 6 2021 - Answer Dell, explaining that we plan on publishing a blog post here after the 90 days if no fix is available
-- June 8 2021 - Dell gets back to us, explaining that their product team could get a fix out by August 2021. Ask if we could wait until then.
-- June 10 2021 - Answer Dell that we are strictly adhering to our 90 days disclosure policy.
-- June 10 2021 - Dell request a copy of this post.
-- June 11 2021 - Update from Dell (we're publishing the advisory, thanks for working with us)
+| Date          | Comment |
+|---------------|---------|
+| March 12 2021 | Sent report to Dell |
+| March 15 2021 | Dell acknowledge reception of the report |
+| May 7 2021    | Update from Dell (working on a remediation plan) |
+| May 28 2021   | Update from Dell (still working on a remediation plan, ask about my disclosure plans) |
+| May 28 2021   | Answer Dell with the initialy provided 90 days disclosure policy description |
+| June 4 2021   | Update from Dell (two issues might be CVE-2017-8023, says the fix will be ready by November, ask again what my disclosure plans are) |
+| June 6 2021   | Answer Dell, explaining that we plan on publishing a blog post here after the 90 days if no fix is available |
+| June 8 2021   | Dell gets back to us, explaining that their product team could get a fix out by August 2021. Ask if we could wait until then. |
+| June 10 2021  | Answer Dell that we are strictly adhering to our 90 days disclosure policy. |
+| June 10 2021  | Dell request a copy of this post. |
+| June 11 2021  | Update from Dell (we're publishing the advisory, thanks for working with us) |
 
-Each vulnerability is fully described below, along with a small walkthrough of how they were identified and exploited. For the impatient, proof-of-concepts are available on Github at [https://github.com/qkaiser/networker-pocs](https://github.com/qkaiser/networker-pocs).
+Each vulnerability is fully described below, along with a small walkthrough of how they were identified and exploited.
+
+For the impatient, proof-of-concepts are available on Github at [https://github.com/qkaiser/networker-pocs](https://github.com/qkaiser/networker-pocs).
 
 ### Command Injection to RCE with nsrdump
 
