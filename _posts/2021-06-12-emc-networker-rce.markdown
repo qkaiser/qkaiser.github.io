@@ -27,10 +27,13 @@ These issues were reported to Dell in March 2021:
 |----------------------------------------|--------------------------------------------------------------------------------------------------|---------------|
 | Information leak in nsrpolicy          | Dell consider it to be fixed since [March 2019](https://seclists.org/fulldisclosure/2019/Mar/50), but we demonstrated it still works against version 19.4.0.0.Build.25 (latest in Q1 2021). | CVE-2017-8023 |
 | Arbitrary command injection in nsrdump | Dell consider it to be fixed since [March 2019](https://seclists.org/fulldisclosure/2019/Mar/50), but we demonstrated it still works against version 19.4.0.0.Build.25 (latest in Q1 2021). | CVE-2017-8023 |
-| Information leak in nsrarchive         | Dell did not released a fix within 90 days. 0day.                                                | PSRC-15195    |
-| Arbitrary file read in nsr_render_log  | Dell did not released a fix within 90 days. 0day.                                                | PSRC-15190    |
+| Information leak in nsrarchive         | Dell did not released a fix within 90 days. 0day.                                                | CVE-2021-21570 |
+| Arbitrary file read in nsr_render_log  | Dell did not released a fix within 90 days. 0day.                                                | CVE-2021-21569 |
 
-**Coordinated Disclosure Timeline**
+
+Dell released an advisory: [DSA-2021-124](https://www.dell.com/support/kbdoc/fr-be/000188311/dsa-2021-124-dell-networker-security-update-for-multiple-vulnerabilities).
+
+#### Coordinated Disclosure Timeline
 
 | Date          | Comment |
 |---------------|---------|
