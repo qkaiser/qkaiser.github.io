@@ -7,8 +7,6 @@ date:   2021-06-12 06:00:00
 comments: true
 categories: security
 excerpt: |
-    In the previous article we covered the different authentication mechanisms implemented by Dell EMC Networker, pointed out the flaws in each of them (identification in oldauth, trust-on-first-use for nsrauth), and provided clear recommendations to Dell EMC Networker administrators that are close to what is said in the EMC NetWorker Security Configuration Guide.
-    
     Today we release multiple vulnerabilities affecting Dell EMC Networker to the public. These issues can be exploited as an unauthenticated user in order to gain arbitrary file read or remote command execution. 
 
 ---
