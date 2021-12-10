@@ -6,6 +6,17 @@ permalink: /publications/
 
 A few things I worked on in the past few years.
 
+#### eCos Offensive Security Research Logbook
+
+*Since the inception of the eCos RTOS in 1998, almost no dedicated research into its inner workings from an offensive security perspective got published. The only notable exception being the Cable Haunt research by Lyrebird which started to cover binary exploitation, but only scratched the surface. From cable modems to ICS components, millions of devices are currently running on eCos, but it seems that no one ever looked into them.*
+
+*To fill this void, we launched ecos.wtf in March 2021. The project aims at documenting everything related to eCos platform security research in a single place. We published posts detailing Broadcom's eCos internals (interrupts and exception handling, memory layout, heap management), eCos firmware analysis, exploitation of memory corruption vulnerabilites, and building eCos firmware implants. These posts were the product of dedicated security research into eCos based cable modems deployed by belgian ISPs such as VOO and Orange Belgium.*
+
+*During this presentation, we will demonstrate how to pull eCos firmwares, analyze them, write exploits, and gain long-term persistence on devices. By doing so, we hope to provide the required methodology, tools, and techniques to security professionals who wants to get involved in the wonderful world of eCos security.*
+
+* [slides]({{site.url}}/assets/qkaiser_brucon_ecos.pdf)
+* [video](https://www.youtube.com/watch?v=K1FVf2xta-4)
+
 #### A Clockwork Orange - Askey TCG300 Vulnerability Report
 
 *This report outlines vulnerabilities found in Askey TCG300 cable modems provided by Orange Belgium to its subscribers. The modems are vulnerable to authenticated and unauthenticated remote code execution through the web administration server. These vulnerabilities arise from memory corruptions due to insecure function calls when handling HTTP requests. These vulnerabilities can be exploited by attackers who already have access to the device’s local network, including from the guest network. Under certain specific conditions, the attack could also be launched remotely over the Internet. By exploiting these vulnerabilities, an attacker can gain unauthorized access to Orange Belgium customers LAN, fully compromise the router, and leave a persistent backdoor allowing direct remote access to the network.*
