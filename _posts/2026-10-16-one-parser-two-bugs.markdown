@@ -20,7 +20,7 @@ October 16th,
 2026](https://www.hexacon.fr/conference/speakers/#one_parser_two_bugs).*
 
 A vulnerability affecting Broadcom's proprietary implementation of 802.11 has
-present in their SDK since [at least
+been present in their SDK since [at least
 2010](https://github.com/shantanugoel/asus-rt-n66u-merlin/blob/ede220728e1eb417b4cc88912738b4311abdc088/release/src-rt/wps/common/ap/ap_eap_sm.c#L4).
 An incomplete patch was silently released in 2018, followed by Broadcom's
 recommendation to move to `hostapd` instead, making it a definitive forever day
@@ -141,7 +141,7 @@ So I tried my best to inform everyone. At this point I have no information
 about the measures taken by affected vendors and ISPs. All I know is that as of
 October 15th 2026, all of these devices are still missing the patch.
 
-And this is limited to Belgium. Affected manufacturers serve a larger market.
+And this is **not** limited to Belgium. Affected manufacturers serve a larger market.
 
 ## Key Takeaways
 
