@@ -19,6 +19,10 @@ Photo by [Hasan Almasi](https://unsplash.com/@hasanalmasi) on [unsplash](https:/
 October 16th, 
 2026](https://www.hexacon.fr/conference/speakers/#one_parser_two_bugs).*
 
+*A general public documentation page has been published at https://qkaiser.github.io/broadcom-wps/ under the name 'WPSplinter'. I hate designer name vulns as much as you do, but I needed a site for the general public. Answering emails one by one won't cut it.*
+
+*We're now on the [front page of Hacker News](https://news.ycombinator.com/item?id=50122058), please everyone stay civil.*
+
 A vulnerability affecting Broadcom's proprietary implementation of 802.11 has
 been present in their SDK since [at least
 2010](https://github.com/shantanugoel/asus-rt-n66u-merlin/blob/ede220728e1eb417b4cc88912738b4311abdc088/release/src-rt/wps/common/ap/ap_eap_sm.c#L4).
