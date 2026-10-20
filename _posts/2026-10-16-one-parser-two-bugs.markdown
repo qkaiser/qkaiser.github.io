@@ -23,6 +23,8 @@ October 16th,
 
 *We're now on the [front page of Hacker News](https://news.ycombinator.com/item?id=50122058), please everyone stay civil.*
 
+*Edit 20/10/2026: Telenet is officialy not affected.*
+
 A vulnerability affecting Broadcom’s proprietary implementation of 802.11 has
 present in their SDK since [at least
 2010](https://github.com/shantanugoel/asus-rt-n66u-merlin/blob/ede220728e1eb417b4cc88912738b4311abdc088/release/src-rt/wps/common/ap/ap_eap_sm.c#L4).
@@ -51,8 +53,9 @@ it which is probably the reason why so many OEMs did not patch
 I demonstrated that the vulnerability is present and exploitable on 3 out of 4
 Belgian Internet Service Providers including Proximus (BBOX 3V+), VOO (Netgear
 CG3100, Netgear CG3700, Technicolor 7210, CGA4233) and Orange (ASKEY TCG3000).
-Telenet may be affected through Sagemcom F@st devices, but I could not get my
-hands on one.
+~Telenet may be affected through Sagemcom F@st devices, but I could not get my
+hands on one.~ **Telenet is officially not affected. Their engineers checked
+their entirer fleet for signs of `wps_monitor` running and found none.**
 
 As of October 15th, 2026, none of these affected devices have been patched. This
 means you can get a root shell from across the street on a significant proportion
