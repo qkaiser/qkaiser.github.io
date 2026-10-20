@@ -53,13 +53,24 @@ it which is probably the reason why so many OEMs did not patch
 I demonstrated that the vulnerability is present and exploitable on 3 out of 4
 Belgian Internet Service Providers including Proximus (BBOX 3V+), VOO (Netgear
 CG3100, Netgear CG3700, Technicolor 7210, CGA4233) and Orange (ASKEY TCG3000).
-~Telenet may be affected through Sagemcom F@st devices, but I could not get my
-hands on one.~ **Telenet is officially not affected. Their engineers checked
-their entirer fleet for signs of `wps_monitor` running and found none.**
+~~Telenet may be affected through Sagemcom F@st devices, but I could not get my
+hands on one.~~
 
 As of October 15th, 2026, none of these affected devices have been patched. This
 means you can get a root shell from across the street on a significant proportion
 of routers in Belgium, and probably elsewhere.
+
+Update October 20th, 2026. I can affirm the following, based on direct communication with the affected parties:
+- **Telenet is not affected. Their engineers checked their entirer fleet for
+  signs of `wps_monitor` running and found none.**
+- **Proximus disabled WPS on its entire fleet of BBoxes over the last 24 hours.
+  They will carry out the full patching in the coming weeks, which is
+considerably faster than a normal rollout of this scale.** If you have a BBOX
+from Proximus, you're good.
+- **Orange Belgium is actively looking into it. They're also analyzing the
+  possibility of disabling WPS across the entire affected infrastructure.**
+
+We'll probably see public communication about this in the coming days. Belgian press has been remarkably silent compared to other countries like [Germany](https://www.golem.de/news/millionen-router-angreifbar-16-jahre-alter-broadcom-bug-gefaehrdet-wlan-netze-2610-214298.html), [France](https://korben.info/faille-wps-broadcom-routeurs-wifi.html), [Spain](https://www.europapress.es/portaltic/ciberseguridad/noticia-alertan-cambiar-contrasena-no-sirve-vulnerabilidad-broadcom-afecta-routers-movistar-20261020113354.html), [the Netherlands](https://www.dutchitchannel.nl/news/763056/ernstig-lek-in-broadcom-chips-treft-miljoenen-routers), [Taiwan](https://www.ithome.com.tw/news/179807), or [US and UK](https://www.theregister.com/networks/2026/10/19/broadcom-wi-fi-bug-turns-sweet-16-still-lets-strangers-hijack-your-router/5303771).
 
 ### Demos
 
