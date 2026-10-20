@@ -23,13 +23,14 @@ October 16th,
 
 *We're now on the [front page of Hacker News](https://news.ycombinator.com/item?id=50122058), please everyone stay civil.*
 
-A vulnerability affecting Broadcom's proprietary implementation of 802.11 has
-been present in their SDK since [at least
+A vulnerability affecting Broadcom’s proprietary implementation of 802.11 has
+present in their SDK since [at least
 2010](https://github.com/shantanugoel/asus-rt-n66u-merlin/blob/ede220728e1eb417b4cc88912738b4311abdc088/release/src-rt/wps/common/ap/ap_eap_sm.c#L4).
-An incomplete patch was silently released in 2018, followed by Broadcom's
-recommendation to move to `hostapd` instead, making it a definitive forever day
+An incomplete patch was silently released in 2018, followed by a new version of
+their SDK which replaced the vulnerable components with hostapd. Broadcom
+recommended to move to this new SDK version, making it a definitive forever day
 on eCos-based platforms (BCM3380, BCM3383, BCM33834) and a potential forever
-day on Linux platforms (BCM3390, BCM65xx, BCM68xx) unless affected Original
+day on Linux platforms (BCM3390, BMC63xx, BCM65xx, BCM68xx) unless affected Original
 Equipment Manufacturers (OEMs) are willing to migrate.
 
 The vulnerability can be triggered remotely over WiFi without knowledge of
