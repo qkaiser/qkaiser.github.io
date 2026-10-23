@@ -18,7 +18,7 @@ Photo by [Intricate Explorer](https://unsplash.com/@intricateexplorer) on [unspl
 *This post is a follow-up to my initial ["One parser, two bugs, many routers"](https://quentinkaiser.be/security/2026/10/16/one-parser-two-bugs/) post*
 
 Since I gave my talk at Hexacon I have been approached by security researchers,
-network engineers at Internet Service Providers, and embedded software engineers
+network engineers at Internet Service Providers, and embedded software developers
 working for Original Equipment Manufacturers.
 
 There is a bit of confusion about what I meant by this:
