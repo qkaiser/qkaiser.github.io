@@ -34,7 +34,8 @@ below is a reconstruction. Broadcom never publicly shared changelogs, SDK
 versions, or exact release dates. The analysis is based on leaked Broadcom
 source code and timestamps embedded in individual source files. Those
 timestamps do not establish an official release history or prove when a change
-reached a particular SDK.
+reached a particular SDK. That being said, I was asked by third parties to look
+at binaries with "the patch", so IYKYK.
 
 ## Source Code Leak Historian
 
